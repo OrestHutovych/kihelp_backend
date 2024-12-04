@@ -24,3 +24,7 @@ management:
     metrics:
       export:
         enabled: true
+#logging:
+#  level:
+#    org.example.kihelp_back: DEBUG
+#

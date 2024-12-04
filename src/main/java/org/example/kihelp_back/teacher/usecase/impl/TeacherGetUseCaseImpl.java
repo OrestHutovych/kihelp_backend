@@ -25,15 +25,16 @@ public class TeacherGetUseCaseImpl implements TeacherGetUseCase {
     @Override
     public List<TeacherResponse> getTeachersBySubject(Integer subjectId) {
         log.debug("Start fetching teachers for subject ID: {}", subjectId);
-
         var teachers = teacherService.getTeachersBySubject(subjectId);
         log.debug("Fetched {} teacher(s) for subject ID: {}", teachers.size(), subjectId);
 
+        log.debug("Mapping teacher(s) {} to TeacherResponse DTOs.", teachers.size());
         var teachersResponse = teachers
                 .stream()
                 .map(teacherToTeacherResponseMapper::map)
                 .collect(Collectors.toList());
-        log.info("Successfully generated {} teacher response(s) for subject ID: {}", teachersResponse.size(), subjectId);
+        log.debug("Successfully mapped {} teacher(s) to TeacherResponse DTOs for subject ID: {}",
+                teachersResponse.size(), subjectId);
 
         return teachersResponse;
     }
