@@ -1,4 +1,4 @@
-package org.example.kihelp_back.teacher.aspect;
+package org.example.kihelp_back.global.aspect;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +16,16 @@ import java.util.Arrays;
 @Slf4j
 public class LoggingAspect {
 
-    @Pointcut("execution(public * org.example.kihelp_back.teacher.controller.*.*(..))")
+    @Pointcut("execution(public * org.example.kihelp_back.teacher.controller.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.subject.controller.*.*(..))")
     public void controllerLog(){}
 
-    @Pointcut("execution(public * org.example.kihelp_back.teacher.service.impl.*.*(..))")
+    @Pointcut("execution(public * org.example.kihelp_back.teacher.service.impl.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.subject.controller.*.*(..))")
     public void serviceLog(){}
 
-    @Pointcut("execution(public * org.example.kihelp_back.teacher.usecase.impl.*.*(..))")
+    @Pointcut("execution(public * org.example.kihelp_back.teacher.usecase.impl.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.subject.controller.*.*(..))")
     public void useCaseLog(){}
 
     @Before("controllerLog()")

@@ -1,20 +1,19 @@
 package org.example.kihelp_back.subject.usecase.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.subject.mapper.SubjectToSubjectResponseMapper;
 import org.example.kihelp_back.subject.model.SubjectResponse;
 import org.example.kihelp_back.subject.service.SubjectService;
 import org.example.kihelp_back.subject.usecase.SubjectGetUseCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Slf4j
 public class SubjectGetUseCaseImpl implements SubjectGetUseCase {
     private final SubjectService subjectService;
     private final SubjectToSubjectResponseMapper subjectToSubjectResponseMapper;
-    private static final Logger LOGGER = LoggerFactory.getLogger(SubjectGetUseCaseImpl.class);
 
     public SubjectGetUseCaseImpl(SubjectService subjectService,
                                  SubjectToSubjectResponseMapper subjectToSubjectResponseMapper) {
@@ -24,14 +23,19 @@ public class SubjectGetUseCaseImpl implements SubjectGetUseCase {
 
     @Override
     public List<SubjectResponse> getSubjectsByCourseNumber(Integer courseNumber) {
-        LOGGER.debug("Starting get subjects by course number {}", courseNumber);
+        log.debug("Start fetching subject for course number: {}", courseNumber);
         var subjects = subjectService.getSubjectsByCourseNumber(courseNumber);
-        LOGGER.debug("Ending get subjects by course number {}", courseNumber);
-        LOGGER.debug("Starting transformation subject {} to subject response", subjects);
-        var subjectsResponse = subjects.stream().map(subjectToSubjectResponseMapper::map).toList();
-        LOGGER.debug("Transformation complete for subjectsResponse {}", subjectsResponse);
+        log.debug("Fetched {} subjects(s) for course number: {}", subjects.size(), courseNumber);
 
-        LOGGER.info("Successfully get subjects {} by course number {}",subjectsResponse, courseNumber);
+        log.debug("Mapping subjects(s) {} to SubjectResponse DTOs.", subjects.size());
+        var subjectsResponse = subjects
+                .stream()
+                .map(subjectToSubjectResponseMapper::map)
+                .toList();
+        log.debug("Successfully mapped {} subjects(s) to SubjectResponse DTOs for course number: {}",
+                subjectsResponse.size(), courseNumber
+        );
+
         return subjectsResponse;
     }
 }
