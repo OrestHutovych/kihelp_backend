@@ -17,15 +17,18 @@ import java.util.Arrays;
 public class LoggingAspect {
 
     @Pointcut("execution(public * org.example.kihelp_back.teacher.controller.*.*(..)) ||" +
-            "execution(public * org.example.kihelp_back.subject.controller.*.*(..))")
+            "execution(public * org.example.kihelp_back.subject.controller.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.task.controller.*.*(..))")
     public void controllerLog(){}
 
     @Pointcut("execution(public * org.example.kihelp_back.teacher.service.impl.*.*(..)) ||" +
-            "execution(public * org.example.kihelp_back.subject.controller.*.*(..))")
+            "execution(public * org.example.kihelp_back.subject.controller.*.*(..)) || " +
+            "execution(public * org.example.kihelp_back.task.controller.*.*(..))")
     public void serviceLog(){}
 
     @Pointcut("execution(public * org.example.kihelp_back.teacher.usecase.impl.*.*(..)) ||" +
-            "execution(public * org.example.kihelp_back.subject.controller.*.*(..))")
+            "execution(public * org.example.kihelp_back.subject.controller.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.task.controller.*.*(..))")
     public void useCaseLog(){}
 
     @Before("controllerLog()")

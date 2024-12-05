@@ -2,6 +2,8 @@ package org.example.kihelp_back.global;
 
 import org.example.kihelp_back.subject.exception.SubjectExistException;
 import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
+import org.example.kihelp_back.task.exception.TaskExistException;
+import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.slf4j.Logger;
@@ -62,6 +64,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TeacherNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTeacherNotFoundException(TeacherNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        LOGGER.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaskExistException.class)
+    public ResponseEntity<Map<String, String>> handleTaskExistException(TaskExistException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        LOGGER.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TypeNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleTypeNotValidException(TypeNotValidException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
 
