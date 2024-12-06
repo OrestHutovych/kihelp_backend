@@ -1,5 +1,6 @@
 package org.example.kihelp_back.argument.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.argument.model.Argument;
@@ -11,6 +12,7 @@ import static org.example.kihelp_back.argument.util.MessageError.ARGUMENT_EXIST;
 import static org.example.kihelp_back.argument.util.MessageError.ARGUMENT_NOT_FOUND;
 
 @Service
+@Slf4j
 public class ArgumentServiceImpl implements ArgumentService {
     private final ArgumentRepository argumentRepository;
 
@@ -20,9 +22,12 @@ public class ArgumentServiceImpl implements ArgumentService {
 
     @Override
     public void create(Argument argument) {
+        log.debug("Checking if argument with name '{}' exists", argument.getName());
         var exist = argumentRepository.existsByName(argument.getName());
+        log.debug("Existence check result {}", exist);
 
         if (exist) {
+            log.warn("Argument with name {} exist. Throwing ArgumentExistException", argument.getName());
             throw new ArgumentExistException(String.format(ARGUMENT_EXIST, argument.getName()));
         }
 
