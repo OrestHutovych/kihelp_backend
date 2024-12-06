@@ -1,5 +1,6 @@
 package org.example.kihelp_back.task.mapper.impl;
 
+import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.task.mapper.TaskRequestToTaskResponse;
 import org.example.kihelp_back.task.model.Task;
@@ -9,14 +10,16 @@ import org.example.kihelp_back.teacher.model.Teacher;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.List;
 
 import static org.example.kihelp_back.task.util.ErrorMessage.TYPE_NOT_VALID;
 
 @Component
 public class TaskRequestToTaskResponseImpl implements TaskRequestToTaskResponse {
 
+
     @Override
-    public Task map(TaskRequest taskRequest, Teacher teacher) {
+    public Task map(TaskRequest taskRequest, Teacher teacher, List<Argument> arguments) {
         Task task = new Task();
         task.setTitle(taskRequest.title());
         task.setDescription(taskRequest.description());
@@ -27,6 +30,7 @@ public class TaskRequestToTaskResponseImpl implements TaskRequestToTaskResponse 
         task.setType(resolveType(taskRequest.type()));
         task.setCreatedTimeStamp(Instant.now());
         task.setTeacher(teacher);
+        task.setArguments(arguments);
         return task;
     }
 

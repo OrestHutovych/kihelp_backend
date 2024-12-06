@@ -3,6 +3,8 @@ package org.example.kihelp_back.task.model;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
+
 import static org.example.kihelp_back.task.util.ErrorMessage.*;
 
 public record TaskRequest(
@@ -14,6 +16,7 @@ public record TaskRequest(
         @Min(value = 1, message = PRICE_MIN_NOT_VALID)
         Integer price,
         String type,
-        Integer teacherId
+        Integer teacherId,
+        List<Integer> args
 ) {
 }
