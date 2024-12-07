@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.teacher.model.Teacher;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.List;
@@ -34,6 +32,10 @@ public class Task {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private Type type;
+
+    // todo Add DeveloperEntity
+    @Column(name = "developer", nullable = false)
+    private String developer;
     private Instant createdTimeStamp;
 
     @ManyToMany(cascade = CascadeType.REMOVE)
@@ -44,7 +46,6 @@ public class Task {
     )
     @OrderColumn(name = "argument_order")
     private List<Argument> arguments;
-
 
     @ManyToOne
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
