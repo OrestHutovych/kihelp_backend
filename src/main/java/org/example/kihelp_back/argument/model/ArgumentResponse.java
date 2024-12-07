@@ -1,4 +1,8 @@
 package org.example.kihelp_back.argument.model;
 
-public class ArgumentResponse {
+public record ArgumentResponse(
+        Integer id,
+        String name,
+        String description
+) {
 }

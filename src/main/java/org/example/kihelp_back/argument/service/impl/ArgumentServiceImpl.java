@@ -7,6 +7,9 @@ import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.argument.repository.ArgumentRepository;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.example.kihelp_back.argument.util.MessageError.ARGUMENT_EXIST;
 import static org.example.kihelp_back.argument.util.MessageError.ARGUMENT_NOT_FOUND;
@@ -40,5 +43,29 @@ public class ArgumentServiceImpl implements ArgumentService {
                 .orElseThrow(() -> new ArgumentNotFoundException(
                         String.format(ARGUMENT_NOT_FOUND, id)
                 ));
+    }
+
+    @Override
+    public List<Argument> getAll() {
+        return argumentRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public void delete(Integer id) {
+        log.debug("Checking if argument with id '{}' exists", id);
+        var exist = argumentRepository.existsById(id);
+        log.debug("Existence check result {}", exist);
+
+        if(!exist) {
+            log.warn("Argument with id '{}' not found. Throwing ArgumentNotFoundException", id);
+            throw new ArgumentNotFoundException(String.format(ARGUMENT_NOT_FOUND, id));
+        }
+
+        log.debug("Deleting argument for task with id '{}'", id);
+        argumentRepository.deleteTaskArgumentsByArgumentId(id);
+        log.debug("Deleted argument for task with id '{}'", id);
+
+        argumentRepository.deleteById(id);
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.teacher.model.Teacher;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.List;
@@ -34,7 +36,7 @@ public class Task {
     private Type type;
     private Instant createdTimeStamp;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "tasks_arguments",
             joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "id")},
