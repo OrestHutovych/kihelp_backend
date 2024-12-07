@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.argument.model.Argument;
+import org.example.kihelp_back.argument.model.ArgumentUpdateRequest;
 import org.example.kihelp_back.argument.repository.ArgumentRepository;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.springframework.stereotype.Service;
@@ -67,5 +68,24 @@ public class ArgumentServiceImpl implements ArgumentService {
         log.debug("Deleted argument for task with id '{}'", id);
 
         argumentRepository.deleteById(id);
+    }
+
+    @Override
+    public void update(Integer id, ArgumentUpdateRequest request) {
+        log.debug("Attempting to find argument with id '{}'", id);
+        var argument = getById(id);
+        log.debug("Successfully found argument: {}", argument);
+
+        if(request.name() != null && !request.name().isEmpty()) {
+            log.debug("Updating name of argument with id '{}' to '{}'", id, request.name());
+            argument.setName(request.name());
+        }
+
+        if(request.description() != null && !request.description().isEmpty()) {
+            log.debug("Updating description of argument with id '{}' to '{}'", id, request.description());
+            argument.setDescription(request.description());
+        }
+
+        argumentRepository.save(argument);
     }
 }

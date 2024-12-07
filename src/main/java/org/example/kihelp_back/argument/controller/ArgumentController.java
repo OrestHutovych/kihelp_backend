@@ -3,9 +3,11 @@ package org.example.kihelp_back.argument.controller;
 import jakarta.validation.Valid;
 import org.example.kihelp_back.argument.model.ArgumentRequest;
 import org.example.kihelp_back.argument.model.ArgumentResponse;
+import org.example.kihelp_back.argument.model.ArgumentUpdateRequest;
 import org.example.kihelp_back.argument.usecase.ArgumentCreateUseCase;
 import org.example.kihelp_back.argument.usecase.ArgumentDeleteUseCase;
 import org.example.kihelp_back.argument.usecase.ArgumentGetUseCase;
+import org.example.kihelp_back.argument.usecase.ArgumentUpdateUseCase;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +18,16 @@ public class ArgumentController {
     private final ArgumentCreateUseCase argumentCreateUseCase;
     private final ArgumentGetUseCase argumentGetUseCase;
     private final ArgumentDeleteUseCase argumentDeleteUseCase;
+    private final ArgumentUpdateUseCase argumentUpdateUseCase;
 
     public ArgumentController(ArgumentCreateUseCase argumentCreateUseCase,
                               ArgumentGetUseCase argumentGetUseCase,
-                              ArgumentDeleteUseCase argumentDeleteUseCase) {
+                              ArgumentDeleteUseCase argumentDeleteUseCase,
+                              ArgumentUpdateUseCase argumentUpdateUseCase) {
         this.argumentCreateUseCase = argumentCreateUseCase;
         this.argumentGetUseCase = argumentGetUseCase;
         this.argumentDeleteUseCase = argumentDeleteUseCase;
+        this.argumentUpdateUseCase = argumentUpdateUseCase;
     }
 
     @PostMapping("/argument")
@@ -38,5 +43,10 @@ public class ArgumentController {
     @DeleteMapping("/argument/{id}")
     public void deleteArgument(@PathVariable("id") Integer argumentId) {
         argumentDeleteUseCase.deleteArgument(argumentId);
+    }
+
+    @PatchMapping("/argument/{id}")
+    public void updateArgument(@PathVariable("id") Integer argumentId, @Valid @RequestBody ArgumentUpdateRequest request) {
+        argumentUpdateUseCase.updateArgument(argumentId, request);
     }
 }
