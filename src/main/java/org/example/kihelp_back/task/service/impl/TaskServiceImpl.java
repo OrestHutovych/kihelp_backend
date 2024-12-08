@@ -3,9 +3,11 @@ package org.example.kihelp_back.task.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.task.exception.TaskExistException;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.repository.TaskRepository;
+import org.example.kihelp_back.subject.repository.TaskRepository;
 import org.example.kihelp_back.task.service.TaskService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static org.example.kihelp_back.task.util.ErrorMessage.TASK_EXIST;
 
@@ -30,5 +32,10 @@ public class TaskServiceImpl implements TaskService {
         }
 
         taskRepository.save(task);
+    }
+
+    @Override
+    public List<Task> getByTeacher(Integer teacherId) {
+        return taskRepository.findByTeacherId(teacherId);
     }
 }

@@ -1,6 +1,7 @@
 package org.example.kihelp_back.task.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.teacher.model.Teacher;
@@ -21,7 +22,7 @@ public class Task {
     private String title;
     @Column(name = "description")
     private String description;
-    @Column(name = "path", nullable = false)
+    @Column(name = "path")
     private String path;
     @Column(name = "price", nullable = false)
     private Integer price;

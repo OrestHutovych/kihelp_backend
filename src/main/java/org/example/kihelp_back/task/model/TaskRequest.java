@@ -16,6 +16,7 @@ public record TaskRequest(
         @Min(value = 1, message = PRICE_MIN_NOT_VALID)
         Integer price,
         String type,
+        String developer,
         Integer teacherId,
         List<Integer> args
 ) {
