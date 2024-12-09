@@ -9,7 +9,7 @@ public record TaskResponse(
         Integer id,
         String title,
         String description,
-        String path,
+        String identifier,
         Integer price,
         Double discount,
         boolean visible,

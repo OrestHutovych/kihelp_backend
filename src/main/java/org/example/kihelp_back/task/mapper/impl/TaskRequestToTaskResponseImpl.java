@@ -23,7 +23,7 @@ public class TaskRequestToTaskResponseImpl implements TaskRequestToTaskResponse 
         Task task = new Task();
         task.setTitle(taskRequest.title());
         task.setDescription(taskRequest.description());
-        task.setPath(taskRequest.path());
+        task.setIdentifier(taskRequest.identifier());
         task.setPrice(taskRequest.price());
         task.setDiscount(0.0);
         task.setVisible(false);

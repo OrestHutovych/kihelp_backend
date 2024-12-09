@@ -22,8 +22,8 @@ public class Task {
     private String title;
     @Column(name = "description")
     private String description;
-    @Column(name = "path")
-    private String path;
+    @Column(name = "identifier", nullable = false)
+    private String identifier;
     @Column(name = "price", nullable = false)
     private Integer price;
     @Column(name = "discount")
