@@ -15,6 +15,7 @@ public record TaskResponse(
         boolean visible,
         String type,
         String developer,
+        boolean autoGenerate,
         Instant createdTimeStamp,
         List<Argument> arguments,
         Integer teacherId

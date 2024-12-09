@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+import static org.example.kihelp_back.task.util.ErrorMessage.IDENTIFIER_BLANK_NOT_VALID;
+
 @Component
 @Slf4j
 public class TaskCreateUseCaseImpl implements TaskCreateUseCase {
@@ -31,6 +33,13 @@ public class TaskCreateUseCaseImpl implements TaskCreateUseCase {
 
     @Override
     public void createTask(TaskRequest taskRequest) {
+        if (taskRequest.autoGenerate()) {
+            String identifier = taskRequest.identifier();
+            if (identifier == null || identifier.isBlank()) {
+                throw new IllegalArgumentException(IDENTIFIER_BLANK_NOT_VALID);
+            }
+        }
+
         log.debug("Attempting to find teacher with id '{}'", taskRequest.teacherId());
         var teacher = teacherService.getTeacherById(taskRequest.teacherId());
         log.debug("Successfully found teacher: {}", teacher);

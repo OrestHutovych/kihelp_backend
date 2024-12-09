@@ -29,6 +29,7 @@ public class TaskRequestToTaskResponseImpl implements TaskRequestToTaskResponse 
         task.setVisible(false);
         task.setType(resolveType(taskRequest.type()));
         task.setDeveloper(taskRequest.developer());
+        task.setAutoGenerate(taskRequest.autoGenerate());
         task.setCreatedTimeStamp(Instant.now());
         task.setTeacher(teacher);
         task.setArguments(arguments);

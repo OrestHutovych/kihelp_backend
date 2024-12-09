@@ -11,12 +11,12 @@ public record TaskRequest(
         @NotBlank(message = TITLE_BLANK_NOT_VALID)
         String title,
         String description,
-        @NotBlank(message = IDENTIFIER_BLANK_NOT_VALID)
         String identifier,
         @Min(value = 1, message = PRICE_MIN_NOT_VALID)
         Integer price,
         String type,
         String developer,
+        boolean autoGenerate,
         Integer teacherId,
         List<Integer> args
 ) {

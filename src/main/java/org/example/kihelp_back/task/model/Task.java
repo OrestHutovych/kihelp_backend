@@ -1,7 +1,6 @@
 package org.example.kihelp_back.task.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.teacher.model.Teacher;
@@ -24,7 +23,7 @@ public class Task {
     private String description;
     @Column(name = "identifier", nullable = false)
     private String identifier;
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
     private Integer price;
     @Column(name = "discount")
     private Double discount;
@@ -33,6 +32,8 @@ public class Task {
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private Type type;
+    @Column(name = "auto_generate", nullable = false)
+    private boolean autoGenerate;
 
     // todo Add DeveloperEntity
     @Column(name = "developer", nullable = false)
