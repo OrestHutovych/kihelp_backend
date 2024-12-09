@@ -1,4 +1,10 @@
 package org.example.kihelp_back.task.model;
 
-public record TaskProcessResponse() {
+import java.time.Instant;
+
+public record TaskProcessResponse(
+        String fileName,
+        String link,
+        Instant createdTimeStamp
+) {
 }

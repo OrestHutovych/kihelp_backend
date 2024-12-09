@@ -1,4 +1,8 @@
 package org.example.kihelp_back.task.model;
 
-public record TaskProcessRequest() {
+import java.util.List;
+
+public record TaskProcessRequest(
+        List<String> arguments
+) {
 }

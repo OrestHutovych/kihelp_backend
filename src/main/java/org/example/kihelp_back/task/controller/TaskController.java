@@ -7,6 +7,7 @@ import org.example.kihelp_back.task.model.TaskRequest;
 import org.example.kihelp_back.task.model.TaskResponse;
 import org.example.kihelp_back.task.usecase.TaskCreateUseCase;
 import org.example.kihelp_back.task.usecase.TaskGetUseCase;
+import org.example.kihelp_back.task.usecase.TaskProcessUseCase;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +17,14 @@ import java.util.List;
 public class TaskController {
     private final TaskCreateUseCase taskCreateUseCase;
     private final TaskGetUseCase taskGetUseCase;
+    private final TaskProcessUseCase taskProcessUseCase;
 
     public TaskController(TaskCreateUseCase taskCreateUseCase,
-                          TaskGetUseCase taskGetUseCase) {
+                          TaskGetUseCase taskGetUseCase,
+                          TaskProcessUseCase taskProcessUseCase) {
         this.taskCreateUseCase = taskCreateUseCase;
         this.taskGetUseCase = taskGetUseCase;
+        this.taskProcessUseCase = taskProcessUseCase;
     }
 
     @PostMapping("/task")
@@ -35,7 +39,6 @@ public class TaskController {
 
     @PostMapping("/task/process/{id}")
     public TaskProcessResponse processTask(@PathVariable("id") Integer taskId, @RequestBody TaskProcessRequest request) {
-        // todo process task
-        return null;
+        return taskProcessUseCase.processTask(taskId, request);
     }
 }
