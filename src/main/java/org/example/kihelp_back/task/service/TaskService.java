@@ -9,4 +9,5 @@ public interface TaskService {
     List<Task> getByTeacher(Integer teacherId);
     Task getById(Integer id);
     void delete(Integer id);
+    void deleteByTeacher(Integer teacherId);
 }

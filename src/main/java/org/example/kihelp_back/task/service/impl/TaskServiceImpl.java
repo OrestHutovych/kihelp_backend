@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.task.exception.TaskExistException;
 import org.example.kihelp_back.task.exception.TaskNotFoundException;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.subject.repository.TaskRepository;
+import org.example.kihelp_back.task.repository.TaskRepository;
 import org.example.kihelp_back.task.service.TaskService;
 import org.springframework.stereotype.Service;
 
@@ -61,5 +61,13 @@ public class TaskServiceImpl implements TaskService {
        log.debug("Deleted argument for task with id '{}'", id);
 
        taskRepository.delete(task);
+    }
+
+    @Override
+    public void deleteByTeacher(Integer teacherId) {
+       var tasks = getByTeacher(teacherId);
+
+       tasks.forEach(t -> taskRepository.deleteAllArgumentByTaskId(t.getId()));
+       taskRepository.deleteAll(tasks);
     }
 }

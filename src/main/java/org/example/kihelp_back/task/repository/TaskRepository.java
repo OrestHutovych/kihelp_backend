@@ -1,4 +1,4 @@
-package org.example.kihelp_back.subject.repository;
+package org.example.kihelp_back.task.repository;
 
 import org.example.kihelp_back.task.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;

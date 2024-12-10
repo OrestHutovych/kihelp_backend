@@ -1,6 +1,7 @@
 package org.example.kihelp_back.teacher.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.teacher.model.Teacher;
@@ -17,9 +18,12 @@ import static org.example.kihelp_back.teacher.util.ErrorMessage.TEACHER_NOT_FOUN
 @Slf4j
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
+    private final TaskService taskService;
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository,
+                              TaskService taskService) {
         this.teacherRepository = teacherRepository;
+        this.taskService = taskService;
     }
 
     @Override
@@ -66,6 +70,7 @@ public class TeacherServiceImpl implements TeacherService {
             throw new TeacherNotFoundException(String.format(TEACHER_NOT_FOUND, teacherId));
         }
 
+        taskService.deleteByTeacher(teacherId);
         teacherRepository.deleteById(teacherId);
     }
 

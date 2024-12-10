@@ -40,7 +40,7 @@ public class Task {
     private String developer;
     private Instant createdTimeStamp;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(
             name = "tasks_arguments",
             joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "id")},

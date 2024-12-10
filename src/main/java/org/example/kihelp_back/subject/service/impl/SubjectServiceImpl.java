@@ -6,6 +6,7 @@ import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
 import org.example.kihelp_back.subject.model.Subject;
 import org.example.kihelp_back.subject.repository.SubjectRepository;
 import org.example.kihelp_back.subject.service.SubjectService;
+import org.example.kihelp_back.teacher.service.TeacherService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,12 @@ import static org.example.kihelp_back.subject.util.ErrorMessages.SUBJECT_NOT_FOU
 @Slf4j
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
+    private final TeacherService teacherService;
 
-    public SubjectServiceImpl(SubjectRepository subjectRepository) {
+    public SubjectServiceImpl(SubjectRepository subjectRepository,
+                              TeacherService teacherService) {
         this.subjectRepository = subjectRepository;
+        this.teacherService = teacherService;
     }
 
     @Override
@@ -55,21 +59,20 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject getSubjectById(Integer id) {
         return subjectRepository.findById(id)
-                .orElseThrow(() -> new SubjectNotFoundException(String.format(SUBJECT_NOT_FOUND, id)));
+                .orElseThrow(() -> {
+                    log.warn("Subject with id {} not found. Throwing SubjectNotFoundException.", id);
+                    return new SubjectNotFoundException(String.format(SUBJECT_NOT_FOUND, id));
+                });
     }
 
     @Override
     public void delete(Integer id) {
-        log.debug("Checking if subject with id '{}' exists", id);
-        var existById = subjectRepository.existsById(id);
-        log.debug("Existence check result {}", existById);
+        log.debug("Attempting to find subject with id '{}'", id);
+        var subject = getSubjectById(id);
+        log.debug("Successfully found subject: {}", subject);
 
-        if(!existById){
-            log.warn("Subject with id '{}' not found. Throwing SubjectNotFoundException", id);
-            throw new SubjectNotFoundException(String.format(SUBJECT_NOT_FOUND, id));
-        }
-
-        subjectRepository.deleteById(id);
+        teacherService.delete(id);
+        subjectRepository.delete(subject);
     }
 
     @Override
