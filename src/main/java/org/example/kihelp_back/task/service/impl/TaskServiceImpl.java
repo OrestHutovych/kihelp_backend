@@ -2,6 +2,7 @@ package org.example.kihelp_back.task.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.task.exception.TaskExistException;
+import org.example.kihelp_back.task.exception.TaskNotFoundException;
 import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.subject.repository.TaskRepository;
 import org.example.kihelp_back.task.service.TaskService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static org.example.kihelp_back.task.util.ErrorMessage.TASK_EXIST;
+import static org.example.kihelp_back.task.util.ErrorMessage.TASK_NOT_FOUND;
 
 @Service
 @Slf4j
@@ -37,5 +39,27 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getByTeacher(Integer teacherId) {
         return taskRepository.findByTeacherId(teacherId);
+    }
+
+    @Override
+    public Task getById(Integer id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("Task with id {} not found. Throwing TaskNotFoundException.", id);
+                    return new TaskNotFoundException(String.format(TASK_NOT_FOUND, id));
+                });
+    }
+
+    @Override
+    public void delete(Integer id) {
+       log.debug("Attempting to find task with id '{}'", id);
+       var task = getById(id);
+       log.debug("Successfully found task: {}", task);
+
+       log.debug("Deleting argument for task with id '{}'", id);
+       taskRepository.deleteAllArgumentByTaskId(id);
+       log.debug("Deleted argument for task with id '{}'", id);
+
+       taskRepository.delete(task);
     }
 }

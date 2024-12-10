@@ -5,6 +5,7 @@ import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.subject.exception.SubjectExistException;
 import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
 import org.example.kihelp_back.task.exception.TaskExistException;
+import org.example.kihelp_back.task.exception.TaskNotFoundException;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
@@ -111,6 +112,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ArgumentNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleArgumentNotFoundException(ArgumentNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        LOGGER.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleTaskNotFoundException(TaskNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
 
