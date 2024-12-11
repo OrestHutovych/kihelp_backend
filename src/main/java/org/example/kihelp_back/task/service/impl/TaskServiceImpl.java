@@ -3,15 +3,17 @@ package org.example.kihelp_back.task.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.task.exception.TaskExistException;
 import org.example.kihelp_back.task.exception.TaskNotFoundException;
+import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.task.model.Task;
+import org.example.kihelp_back.task.model.TaskUpdateRequest;
+import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.task.repository.TaskRepository;
 import org.example.kihelp_back.task.service.TaskService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static org.example.kihelp_back.task.util.ErrorMessage.TASK_EXIST;
-import static org.example.kihelp_back.task.util.ErrorMessage.TASK_NOT_FOUND;
+import static org.example.kihelp_back.task.util.ErrorMessage.*;
 
 @Service
 @Slf4j
@@ -65,9 +67,72 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteByTeacher(Integer teacherId) {
-       var tasks = getByTeacher(teacherId);
+        log.debug("Attempting to find task with id '{}'", teacherId);
+        var tasks = getByTeacher(teacherId);
+        log.debug("Successfully found tasks: {}", tasks);
 
-       tasks.forEach(t -> taskRepository.deleteAllArgumentByTaskId(t.getId()));
-       taskRepository.deleteAll(tasks);
+        log.debug("Deleting argument for task(s) with teacher id '{}'", teacherId);
+        tasks.forEach(t -> taskRepository.deleteAllArgumentByTaskId(t.getId()));
+        log.debug("Deleted argument for task(s) with teacher id '{}'", teacherId);
+
+        taskRepository.deleteAll(tasks);
+    }
+
+    @Override
+    public void update(Integer id, TaskUpdateRequest request) {
+        log.debug("Updating task with id: {}", id);
+        var task = getById(id);
+
+        if (request.title() != null && !request.title().isEmpty()) {
+            log.debug("Updating title to: '{}'", request.title());
+            task.setTitle(request.title());
+        }
+
+        if (request.description() != null && !request.description().isEmpty()) {
+            log.debug("Updating description to: '{}'", request.description());
+            task.setDescription(request.description());
+        }
+
+        if (request.identifier() != null && !request.identifier().isEmpty()) {
+            log.debug("Updating identifier to: '{}'", request.identifier());
+            task.setIdentifier(request.identifier());
+        }
+
+        if (request.price() != null) {
+            log.debug("Updating price to: {}", request.price());
+            task.setPrice(request.price());
+        }
+
+        if (request.discount() != null) {
+            log.debug("Updating discount to: {}", request.discount());
+            task.setDiscount(request.discount());
+        }
+
+        log.debug("Updating visibility to: {}", request.visible());
+        task.setVisible(request.visible());
+
+        if (request.type() != null && !request.type().isEmpty()) {
+            log.debug("Updating type to: '{}'", request.type());
+            task.setType(resolveType(request.type()));
+        }
+
+        if (request.developer() != null && !request.developer().isEmpty()) {
+            log.debug("Updating developer to: '{}'", request.developer());
+            task.setDeveloper(request.developer());
+        }
+
+        log.debug("Updating auto-generate to: {}", request.autoGenerate());
+        task.setAutoGenerate(request.autoGenerate());
+
+        log.info("Saving updated task: {}", task);
+        taskRepository.save(task);
+    }
+
+    private Type resolveType(String type) {
+        try {
+            return Type.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new TypeNotValidException(String.format(TYPE_NOT_VALID, type));
+        }
     }
 }
