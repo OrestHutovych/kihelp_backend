@@ -11,6 +11,7 @@ import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.user.exception.RoleNotFoundException;
 import org.example.kihelp_back.user.exception.UserIsBannedException;
+import org.example.kihelp_back.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -141,6 +142,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleRoleNotFoundException(RoleNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+
+        LOGGER.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
 
