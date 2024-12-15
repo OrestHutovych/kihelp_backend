@@ -1,6 +1,7 @@
 package org.example.kihelp_back.user.controller;
 
 import jakarta.validation.Valid;
+import org.example.kihelp_back.user.dto.JwtResponse;
 import org.example.kihelp_back.user.dto.UserBanRequest;
 import org.example.kihelp_back.user.dto.UserRequest;
 import org.example.kihelp_back.user.dto.UserResponse;
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public void authUser(@Valid @RequestBody UserRequest user) {
-        userCreateUseCase.authUser(user);
+    public JwtResponse authUser(@Valid @RequestBody UserRequest user) {
+       return userCreateUseCase.authUser(user);
     }
 
     @GetMapping("/user/all")

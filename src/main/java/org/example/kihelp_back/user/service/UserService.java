@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserService {
     void save(User user);
-    Optional<User> findByTelegramId(Long telegramId);
+    Optional<User> findByTelegramId(String telegramId);
     User findById(Long id);
     List<User> getAll();
     void changeBan(Long id, boolean value);

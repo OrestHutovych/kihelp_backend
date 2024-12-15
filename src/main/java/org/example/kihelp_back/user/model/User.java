@@ -14,7 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "telegram_id", unique = true, nullable = false)
-    private Long telegramId;
+    private String telegramId;
     @Column(name = "username", nullable = false)
     private String username;
     @Column(name = "password", nullable = false)

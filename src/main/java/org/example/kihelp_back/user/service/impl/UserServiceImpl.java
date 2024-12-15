@@ -5,22 +5,45 @@ import org.example.kihelp_back.user.exception.UserIsBannedException;
 import org.example.kihelp_back.user.exception.UserNotFoundException;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
+import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.example.kihelp_back.user.util.ErrorMessage.USER_IS_BANNED;
-import static org.example.kihelp_back.user.util.ErrorMessage.USER_NOT_FOUND;
+import static org.example.kihelp_back.user.util.ErrorMessage.*;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleService roleService;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleService roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var user = findByTelegramId(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_BY_TG_ID, username)
+                ));
+
+        return new org.springframework.security.core.userdetails.User(
+                String.valueOf(user.getTelegramId()),
+                user.getPassword(),
+                user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList()
+        );
     }
 
     @Override
@@ -52,7 +75,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByTelegramId(Long telegramId) {
+    public Optional<User> findByTelegramId(String telegramId) {
         log.info("Searching for user with Telegram ID: {}", telegramId);
         var user = userRepository.findByTelegramId(telegramId);
         if (user.isPresent()) {

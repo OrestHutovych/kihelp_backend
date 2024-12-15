@@ -13,6 +13,7 @@ import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.user.exception.RoleNotFoundException;
 import org.example.kihelp_back.user.exception.UserIsBannedException;
 import org.example.kihelp_back.user.exception.UserNotFoundException;
+import org.example.kihelp_back.user.exception.UserUnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -156,5 +157,14 @@ public class GlobalExceptionHandler {
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserUnauthorizedException.class)
+    public ResponseEntity<Map<String, String>> handleUserUnauthorizedException(UserUnauthorizedException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 }
