@@ -40,19 +40,27 @@ public class TaskCreateUseCaseImpl implements TaskCreateUseCase {
     @Override
     public void createTask(TaskRequest taskRequest) {
         if (taskRequest.autoGenerate()) {
+            log.debug("Auto-generation is enabled for the task.");
+
             String identifier = taskRequest.identifier();
             if (identifier == null || identifier.isBlank()) {
+                log.warn("Identifier is null. Throwing IllegalArgumentException.");
                 throw new IllegalArgumentException(IDENTIFIER_BLANK_NOT_VALID);
             }
+
+            log.debug("Task identifier is valid: {}", identifier);
         }
 
+        log.debug("Attempting to find developer with id '{}'", taskRequest.developerId());
         var developer = userService.findById(taskRequest.developerId());
+
         var roles = developer.getRoles()
                 .stream()
                 .filter(r -> r.getName().equals("ROLE_DEVELOPER") || r.getName().equals("ROLE_ADMIN"))
                 .toList();
 
         if (roles.isEmpty()) {
+            log.warn("Role is not equals Developer. Throwing TaskDeveloperNotValidException.");
             throw new TaskDeveloperNotValidException(
                     String.format(DEVELOPER_NOT_VALID, taskRequest.developerId())
             );

@@ -124,10 +124,16 @@ public class TaskServiceImpl implements TaskService {
         if (request.developerId() != null) {
             log.debug("Updating developer to: '{}'", request.developerId());
 
+            log.debug("Attempting to find developer with id '{}'", request.developerId());
             var developer = userService.findById(request.developerId());
-            var roles = developer.getRoles();
 
-            if (!roles.contains("ROLE_DEVELOPER") || !roles.contains("ROLE_ADMIN")) {
+            var roles = developer.getRoles()
+                    .stream()
+                    .filter(r -> r.getName().equals("ROLE_DEVELOPER") || r.getName().equals("ROLE_ADMIN"))
+                    .toList();
+
+            if (roles.isEmpty()) {
+                log.warn("Role is not equals Developer. Throwing TaskDeveloperNotValidException.");
                 throw new TaskDeveloperNotValidException(
                         String.format(DEVELOPER_NOT_VALID, request.developerId())
                 );
