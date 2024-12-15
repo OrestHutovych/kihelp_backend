@@ -7,6 +7,7 @@ import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.task.dto.TaskRequest;
 import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.teacher.model.Teacher;
+import org.example.kihelp_back.user.model.User;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -19,7 +20,7 @@ public class TaskRequestToTaskResponseImpl implements TaskRequestToTaskResponse 
 
 
     @Override
-    public Task map(TaskRequest taskRequest, Teacher teacher, List<Argument> arguments) {
+    public Task map(TaskRequest taskRequest, Teacher teacher, List<Argument> arguments, User developer) {
         Task task = new Task();
         task.setTitle(taskRequest.title());
         task.setDescription(taskRequest.description());
@@ -28,7 +29,7 @@ public class TaskRequestToTaskResponseImpl implements TaskRequestToTaskResponse 
         task.setDiscount(0.0);
         task.setVisible(false);
         task.setType(resolveType(taskRequest.type()));
-        task.setDeveloper(taskRequest.developer());
+        task.setDeveloper(developer);
         task.setAutoGenerate(taskRequest.autoGenerate());
         task.setCreatedTimeStamp(Instant.now());
         task.setTeacher(teacher);

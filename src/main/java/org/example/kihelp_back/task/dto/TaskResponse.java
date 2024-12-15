@@ -14,7 +14,7 @@ public record TaskResponse(
         Double discount,
         boolean visible,
         String type,
-        String developer,
+        Long developerId,
         boolean autoGenerate,
         Instant createdTimeStamp,
         List<Argument> arguments,

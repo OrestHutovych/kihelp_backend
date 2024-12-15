@@ -10,5 +10,6 @@ public interface UserService {
     Optional<User> findByTelegramId(String telegramId);
     User findById(Long id);
     List<User> getAll();
+    List<User> getByRole(String roleName);
     void changeBan(Long id, boolean value);
 }

@@ -9,6 +9,6 @@ public record TaskUpdateRequest(
         boolean visible,
         String type,
         boolean autoGenerate,
-        String developer
+        Long developerId
 ) {
 }

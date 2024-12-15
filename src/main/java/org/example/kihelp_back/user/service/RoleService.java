@@ -4,4 +4,5 @@ import org.example.kihelp_back.user.model.Role;
 
 public interface RoleService {
     Role findByName(String name);
+    boolean existsByName(String name);
 }

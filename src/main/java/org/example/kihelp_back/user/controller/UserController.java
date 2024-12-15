@@ -37,6 +37,11 @@ public class UserController {
         return userGetUseCase.getAllUsers();
     }
 
+    @GetMapping("/user/by/role/{role_name}")
+    public List<UserResponse> getUsersByRole(@PathVariable("role_name") String roleName) {
+        return userGetUseCase.getUserByRole(roleName);
+    }
+
     @PatchMapping("/user/ban/{id}")
     public void banUser(@PathVariable("id") Long userId, @RequestBody UserBanRequest request) {
         userUpdateUseCase.changeBanValueByUser(userId, request);

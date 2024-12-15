@@ -1,6 +1,7 @@
 package org.example.kihelp_back.task.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.task.exception.TaskDeveloperNotValidException;
 import org.example.kihelp_back.task.exception.TaskExistException;
 import org.example.kihelp_back.task.exception.TaskNotFoundException;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
@@ -9,6 +10,7 @@ import org.example.kihelp_back.task.dto.TaskUpdateRequest;
 import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.task.repository.TaskRepository;
 import org.example.kihelp_back.task.service.TaskService;
+import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +21,12 @@ import static org.example.kihelp_back.task.util.ErrorMessage.*;
 @Slf4j
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository,
+                           UserService userService) {
         this.taskRepository = taskRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -116,9 +121,19 @@ public class TaskServiceImpl implements TaskService {
             task.setType(resolveType(request.type()));
         }
 
-        if (request.developer() != null && !request.developer().isEmpty()) {
-            log.debug("Updating developer to: '{}'", request.developer());
-            task.setDeveloper(request.developer());
+        if (request.developerId() != null) {
+            log.debug("Updating developer to: '{}'", request.developerId());
+
+            var developer = userService.findById(request.developerId());
+            var roles = developer.getRoles();
+
+            if (!roles.contains("ROLE_DEVELOPER") || !roles.contains("ROLE_ADMIN")) {
+                throw new TaskDeveloperNotValidException(
+                        String.format(DEVELOPER_NOT_VALID, request.developerId())
+                );
+            }
+
+            task.setDeveloper(developer);
         }
 
         log.debug("Updating auto-generate to: {}", request.autoGenerate());

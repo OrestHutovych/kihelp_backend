@@ -7,4 +7,5 @@ public class ErrorMessage {
     public static final String TITLE_BLANK_NOT_VALID = "Заголовок завдання не повинен будти пустим.";
     public static final String IDENTIFIER_BLANK_NOT_VALID = "Ідентифікатор дл завдання не повинен будти пустим.";
     public static final String PRICE_MIN_NOT_VALID = "Ціна повинна бути більше 1 UAH.";
+    public static final String DEVELOPER_NOT_VALID = "У розробника з id (%s) відсутня роль Developer.";
 }

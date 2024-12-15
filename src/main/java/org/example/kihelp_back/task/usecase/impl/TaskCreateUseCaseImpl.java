@@ -2,15 +2,18 @@ package org.example.kihelp_back.task.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.service.ArgumentService;
+import org.example.kihelp_back.task.exception.TaskDeveloperNotValidException;
 import org.example.kihelp_back.task.mapper.TaskRequestToTaskResponse;
 import org.example.kihelp_back.task.dto.TaskRequest;
 import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.task.usecase.TaskCreateUseCase;
 import org.example.kihelp_back.teacher.service.TeacherService;
+import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+import static org.example.kihelp_back.task.util.ErrorMessage.DEVELOPER_NOT_VALID;
 import static org.example.kihelp_back.task.util.ErrorMessage.IDENTIFIER_BLANK_NOT_VALID;
 
 @Component
@@ -19,16 +22,19 @@ public class TaskCreateUseCaseImpl implements TaskCreateUseCase {
     private final TaskService taskService;
     private final TeacherService teacherService;
     private final ArgumentService argumentService;
+    private final UserService userService;
     private final TaskRequestToTaskResponse taskRequestToTaskResponse;
 
     public TaskCreateUseCaseImpl(TaskService taskService,
                                  TeacherService teacherService,
                                  TaskRequestToTaskResponse taskRequestToTaskResponse,
-                                 ArgumentService argumentService) {
+                                 ArgumentService argumentService,
+                                 UserService userService) {
         this.taskService = taskService;
         this.teacherService = teacherService;
         this.taskRequestToTaskResponse = taskRequestToTaskResponse;
         this.argumentService = argumentService;
+        this.userService = userService;
     }
 
     @Override
@@ -38,6 +44,18 @@ public class TaskCreateUseCaseImpl implements TaskCreateUseCase {
             if (identifier == null || identifier.isBlank()) {
                 throw new IllegalArgumentException(IDENTIFIER_BLANK_NOT_VALID);
             }
+        }
+
+        var developer = userService.findById(taskRequest.developerId());
+        var roles = developer.getRoles()
+                .stream()
+                .filter(r -> r.getName().equals("ROLE_DEVELOPER") || r.getName().equals("ROLE_ADMIN"))
+                .toList();
+
+        if (roles.isEmpty()) {
+            throw new TaskDeveloperNotValidException(
+                    String.format(DEVELOPER_NOT_VALID, taskRequest.developerId())
+            );
         }
 
         log.debug("Attempting to find teacher with id '{}'", taskRequest.teacherId());
@@ -56,7 +74,8 @@ public class TaskCreateUseCaseImpl implements TaskCreateUseCase {
                 teacher,
                 arguments
         );
-        var task = taskRequestToTaskResponse.map(taskRequest, teacher, arguments);
+
+        var task = taskRequestToTaskResponse.map(taskRequest, teacher, arguments, developer);
         log.debug("Mapped Task entity: {}", task);
 
         taskService.create(task);

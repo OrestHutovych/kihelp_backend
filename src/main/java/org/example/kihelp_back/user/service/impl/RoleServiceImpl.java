@@ -28,4 +28,9 @@ public class RoleServiceImpl implements RoleService {
                             String.format(ROLE_NOT_FOUND, name));
                 });
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return roleRepository.existsByName(name);
+    }
 }

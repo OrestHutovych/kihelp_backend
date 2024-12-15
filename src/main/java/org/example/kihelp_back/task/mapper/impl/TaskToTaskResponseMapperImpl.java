@@ -19,7 +19,7 @@ public class TaskToTaskResponseMapperImpl implements TaskToTaskResponseMapper {
               task.getDiscount(),
               task.isVisible(),
               task.getType().name(),
-              task.getDeveloper(),
+              task.getDeveloper().getId(),
               task.isAutoGenerate(),
               task.getCreatedTimeStamp(),
               task.getArguments(),

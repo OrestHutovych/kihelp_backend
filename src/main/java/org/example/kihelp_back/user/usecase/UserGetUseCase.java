@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface UserGetUseCase {
     List<UserResponse> getAllUsers();
+    List<UserResponse> getUserByRole(String roleName);
 }

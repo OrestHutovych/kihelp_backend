@@ -1,10 +1,12 @@
 package org.example.kihelp_back.user.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.user.exception.RoleNotFoundException;
 import org.example.kihelp_back.user.exception.UserIsBannedException;
 import org.example.kihelp_back.user.exception.UserNotFoundException;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
+import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +24,12 @@ import static org.example.kihelp_back.user.util.ErrorMessage.*;
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleService roleService;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleService roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
     @Override
@@ -49,7 +54,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void save(User user) {
         log.info("Starting the save process for user with Telegram ID: {}", user.getTelegramId());
-
         var existingUser = findByTelegramId(user.getTelegramId());
 
         if (existingUser.isPresent()) {
@@ -90,7 +94,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User findById(Long id) {
         log.info("Attempting to find user by ID: {}", id);
         return userRepository.findById(id).orElseThrow(() -> {
-            log.warn("User with ID {} not found.", id);
+            log.warn("User with ID {} not found. Thrown UserNotFoundException", id);
             return new UserNotFoundException(String.format(USER_NOT_FOUND, id));
         });
     }
@@ -99,6 +103,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<User> getAll() {
         log.info("Fetching all users from the database.");
         var users = userRepository.findAll();
+        log.debug("Found {} users in the database.", users.size());
+        return users;
+    }
+
+    @Override
+    public List<User> getByRole(String roleName) {
+        log.debug("Attempting to find users by role: {}", roleName);
+        var exist = roleService.existsByName(roleName);
+
+        if(!exist){
+            log.warn("Role with name {} not found. Thrown RoleNotFoundException", roleName);
+            throw new RoleNotFoundException(String.format(ROLE_NOT_FOUND, roleName));
+        }
+
+        log.info("Fetching users by role name from the database.");
+        var users = userRepository.findByRoleName(roleName);
         log.debug("Found {} users in the database.", users.size());
         return users;
     }

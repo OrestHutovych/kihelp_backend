@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.teacher.model.Teacher;
+import org.example.kihelp_back.user.model.User;
 
 import java.time.Instant;
 import java.util.List;
@@ -34,11 +35,11 @@ public class Task {
     private Type type;
     @Column(name = "auto_generate", nullable = false)
     private boolean autoGenerate;
-
-    // todo Add DeveloperEntity
-    @Column(name = "developer", nullable = false)
-    private String developer;
     private Instant createdTimeStamp;
+
+    @ManyToOne
+    @JoinColumn(name = "developer_id", referencedColumnName = "id")
+    private User developer;
 
     @ManyToMany
     @JoinTable(
