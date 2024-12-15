@@ -1,6 +1,8 @@
 package org.example.kihelp_back.task.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.task.dto.TaskProcessRequest;
+import org.example.kihelp_back.task.dto.TaskProcessResponse;
 import org.example.kihelp_back.task.exception.TaskDeveloperNotValidException;
 import org.example.kihelp_back.task.exception.TaskExistException;
 import org.example.kihelp_back.task.exception.TaskNotFoundException;
@@ -41,6 +43,14 @@ public class TaskServiceImpl implements TaskService {
         }
 
         taskRepository.save(task);
+    }
+
+    @Override
+    public TaskProcessResponse process(Integer taskId, TaskProcessRequest request) {
+        var task = getById(taskId);
+
+
+        return null;
     }
 
     @Override

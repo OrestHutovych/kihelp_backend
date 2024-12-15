@@ -16,9 +16,8 @@ public class TaskProcessUseCaseImpl implements TaskProcessUseCase {
 
     @Override
     public TaskProcessResponse processTask(Integer taskId, TaskProcessRequest request) {
-        // todo call taskService.process();
+        var taskProcessResponse = taskService.process(taskId, request);
 
-
-        return null;
+        return taskProcessResponse;
     }
 }
