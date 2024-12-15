@@ -27,7 +27,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void save(Subject subject) {
+    public Subject save(Subject subject) {
         log.debug("Checking if subject with name '{}' and course number '{}' exists", subject.getName(), subject.getCourseNumber());
         var existsByNameAndCourseNumber = subjectRepository.existsByNameAndCourseNumber(subject.getName(), subject.getCourseNumber());
         log.debug("Existence check result {}", existsByNameAndCourseNumber);
@@ -40,7 +40,7 @@ public class SubjectServiceImpl implements SubjectService {
             throw new SubjectExistException(String.format(SUBJECT_EXIST, subject.getName(), subject.getCourseNumber()));
         }
 
-        subjectRepository.save(subject);
+        return subjectRepository.save(subject);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void update(Integer id, String name) {
+    public Subject update(Integer id, String name) {
         log.debug("Attempting to find subject with id '{}'", id);
         var subject = getSubjectById(id);
         log.debug("Successfully found subject: {}", subject);
@@ -85,6 +85,6 @@ public class SubjectServiceImpl implements SubjectService {
         subject.setName(name);
         log.debug("Successfully updated subject: {}", subject);
 
-        subjectRepository.save(subject);
+        return subjectRepository.save(subject);
     }
 }
