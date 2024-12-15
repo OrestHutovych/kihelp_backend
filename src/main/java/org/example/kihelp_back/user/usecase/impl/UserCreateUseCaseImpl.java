@@ -49,17 +49,22 @@ public class UserCreateUseCaseImpl implements UserCreateUseCase {
         userService.save(user);
 
         try {
+            log.debug("Attempting authentication for Telegram ID: {}", request.telegramId());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     request.telegramId(),
                     request.telegramId()
             ));
-        }catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
+            log.warn("Authentication failed for Telegram ID: {}", request.telegramId());
             throw new UserUnauthorizedException(USER_BAD_CREDENTIALS);
         }
 
+        log.debug("Loading UserDetails for Telegram ID: {}", user.getTelegramId());
         UserDetails userDetails = userService.loadUserByUsername(user.getTelegramId());
+        log.debug("Generating JWT token for user: {}", userDetails);
         String jwtToken = jwtTokenUtils.generateToken(userDetails);
 
+        log.info("Successfully generated JWT token for Telegram ID: {}", user.getTelegramId());
         return new JwtResponse(jwtToken);
     }
 }

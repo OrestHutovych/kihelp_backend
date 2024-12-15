@@ -5,7 +5,6 @@ import org.example.kihelp_back.user.exception.UserIsBannedException;
 import org.example.kihelp_back.user.exception.UserNotFoundException;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
-import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,21 +22,22 @@ import static org.example.kihelp_back.user.util.ErrorMessage.*;
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
-    private final RoleService roleService;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleService roleService) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("Attempting to load user by Telegram ID: {}", username);
         var user = findByTelegramId(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        String.format(USER_NOT_FOUND_BY_TG_ID, username)
-                ));
+                .orElseThrow(() -> {
+                    log.warn("User not found by Telegram ID: {}. Thrown UsernameNotFoundException", username);
+                    return new UsernameNotFoundException(
+                            String.format(USER_NOT_FOUND_BY_TG_ID, username)
+                    );
+                });
 
         return new org.springframework.security.core.userdetails.User(
                 String.valueOf(user.getTelegramId()),
