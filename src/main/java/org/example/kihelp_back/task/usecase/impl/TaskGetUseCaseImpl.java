@@ -2,7 +2,7 @@ package org.example.kihelp_back.task.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.task.mapper.TaskToTaskResponseMapper;
-import org.example.kihelp_back.task.model.TaskResponse;
+import org.example.kihelp_back.task.dto.TaskResponse;
 import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.task.usecase.TaskGetUseCase;
 import org.springframework.stereotype.Component;

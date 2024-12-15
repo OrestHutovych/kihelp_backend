@@ -2,7 +2,7 @@ package org.example.kihelp_back.user.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.user.mapper.UserRequestToUserMapper;
-import org.example.kihelp_back.user.model.UserRequest;
+import org.example.kihelp_back.user.dto.UserRequest;
 import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;

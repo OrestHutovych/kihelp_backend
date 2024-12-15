@@ -3,7 +3,7 @@ package org.example.kihelp_back.teacher.mapper.impl;
 import org.example.kihelp_back.subject.model.Subject;
 import org.example.kihelp_back.teacher.mapper.TeacherRequestToTeacherMapper;
 import org.example.kihelp_back.teacher.model.Teacher;
-import org.example.kihelp_back.teacher.model.TeacherRequest;
+import org.example.kihelp_back.teacher.dto.TeacherRequest;
 import org.springframework.stereotype.Component;
 
 @Component

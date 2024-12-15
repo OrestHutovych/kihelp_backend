@@ -2,7 +2,7 @@ package org.example.kihelp_back.user.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.user.mapper.UserToUserResponseMapper;
-import org.example.kihelp_back.user.model.UserResponse;
+import org.example.kihelp_back.user.dto.UserResponse;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserGetUseCase;
 import org.springframework.stereotype.Component;

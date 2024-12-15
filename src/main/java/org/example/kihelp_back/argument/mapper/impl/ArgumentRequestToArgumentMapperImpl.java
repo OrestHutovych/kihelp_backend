@@ -2,7 +2,7 @@ package org.example.kihelp_back.argument.mapper.impl;
 
 import org.example.kihelp_back.argument.mapper.ArgumentRequestToArgumentMapper;
 import org.example.kihelp_back.argument.model.Argument;
-import org.example.kihelp_back.argument.model.ArgumentRequest;
+import org.example.kihelp_back.argument.dto.ArgumentRequest;
 import org.springframework.stereotype.Component;
 
 @Component

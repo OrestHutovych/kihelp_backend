@@ -1,9 +1,9 @@
 package org.example.kihelp_back.argument.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.argument.model.ArgumentRequest;
-import org.example.kihelp_back.argument.model.ArgumentResponse;
-import org.example.kihelp_back.argument.model.ArgumentUpdateRequest;
+import org.example.kihelp_back.argument.dto.ArgumentRequest;
+import org.example.kihelp_back.argument.dto.ArgumentResponse;
+import org.example.kihelp_back.argument.dto.ArgumentUpdateRequest;
 import org.example.kihelp_back.argument.usecase.ArgumentCreateUseCase;
 import org.example.kihelp_back.argument.usecase.ArgumentDeleteUseCase;
 import org.example.kihelp_back.argument.usecase.ArgumentGetUseCase;

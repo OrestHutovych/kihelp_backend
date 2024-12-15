@@ -1,6 +1,6 @@
 package org.example.kihelp_back.task.usecase.impl;
 
-import org.example.kihelp_back.task.model.TaskUpdateRequest;
+import org.example.kihelp_back.task.dto.TaskUpdateRequest;
 import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.task.usecase.TaskUpdateUseCase;
 import org.springframework.stereotype.Component;

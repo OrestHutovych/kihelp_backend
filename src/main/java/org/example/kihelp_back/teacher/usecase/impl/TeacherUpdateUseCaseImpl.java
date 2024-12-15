@@ -1,6 +1,6 @@
 package org.example.kihelp_back.teacher.usecase.impl;
 
-import org.example.kihelp_back.teacher.model.TeacherUpdateRequest;
+import org.example.kihelp_back.teacher.dto.TeacherUpdateRequest;
 import org.example.kihelp_back.teacher.service.TeacherService;
 import org.example.kihelp_back.teacher.usecase.TeacherUpdateUseCase;
 import org.springframework.stereotype.Component;

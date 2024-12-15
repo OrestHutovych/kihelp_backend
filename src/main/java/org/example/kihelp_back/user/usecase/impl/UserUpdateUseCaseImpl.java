@@ -1,7 +1,7 @@
 package org.example.kihelp_back.user.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.user.model.UserBanRequest;
+import org.example.kihelp_back.user.dto.UserBanRequest;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.stereotype.Component;

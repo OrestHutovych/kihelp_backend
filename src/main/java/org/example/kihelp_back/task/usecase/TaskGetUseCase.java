@@ -1,6 +1,6 @@
 package org.example.kihelp_back.task.usecase;
 
-import org.example.kihelp_back.task.model.TaskResponse;
+import org.example.kihelp_back.task.dto.TaskResponse;
 
 import java.util.List;
 

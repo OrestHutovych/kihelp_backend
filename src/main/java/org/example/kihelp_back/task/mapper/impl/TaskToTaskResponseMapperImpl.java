@@ -2,7 +2,7 @@ package org.example.kihelp_back.task.mapper.impl;
 
 import org.example.kihelp_back.task.mapper.TaskToTaskResponseMapper;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.model.TaskResponse;
+import org.example.kihelp_back.task.dto.TaskResponse;
 import org.springframework.stereotype.Component;
 
 @Component

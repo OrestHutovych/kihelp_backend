@@ -2,7 +2,7 @@ package org.example.kihelp_back.teacher.mapper.impl;
 
 import org.example.kihelp_back.teacher.mapper.TeacherToTeacherResponseMapper;
 import org.example.kihelp_back.teacher.model.Teacher;
-import org.example.kihelp_back.teacher.model.TeacherResponse;
+import org.example.kihelp_back.teacher.dto.TeacherResponse;
 import org.springframework.stereotype.Component;
 
 @Component

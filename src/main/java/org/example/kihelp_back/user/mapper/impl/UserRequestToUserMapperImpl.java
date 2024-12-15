@@ -3,7 +3,7 @@ package org.example.kihelp_back.user.mapper.impl;
 import org.example.kihelp_back.user.mapper.UserRequestToUserMapper;
 import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.model.User;
-import org.example.kihelp_back.user.model.UserRequest;
+import org.example.kihelp_back.user.dto.UserRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

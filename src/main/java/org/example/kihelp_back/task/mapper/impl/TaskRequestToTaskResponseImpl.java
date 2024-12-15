@@ -4,7 +4,7 @@ import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.task.mapper.TaskRequestToTaskResponse;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.model.TaskRequest;
+import org.example.kihelp_back.task.dto.TaskRequest;
 import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.teacher.model.Teacher;
 import org.springframework.stereotype.Component;

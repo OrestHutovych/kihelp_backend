@@ -2,7 +2,7 @@ package org.example.kihelp_back.argument.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.mapper.ArgumentToArgumentResponseMapper;
-import org.example.kihelp_back.argument.model.ArgumentResponse;
+import org.example.kihelp_back.argument.dto.ArgumentResponse;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.example.kihelp_back.argument.usecase.ArgumentGetUseCase;
 import org.springframework.stereotype.Component;

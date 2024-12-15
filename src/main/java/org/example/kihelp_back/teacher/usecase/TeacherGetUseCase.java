@@ -1,6 +1,6 @@
 package org.example.kihelp_back.teacher.usecase;
 
-import org.example.kihelp_back.teacher.model.TeacherResponse;
+import org.example.kihelp_back.teacher.dto.TeacherResponse;
 
 import java.util.List;
 

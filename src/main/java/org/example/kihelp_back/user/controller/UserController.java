@@ -1,9 +1,9 @@
 package org.example.kihelp_back.user.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.user.model.UserBanRequest;
-import org.example.kihelp_back.user.model.UserRequest;
-import org.example.kihelp_back.user.model.UserResponse;
+import org.example.kihelp_back.user.dto.UserBanRequest;
+import org.example.kihelp_back.user.dto.UserRequest;
+import org.example.kihelp_back.user.dto.UserResponse;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;
 import org.example.kihelp_back.user.usecase.UserGetUseCase;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;

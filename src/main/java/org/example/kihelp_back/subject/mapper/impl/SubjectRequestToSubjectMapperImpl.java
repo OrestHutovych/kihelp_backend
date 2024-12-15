@@ -2,7 +2,7 @@ package org.example.kihelp_back.subject.mapper.impl;
 
 import org.example.kihelp_back.subject.mapper.SubjectRequestToSubjectMapper;
 import org.example.kihelp_back.subject.model.Subject;
-import org.example.kihelp_back.subject.model.SubjectRequest;
+import org.example.kihelp_back.subject.dto.SubjectRequest;
 import org.springframework.stereotype.Component;
 
 @Component

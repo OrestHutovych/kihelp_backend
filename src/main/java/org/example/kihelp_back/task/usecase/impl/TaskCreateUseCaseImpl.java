@@ -3,13 +3,12 @@ package org.example.kihelp_back.task.usecase.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.example.kihelp_back.task.mapper.TaskRequestToTaskResponse;
-import org.example.kihelp_back.task.model.TaskRequest;
+import org.example.kihelp_back.task.dto.TaskRequest;
 import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.task.usecase.TaskCreateUseCase;
 import org.example.kihelp_back.teacher.service.TeacherService;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.example.kihelp_back.task.util.ErrorMessage.IDENTIFIER_BLANK_NOT_VALID;

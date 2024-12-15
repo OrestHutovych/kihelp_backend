@@ -1,7 +1,7 @@
 package org.example.kihelp_back.task.service;
 
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.model.TaskUpdateRequest;
+import org.example.kihelp_back.task.dto.TaskUpdateRequest;
 
 import java.util.List;
 

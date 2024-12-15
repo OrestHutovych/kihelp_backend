@@ -1,4 +1,4 @@
-package org.example.kihelp_back.user.model;
+package org.example.kihelp_back.user.dto;
 
 import jakarta.validation.constraints.NotNull;
 

@@ -1,7 +1,7 @@
 package org.example.kihelp_back.argument.service;
 
 import org.example.kihelp_back.argument.model.Argument;
-import org.example.kihelp_back.argument.model.ArgumentUpdateRequest;
+import org.example.kihelp_back.argument.dto.ArgumentUpdateRequest;
 
 import java.util.List;
 

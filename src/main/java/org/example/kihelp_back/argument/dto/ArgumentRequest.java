@@ -1,4 +1,4 @@
-package org.example.kihelp_back.argument.model;
+package org.example.kihelp_back.argument.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

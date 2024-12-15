@@ -1,4 +1,4 @@
-package org.example.kihelp_back.task.model;
+package org.example.kihelp_back.task.dto;
 
 public record TaskUpdateRequest(
         String title,

@@ -1,4 +1,4 @@
-package org.example.kihelp_back.task.model;
+package org.example.kihelp_back.task.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

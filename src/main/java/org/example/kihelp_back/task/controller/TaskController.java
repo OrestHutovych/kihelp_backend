@@ -1,7 +1,7 @@
 package org.example.kihelp_back.task.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.task.model.*;
+import org.example.kihelp_back.task.dto.*;
 import org.example.kihelp_back.task.usecase.*;
 import org.springframework.web.bind.annotation.*;
 

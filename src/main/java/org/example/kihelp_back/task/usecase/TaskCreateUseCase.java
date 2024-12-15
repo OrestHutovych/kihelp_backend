@@ -1,7 +1,7 @@
 package org.example.kihelp_back.task.usecase;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.task.model.TaskRequest;
+import org.example.kihelp_back.task.dto.TaskRequest;
 import org.springframework.validation.annotation.Validated;
 
 @Validated

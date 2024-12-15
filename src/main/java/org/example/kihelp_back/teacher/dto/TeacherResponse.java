@@ -1,4 +1,4 @@
-package org.example.kihelp_back.teacher.model;
+package org.example.kihelp_back.teacher.dto;
 
 public record TeacherResponse(
         Integer id,

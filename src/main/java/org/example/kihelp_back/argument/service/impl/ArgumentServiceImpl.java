@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.argument.model.Argument;
-import org.example.kihelp_back.argument.model.ArgumentUpdateRequest;
+import org.example.kihelp_back.argument.dto.ArgumentUpdateRequest;
 import org.example.kihelp_back.argument.repository.ArgumentRepository;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.springframework.stereotype.Service;

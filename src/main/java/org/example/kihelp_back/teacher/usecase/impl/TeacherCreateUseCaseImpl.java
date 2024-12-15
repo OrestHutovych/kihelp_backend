@@ -3,7 +3,7 @@ package org.example.kihelp_back.teacher.usecase.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.subject.service.SubjectService;
 import org.example.kihelp_back.teacher.mapper.TeacherRequestToTeacherMapper;
-import org.example.kihelp_back.teacher.model.TeacherRequest;
+import org.example.kihelp_back.teacher.dto.TeacherRequest;
 import org.example.kihelp_back.teacher.service.TeacherService;
 import org.example.kihelp_back.teacher.usecase.TeacherCreateUseCase;
 import org.springframework.stereotype.Component;

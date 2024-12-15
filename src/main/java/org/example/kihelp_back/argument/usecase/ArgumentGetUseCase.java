@@ -1,6 +1,6 @@
 package org.example.kihelp_back.argument.usecase;
 
-import org.example.kihelp_back.argument.model.ArgumentResponse;
+import org.example.kihelp_back.argument.dto.ArgumentResponse;
 
 import java.util.List;
 

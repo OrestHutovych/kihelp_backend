@@ -1,6 +1,6 @@
 package org.example.kihelp_back.argument.usecase.impl;
 
-import org.example.kihelp_back.argument.model.ArgumentUpdateRequest;
+import org.example.kihelp_back.argument.dto.ArgumentUpdateRequest;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.example.kihelp_back.argument.usecase.ArgumentUpdateUseCase;
 import org.springframework.stereotype.Component;

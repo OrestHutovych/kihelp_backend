@@ -1,9 +1,9 @@
 package org.example.kihelp_back.teacher.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.teacher.model.TeacherRequest;
-import org.example.kihelp_back.teacher.model.TeacherResponse;
-import org.example.kihelp_back.teacher.model.TeacherUpdateRequest;
+import org.example.kihelp_back.teacher.dto.TeacherRequest;
+import org.example.kihelp_back.teacher.dto.TeacherResponse;
+import org.example.kihelp_back.teacher.dto.TeacherUpdateRequest;
 import org.example.kihelp_back.teacher.usecase.TeacherCreateUseCase;
 import org.example.kihelp_back.teacher.usecase.TeacherDeleteUseCase;
 import org.example.kihelp_back.teacher.usecase.TeacherGetUseCase;

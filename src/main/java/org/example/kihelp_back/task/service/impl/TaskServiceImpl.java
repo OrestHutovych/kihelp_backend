@@ -5,7 +5,7 @@ import org.example.kihelp_back.task.exception.TaskExistException;
 import org.example.kihelp_back.task.exception.TaskNotFoundException;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.model.TaskUpdateRequest;
+import org.example.kihelp_back.task.dto.TaskUpdateRequest;
 import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.task.repository.TaskRepository;
 import org.example.kihelp_back.task.service.TaskService;

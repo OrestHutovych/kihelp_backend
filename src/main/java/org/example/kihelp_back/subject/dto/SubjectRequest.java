@@ -1,4 +1,4 @@
-package org.example.kihelp_back.subject.model;
+package org.example.kihelp_back.subject.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

@@ -1,4 +1,4 @@
-package org.example.kihelp_back.task.model;
+package org.example.kihelp_back.task.dto;
 
 import java.util.List;
 
