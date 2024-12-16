@@ -26,13 +26,11 @@ public class WalletCreateUseCaseImpl implements WalletCreateUseCase {
 
     @Override
     public void createWallet(WalletRequest request) {
-        log.info("Attempting to create a wallet for user with ID: {}", request.userId());
-
         var user = userService.findById(request.userId());
+
+        log.info("Attempting to map WalletRequest {} to Wallet", request);
         var wallet = walletRequestToWalletMapper.map(request, user);
-        log.info("Mapped wallet request to wallet: {}", wallet);
 
         walletService.save(wallet);
-        log.info("Wallet created for user with ID: {}", wallet.getUser().getId());
     }
 }
