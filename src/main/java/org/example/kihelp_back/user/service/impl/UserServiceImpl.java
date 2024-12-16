@@ -8,8 +8,6 @@ import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
 import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
-import org.example.kihelp_back.wallet.model.Wallet;
-import org.example.kihelp_back.wallet.service.WalletService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,14 +25,11 @@ import static org.example.kihelp_back.user.util.ErrorMessage.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
-    private final WalletService walletService;
 
     public UserServiceImpl(UserRepository userRepository,
-                           RoleService roleService,
-                           WalletService walletService) {
+                           RoleService roleService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
-        this.walletService = walletService;
     }
 
     @Override
@@ -57,6 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public void save(User user) {
         log.info("Starting the save process for user with Telegram ID: {}", user.getTelegramId());
         var existingUser = findByTelegramId(user.getTelegramId());
@@ -76,15 +72,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userRepository.save(existingUser.get());
             log.info("User with Telegram ID {} successfully updated.", user.getTelegramId());
         } else {
-            log.info("No existing user found with Telegram ID: {}. Saving new user.", user.getTelegramId());
-
-            log.debug("Default wallet creating for user with Telegram ID: {}", user.getTelegramId());
-            Wallet wallet = walletService.createDefaultWallet(user);
-            log.info("Wallet adding to user with Telegram ID: {}", user.getTelegramId());
-            user.getWallet().add(wallet);
-
             userRepository.save(user);
-            log.info("User with Telegram ID {} successfully saved.", user.getTelegramId());
+            log.debug("User wallets: {}", user.getWallet());
         }
     }
 

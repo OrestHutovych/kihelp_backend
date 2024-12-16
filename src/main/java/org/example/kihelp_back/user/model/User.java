@@ -35,6 +35,17 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wallet> wallet = new ArrayList<>();
 
+    @PostPersist
+    private void createDefaultWallet() {
+        Wallet defaultWallet = Wallet.builder()
+                .name("Загальний гаманець")
+                .balance(0.0)
+                .defaultWallet(true)
+                .user(this)
+                .build();
+        this.wallet.add(defaultWallet);
+    }
+
 //    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 //    private Profile profile;
 }

@@ -15,6 +15,8 @@ import org.example.kihelp_back.user.exception.RoleNotFoundException;
 import org.example.kihelp_back.user.exception.UserIsBannedException;
 import org.example.kihelp_back.user.exception.UserNotFoundException;
 import org.example.kihelp_back.user.exception.UserUnauthorizedException;
+import org.example.kihelp_back.wallet.exception.WalletDefaultExistException;
+import org.example.kihelp_back.wallet.exception.WalletExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -171,6 +173,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskDeveloperNotValidException.class)
     public ResponseEntity<Map<String, String>> handleTaskDeveloperNotValidException(TaskDeveloperNotValidException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(WalletDefaultExistException.class)
+    public ResponseEntity<Map<String, String>> handleWalletDefaultExistException(WalletDefaultExistException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(WalletExistException.class)
+    public ResponseEntity<Map<String, String>> handleWalletExistException(WalletExistException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("message", ex.getMessage());
 

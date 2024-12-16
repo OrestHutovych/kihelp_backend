@@ -20,21 +20,24 @@ public class LoggingAspect {
             "execution(public * org.example.kihelp_back.subject.controller.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.task.controller.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.argument.controller.*.*(..)) ||" +
-            "execution(public * org.example.kihelp_back.user.controller.*.*(..))")
+            "execution(public * org.example.kihelp_back.user.controller.*.*(..)) || " +
+            "execution(public * org.example.kihelp_back.wallet.controller.*.*(..))")
     public void controllerLog(){}
 
     @Pointcut("execution(public * org.example.kihelp_back.teacher.service.impl.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.subject.service.impl.*.*(..)) || " +
             "execution(public * org.example.kihelp_back.task.service.impl.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.argument.service.impl.*.*(..)) ||" +
-            "execution(public * org.example.kihelp_back.user.service.impl.*.*(..))")
+            "execution(public * org.example.kihelp_back.user.service.impl.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.wallet.service.impl.*.*(..))")
     public void serviceLog(){}
 
     @Pointcut("execution(public * org.example.kihelp_back.teacher.usecase.impl.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.subject.usecase.impl.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.task.usecase.impl.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.argument.usecase.impl.*.*(..)) ||" +
-            "execution(public * org.example.kihelp_back.user.usecase.impl.*.*(..))")
+            "execution(public * org.example.kihelp_back.user.usecase.impl.*.*(..)) || " +
+            "execution(public * org.example.kihelp_back.wallet.usecase.impl.*.*(..))")
     public void useCaseLog(){}
 
     @Before("controllerLog()")
