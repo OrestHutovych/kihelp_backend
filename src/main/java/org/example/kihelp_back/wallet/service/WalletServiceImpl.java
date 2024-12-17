@@ -51,6 +51,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet findById(Long id) {
+        log.info("Attempting to find wallet with user ID: {}", id);
         return walletRepository.findById(id)
                 .orElseThrow(() -> new WalletNotFoundException(String.format(
                         WALLET_NOT_FOUND, id
@@ -83,6 +84,7 @@ public class WalletServiceImpl implements WalletService {
     public void deleteByNotDefaultByUser(Long userId) {
         var wallets = walletRepository.findByUserId(userId);
 
+        log.info("Check if wallet is not default and delete it.");
         wallets.stream()
                 .filter(wallet -> !wallet.isDefaultWallet())
                 .forEach(walletRepository::delete);
