@@ -17,6 +17,4 @@ public class WalletController {
     public void createWallet(@RequestBody WalletRequest request) {
         walletCreateUseCase.createWallet(request);
     }
-
-    
 }

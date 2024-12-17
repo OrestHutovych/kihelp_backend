@@ -1,13 +1,17 @@
 package org.example.kihelp_back.user.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.user.exception.IllegalRoleChangeException;
 import org.example.kihelp_back.user.exception.RoleNotFoundException;
 import org.example.kihelp_back.user.exception.UserIsBannedException;
 import org.example.kihelp_back.user.exception.UserNotFoundException;
+import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
 import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
+import org.example.kihelp_back.wallet.model.Wallet;
+import org.example.kihelp_back.wallet.service.WalletService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,11 +29,14 @@ import static org.example.kihelp_back.user.util.ErrorMessage.*;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
+    private final WalletService walletService;
 
     public UserServiceImpl(UserRepository userRepository,
-                           RoleService roleService) {
+                           RoleService roleService,
+                           WalletService walletService) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.walletService = walletService;
     }
 
     @Override
@@ -132,5 +139,43 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.debug("Saving updated ban status for user: {}", user);
         userRepository.save(user);
         log.info("Successfully updated ban status for user with ID: {}", id);
+    }
+
+    @Override
+    public void changeRole(Long id, String roleName) {
+        var role = roleService.findByName(roleName);
+        var user = findById(id);
+
+        log.info("Validating user role by ROLE_USER");
+        validateRoleUserChange(role);
+
+        if (user.getRoles().contains(role)) {
+            user.getRoles().remove(role);
+
+            log.info("Deleting non-default wallets for user: {}", user.getId());
+            walletService.deleteByNotDefaultByUser(user.getId());
+        } else {
+            user.getRoles().add(role);
+
+            var wallet = Wallet.builder()
+                    .balance(0.0)
+                    .name("Dev гаманець")
+                    .defaultWallet(false)
+                    .user(user)
+                    .build();
+
+            log.debug("Saving new dev wallet with ID: {} for user with ID: {}", wallet.getId(), user.getId());
+            walletService.save(wallet);
+        }
+
+        log.debug("Saving user with updated role: {}", role.getName());
+        userRepository.save(user);
+    }
+
+
+    private void validateRoleUserChange(Role role) {
+        if ("ROLE_USER".equals(role.getName())) {
+            throw new IllegalRoleChangeException(USER_ROLE_CHANGE_NOT_ALLOWED);
+        }
     }
 }

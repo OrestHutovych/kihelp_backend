@@ -9,6 +9,8 @@ import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static org.example.kihelp_back.wallet.util.ErrorMessage.*;
 
 @Service
@@ -56,11 +58,8 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet findByUserTelegramId(String telegramId) {
-        return walletRepository.findByUserTelegramId(telegramId)
-                .orElseThrow(() -> new WalletNotFoundException(String.format(
-                        WALLET_NOT_FOUND_BY_USER_TELEGRAM_ID, telegramId
-                )));
+    public List<Wallet> findByUserTelegramId(String telegramId) {
+        return walletRepository.findByUserTelegramId(telegramId);
     }
 
     @Override
@@ -78,5 +77,14 @@ public class WalletServiceImpl implements WalletService {
         wallet.setBalance(wallet.getBalance() + amount);
 
         walletRepository.save(wallet);
+    }
+
+    @Override
+    public void deleteByNotDefaultByUser(Long userId) {
+        var wallets = walletRepository.findByUserId(userId);
+
+        wallets.stream()
+                .filter(wallet -> !wallet.isDefaultWallet())
+                .forEach(walletRepository::delete);
     }
 }

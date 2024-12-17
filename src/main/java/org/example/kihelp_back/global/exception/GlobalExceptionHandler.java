@@ -11,10 +11,7 @@ import org.example.kihelp_back.task.exception.TaskNotFoundException;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
-import org.example.kihelp_back.user.exception.RoleNotFoundException;
-import org.example.kihelp_back.user.exception.UserIsBannedException;
-import org.example.kihelp_back.user.exception.UserNotFoundException;
-import org.example.kihelp_back.user.exception.UserUnauthorizedException;
+import org.example.kihelp_back.user.exception.*;
 import org.example.kihelp_back.wallet.exception.WalletDefaultExistException;
 import org.example.kihelp_back.wallet.exception.WalletExistException;
 import org.example.kihelp_back.wallet.exception.WalletIsNotDefaultException;
@@ -211,6 +208,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(WalletNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleWalletNotFoundException(WalletNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(IllegalRoleChangeException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalRoleChangeException(IllegalRoleChangeException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("message", ex.getMessage());
 

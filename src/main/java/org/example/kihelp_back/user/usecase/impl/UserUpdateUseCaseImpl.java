@@ -2,6 +2,7 @@ package org.example.kihelp_back.user.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.user.dto.UserBanRequest;
+import org.example.kihelp_back.user.dto.UserToggleRoleRequest;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.stereotype.Component;
@@ -18,5 +19,10 @@ public class UserUpdateUseCaseImpl implements UserUpdateUseCase {
     @Override
     public void changeBanValueByUser(Long userId, UserBanRequest request) {
         userService.changeBan(userId, request.value());
+    }
+
+    @Override
+    public void toggleRole(Long userId, UserToggleRoleRequest request) {
+        userService.changeRole(userId, request.name());
     }
 }

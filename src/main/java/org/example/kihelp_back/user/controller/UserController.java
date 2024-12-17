@@ -1,10 +1,7 @@
 package org.example.kihelp_back.user.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.user.dto.JwtResponse;
-import org.example.kihelp_back.user.dto.UserBanRequest;
-import org.example.kihelp_back.user.dto.UserRequest;
-import org.example.kihelp_back.user.dto.UserResponse;
+import org.example.kihelp_back.user.dto.*;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;
 import org.example.kihelp_back.user.usecase.UserGetUseCase;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
@@ -30,6 +27,11 @@ public class UserController {
     @PostMapping("/user")
     public JwtResponse authUser(@Valid @RequestBody UserRequest user) {
        return userCreateUseCase.authUser(user);
+    }
+
+    @PutMapping("/user/{id}/toggle-role")
+    public void toggleRole(@PathVariable("id") Long id, @RequestBody UserToggleRoleRequest request) {
+        userUpdateUseCase.toggleRole(id, request);
     }
 
     @GetMapping("/user/all")

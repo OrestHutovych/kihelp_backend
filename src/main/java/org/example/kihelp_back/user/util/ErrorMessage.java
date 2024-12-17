@@ -9,4 +9,5 @@ public class ErrorMessage {
     public static final String USER_BAN_VALUE_NOT_NULL = "Значення value не має дорівнювати null.";
     public static final String USER_BAD_CREDENTIALS = "Bad credentials";
     public static final String JWT_TOKEN_EXPIRED = "JWT Expired";
+    public static final String USER_ROLE_CHANGE_NOT_ALLOWED = "Не можна забрати роль 'ROLE_USER' у користувача";
 }
