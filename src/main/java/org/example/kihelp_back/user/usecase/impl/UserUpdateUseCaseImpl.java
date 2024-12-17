@@ -22,7 +22,7 @@ public class UserUpdateUseCaseImpl implements UserUpdateUseCase {
     }
 
     @Override
-    public void toggleRole(Long userId, UserToggleRoleRequest request) {
-        userService.changeRole(userId, request.name());
+    public void toggleRole(String telegramId, UserToggleRoleRequest request) {
+        userService.changeRole(telegramId, request.name());
     }
 }

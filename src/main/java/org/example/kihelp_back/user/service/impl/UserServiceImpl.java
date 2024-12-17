@@ -142,9 +142,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void changeRole(Long id, String roleName) {
+    public void changeRole(String telegramId, String roleName) {
         var role = roleService.findByName(roleName);
-        var user = findById(id);
+        var user = findByTelegramId(telegramId)
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId)));
 
         log.info("Validating user role by ROLE_USER");
         validateRoleUserChange(role);

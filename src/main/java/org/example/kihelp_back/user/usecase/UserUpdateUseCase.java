@@ -5,5 +5,5 @@ import org.example.kihelp_back.user.dto.UserToggleRoleRequest;
 
 public interface UserUpdateUseCase {
     void changeBanValueByUser(Long userId, UserBanRequest request);
-    void toggleRole(Long userId, UserToggleRoleRequest request);
+    void toggleRole(String telegramId, UserToggleRoleRequest request);
 }

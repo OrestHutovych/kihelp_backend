@@ -29,9 +29,10 @@ public class UserController {
        return userCreateUseCase.authUser(user);
     }
 
-    @PutMapping("/user/{id}/toggle-role")
-    public void toggleRole(@PathVariable("id") Long id, @RequestBody UserToggleRoleRequest request) {
-        userUpdateUseCase.toggleRole(id, request);
+    @PutMapping("/user/{telegram_id}/toggle-role")
+    public void toggleRole(@PathVariable("telegram_id") String telegramId,
+                           @RequestBody UserToggleRoleRequest request) {
+        userUpdateUseCase.toggleRole(telegramId, request);
     }
 
     @GetMapping("/user/all")

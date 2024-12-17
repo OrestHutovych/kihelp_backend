@@ -12,5 +12,5 @@ public interface UserService {
     List<User> getAll();
     List<User> getByRole(String roleName);
     void changeBan(Long id, boolean value);
-    void changeRole(Long id, String roleName);
+    void changeRole(String telegramId, String roleName);
 }
