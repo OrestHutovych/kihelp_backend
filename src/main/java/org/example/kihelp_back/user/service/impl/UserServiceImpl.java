@@ -130,15 +130,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void changeBan(Long id, boolean value) {
-        log.info("Changing ban status for user with ID: {}. New ban status: {}", id, value);
+    public void changeBan(String telegramId, boolean value) {
+        log.info("Attempting to change ban status user with Telegram ID: {}", telegramId);
 
-        var user = findById(id);
+        var user = findByTelegramId(telegramId)
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId)));
+
+        if (user.isBanned() == value) {
+            log.warn("Ban status is already '{}' for user with Telegram ID: {}", value, telegramId);
+            return;
+        }
+
+        log.info("Changing ban status {} to {} user with Telegram ID: {}",user.isBanned(), value, user.getTelegramId());
         user.setBanned(value);
 
-        log.debug("Saving updated ban status for user: {}", user);
+        if(user.getRoles().contains("ROLE_DEVELOPER")){
+            log.info("Deleting developer user with Telegram ID: {}", user.getTelegramId());
+            user.getRoles().remove("ROLE_DEVELOPER");
+            walletService.deleteByNotDefaultByUser(user.getId());
+        }
+
         userRepository.save(user);
-        log.info("Successfully updated ban status for user with ID: {}", id);
+        log.info("Successfully updated ban status for user with Telegram ID: {}", telegramId);
     }
 
     @Override

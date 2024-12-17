@@ -45,8 +45,8 @@ public class UserController {
         return userGetUseCase.getUserByRole(roleName);
     }
 
-    @PatchMapping("/user/ban/{id}")
-    public void banUser(@PathVariable("id") Long userId, @RequestBody UserBanRequest request) {
-        userUpdateUseCase.changeBanValueByUser(userId, request);
+    @PatchMapping("/user/ban/{telegram_id}")
+    public void banUser(@PathVariable("telegram_id") String telegramId, @RequestBody UserBanRequest request) {
+        userUpdateUseCase.changeBanValueByUser(telegramId, request);
     }
 }

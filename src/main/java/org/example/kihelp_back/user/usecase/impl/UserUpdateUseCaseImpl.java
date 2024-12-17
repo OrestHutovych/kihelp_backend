@@ -17,8 +17,8 @@ public class UserUpdateUseCaseImpl implements UserUpdateUseCase {
     }
 
     @Override
-    public void changeBanValueByUser(Long userId, UserBanRequest request) {
-        userService.changeBan(userId, request.value());
+    public void changeBanValueByUser(String telegramId, UserBanRequest request) {
+        userService.changeBan(telegramId, request.value());
     }
 
     @Override
