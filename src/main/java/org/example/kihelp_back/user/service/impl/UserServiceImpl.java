@@ -13,6 +13,7 @@ import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.service.WalletService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -103,6 +104,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             log.warn("User with ID {} not found. Thrown UserNotFoundException", id);
             return new UserNotFoundException(String.format(USER_NOT_FOUND, id));
         });
+    }
+
+    @Override
+    public User findByJwt() {
+        var securityContext = SecurityContextHolder.getContext();
+        var authentication = securityContext.getAuthentication();
+
+        if (authentication == null) {
+            throw new UserNotFoundException(USER_NOT_FOUND);
+        }
+
+        var telegramId = authentication.getName();
+
+        log.info("Attempting to find user with Telegram ID: {}", telegramId);
+        return findByTelegramId(telegramId)
+                .orElseThrow(() ->
+                        new UserNotFoundException(String.format(USER_NOT_FOUND, telegramId))
+                );
     }
 
     @Override

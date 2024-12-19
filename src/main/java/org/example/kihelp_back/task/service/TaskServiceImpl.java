@@ -1,4 +1,4 @@
-package org.example.kihelp_back.task.service.impl;
+package org.example.kihelp_back.task.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.task.dto.TaskProcessRequest;
@@ -11,7 +11,6 @@ import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.task.dto.TaskUpdateRequest;
 import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.task.repository.TaskRepository;
-import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Service;
 
