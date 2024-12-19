@@ -1,5 +1,6 @@
 package org.example.kihelp_back.history.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.repository.HistoryRepository;
 import org.example.kihelp_back.history.service.HistoryService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@Slf4j
 public class HistoryServiceImpl implements HistoryService {
     private final HistoryRepository historyRepository;
 
@@ -17,7 +19,8 @@ public class HistoryServiceImpl implements HistoryService {
 
     @Override
     public void save(History history) {
-        historyRepository.save(history);
+        var savedHistory = historyRepository.save(history);
+        log.info("Successfully saved history for user with Telegram ID: {}.", savedHistory.getUser().getTelegramId());
     }
 
     @Override
