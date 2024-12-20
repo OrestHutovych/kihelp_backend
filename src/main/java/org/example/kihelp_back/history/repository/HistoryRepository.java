@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface HistoryRepository extends JpaRepository<History, Long> {
     List<History> findAllByUserTelegramId(String telegramId);
+    List<History> findAllByTaskId(Integer taskId);
 }

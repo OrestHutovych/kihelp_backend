@@ -1,6 +1,7 @@
 package org.example.kihelp_back.task.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.history.service.HistoryService;
 import org.example.kihelp_back.task.dto.TaskProcessRequest;
 import org.example.kihelp_back.task.dto.TaskProcessResponse;
 import org.example.kihelp_back.task.exception.TaskDeveloperNotValidException;
@@ -13,6 +14,7 @@ import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.task.repository.TaskRepository;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,11 +25,14 @@ import static org.example.kihelp_back.task.util.ErrorMessage.*;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
+    private final HistoryService historyService;
 
     public TaskServiceImpl(TaskRepository taskRepository,
-                           UserService userService) {
+                           UserService userService,
+                           HistoryService historyService) {
         this.taskRepository = taskRepository;
         this.userService = userService;
+        this.historyService = historyService;
     }
 
     @Override
@@ -67,14 +72,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
-       log.debug("Attempting to find task with id '{}'", id);
+       log.info("Attempting to find task with id '{}'", id);
        var task = getById(id);
-       log.debug("Successfully found task: {}", task);
+       log.info("Successfully found task: {}", task.getTitle());
 
-       log.debug("Deleting argument for task with id '{}'", id);
+       log.info("Deleting argument for task with id '{}'", id);
        taskRepository.deleteAllArgumentByTaskId(id);
-       log.debug("Deleted argument for task with id '{}'", id);
+       log.info("Deleted argument for task with id '{}'", id);
+
+       log.info("Deleting histories for task with id '{}'", id);
+       historyService.deleteByTask(task.getId());
+       log.info("Deleted histories for task with id '{}'", id);
 
        taskRepository.delete(task);
     }
@@ -85,9 +95,13 @@ public class TaskServiceImpl implements TaskService {
         var tasks = getByTeacher(teacherId);
         log.debug("Successfully found tasks: {}", tasks);
 
-        log.debug("Deleting argument for task(s) with teacher id '{}'", teacherId);
+        log.debug("Deleting argument for task(s) with task id '{}'", teacherId);
         tasks.forEach(t -> taskRepository.deleteAllArgumentByTaskId(t.getId()));
-        log.debug("Deleted argument for task(s) with teacher id '{}'", teacherId);
+        log.debug("Deleted argument for task(s) with task id '{}'", teacherId);
+
+        log.debug("Deleting histories for task(s) with task id '{}'", teacherId);
+        tasks.forEach(t -> historyService.deleteByTask(t.getId()));
+        log.debug("Deleted histories for task(s) with task id '{}'", teacherId);
 
         taskRepository.deleteAll(tasks);
     }

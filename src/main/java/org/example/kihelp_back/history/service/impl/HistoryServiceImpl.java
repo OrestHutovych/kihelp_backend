@@ -27,4 +27,12 @@ public class HistoryServiceImpl implements HistoryService {
     public List<History> getHistoryByUser(String telegramId) {
         return historyRepository.findAllByUserTelegramId(telegramId);
     }
+
+    @Override
+    public void deleteByTask(Integer taskId) {
+        var history = historyRepository.findAllByTaskId(taskId);
+
+        historyRepository.deleteAll(history);
+        log.info("Successfully deleted history with Task ID: {}.", taskId);
+    }
 }

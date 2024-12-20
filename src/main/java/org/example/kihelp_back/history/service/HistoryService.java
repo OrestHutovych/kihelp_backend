@@ -7,4 +7,5 @@ import java.util.List;
 public interface HistoryService {
     void save(History history);
     List<History> getHistoryByUser(String telegramId);
+    void deleteByTask(Integer taskId);
 }
