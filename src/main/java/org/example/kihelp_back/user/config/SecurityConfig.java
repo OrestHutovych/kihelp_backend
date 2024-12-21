@@ -37,6 +37,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
                                 .requestMatchers(HttpMethod.POST,"/api/v1/users/user").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/actuator/prometheus").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 )

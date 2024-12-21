@@ -1,7 +1,9 @@
 package org.example.kihelp_back.wallet.service;
 
+import jakarta.validation.constraints.Positive;
 import org.example.kihelp_back.wallet.model.Wallet;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface WalletService {
@@ -9,6 +11,6 @@ public interface WalletService {
     void validateDefaultWallet(Wallet wallet);
     Wallet findById(Long id);
     List<Wallet> findByUserTelegramId(String telegramId);
-    void updateDefaultWalletBalance(Long walletId, double amount);
+    void updateDefaultWalletBalanceByUserTelegramId(String telegramId, @Positive BigDecimal amount);
     void deleteByNotDefaultByUser(Long userId);
 }

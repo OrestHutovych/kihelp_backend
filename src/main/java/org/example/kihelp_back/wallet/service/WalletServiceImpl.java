@@ -3,12 +3,12 @@ package org.example.kihelp_back.wallet.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.wallet.exception.WalletDefaultExistException;
 import org.example.kihelp_back.wallet.exception.WalletExistException;
-import org.example.kihelp_back.wallet.exception.WalletIsNotDefaultException;
 import org.example.kihelp_back.wallet.exception.WalletNotFoundException;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.repository.WalletRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.example.kihelp_back.wallet.util.ErrorMessage.*;
@@ -64,18 +64,17 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public void updateDefaultWalletBalance(Long walletId, double amount) {
-        var wallet = findById(walletId);
-
-        if(!wallet.isDefaultWallet()){
-            log.warn("Wallet with ID: {} is not default.", walletId);
-            throw new WalletIsNotDefaultException(
-                    String.format(WALLET_IS_NOT_DEFAULT, walletId)
-            );
-        }
+    public void updateDefaultWalletBalanceByUserTelegramId(String telegramId, BigDecimal amount) {
+        var wallet = findByUserTelegramId(telegramId)
+                .stream()
+                .filter(Wallet::isDefaultWallet)
+                .findFirst()
+                .orElseThrow(() -> new WalletNotFoundException(String.format(
+                        WALLET_NOT_FOUND, telegramId
+                )));
 
         log.info("Set balance {} in default wallet with ID: {}", amount, wallet.getId());
-        wallet.setBalance(wallet.getBalance() + amount);
+        wallet.setBalance(wallet.getBalance() + amount.doubleValue());
 
         walletRepository.save(wallet);
     }
