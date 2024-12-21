@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             log.info("User with Telegram ID {} successfully updated.", user.getTelegramId());
         } else {
             userRepository.save(user);
-            log.debug("User wallets: {}", user.getWallet());
+            log.debug("User wallets: {}", user.getWallets());
         }
     }
 

@@ -2,11 +2,13 @@ package org.example.kihelp_back.user.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.wallet.model.Wallet;
 
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -24,16 +26,19 @@ public class User {
     private Instant createdTimeStamp = Instant.now();
     private boolean isBanned = false;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
-    private List<Role> roles;
+    private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Wallet> wallet = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Wallet> wallets = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Transaction> transactions;
 
     @PostPersist
     private void createDefaultWallet() {
@@ -43,9 +48,6 @@ public class User {
                 .defaultWallet(true)
                 .user(this)
                 .build();
-        this.wallet.add(defaultWallet);
+        this.wallets.add(defaultWallet);
     }
-
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private Profile profile;
 }
