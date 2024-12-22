@@ -25,26 +25,18 @@ public class UserGetUseCaseImpl implements UserGetUseCase {
     public List<UserResponse> getAllUsers() {
         var users = userService.getAll();
 
-        log.debug("Mapping {} user entities to UserResponse objects.", users.size());
-        var userResponse = users.stream()
+        return users.stream()
                 .map(userToUserResponseMapper::map)
                 .toList();
-        log.info("Successfully mapped {} users to UserResponse objects.", userResponse.size());
-
-        return userResponse;
     }
 
     @Override
     public List<UserResponse> getUserByRole(String roleName) {
         var users = userService.getByRole(roleName);
 
-        log.debug("Mapping {} user entities to UserResponse objects.", users.size());
-        var userResponse = users.stream()
+        return users.stream()
                 .map(userToUserResponseMapper::map)
                 .toList();
-        log.info("Successfully mapped {} users to UserResponse objects.", userResponse.size());
-
-        return userResponse;
     }
 
 }

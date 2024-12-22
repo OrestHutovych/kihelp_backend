@@ -7,7 +7,7 @@ import org.example.kihelp_back.user.dto.UserRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
+import java.util.List;
 
 @Component
 public class UserRequestToUserMapperImpl implements UserRequestToUserMapper {
@@ -24,7 +24,7 @@ public class UserRequestToUserMapperImpl implements UserRequestToUserMapper {
         user.setTelegramId(userRequest.telegramId());
         user.setUsername(userRequest.username());
         user.setPassword(passwordEncoder.encode(userRequest.telegramId()));
-        user.setRoles(Set.of(role));
+        user.setRoles(List.of(role));
 
         return user;
     }

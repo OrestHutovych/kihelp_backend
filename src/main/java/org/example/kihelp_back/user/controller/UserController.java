@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/user")
 public class UserController {
     private final UserCreateUseCase userCreateUseCase;
     private final UserGetUseCase userGetUseCase;
@@ -24,28 +24,28 @@ public class UserController {
         this.userUpdateUseCase = userUpdateUseCase;
     }
 
-    @PostMapping("/user")
+    @PostMapping("/auth")
     public JwtResponse authUser(@Valid @RequestBody UserRequest user) {
        return userCreateUseCase.authUser(user);
     }
 
-    @PutMapping("/user/{telegram_id}/toggle-role")
+    @PutMapping("/{telegram_id}/toggle_role")
     public void toggleRole(@PathVariable("telegram_id") String telegramId,
                            @RequestBody UserToggleRoleRequest request) {
         userUpdateUseCase.toggleRole(telegramId, request);
     }
 
-    @GetMapping("/user/all")
+    @GetMapping("/")
     public List<UserResponse> getUsers() {
         return userGetUseCase.getAllUsers();
     }
 
-    @GetMapping("/user/by/role/{role_name}")
+    @GetMapping("/role/{role_name}")
     public List<UserResponse> getUsersByRole(@PathVariable("role_name") String roleName) {
         return userGetUseCase.getUserByRole(roleName);
     }
 
-    @PatchMapping("/user/ban/{telegram_id}")
+    @PatchMapping("/{telegram_id}/ban")
     public void banUser(@PathVariable("telegram_id") String telegramId, @RequestBody UserBanRequest request) {
         userUpdateUseCase.changeBanValueByUser(telegramId, request);
     }

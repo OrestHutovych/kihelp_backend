@@ -1,6 +1,6 @@
 package org.example.kihelp_back.user.config;
 
-import org.example.kihelp_back.user.service.impl.UserServiceImpl;
+import org.example.kihelp_back.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,10 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final JwtRequestFilter jwtRequestFilter;
 
-    public SecurityConfig(UserServiceImpl userService,
+    public SecurityConfig(UserService userService,
                           JwtRequestFilter jwtRequestFilter) {
         this.userService = userService;
         this.jwtRequestFilter = jwtRequestFilter;
