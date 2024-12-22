@@ -1,7 +1,6 @@
 package org.example.kihelp_back.wallet.dto;
 
-public record WalletResponse(
-        Long id,
+public record WalletResponseDto(
         String name,
         Double balance,
         boolean isDefault

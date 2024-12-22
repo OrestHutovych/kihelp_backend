@@ -144,7 +144,7 @@ public class UserService implements UserDetailsService {
         if(user.getRoles().contains("ROLE_DEVELOPER")){
             log.info("Deleting developer user with Telegram ID: {}", user.getTelegramId());
             user.getRoles().remove("ROLE_DEVELOPER");
-            walletService.deleteByNotDefaultByUser(user.getId());
+            walletService.deleteNotDefaultWalletsByUser(user.getId());
         }
 
         userRepository.save(user);
@@ -162,7 +162,7 @@ public class UserService implements UserDetailsService {
             user.getRoles().remove(role);
 
             log.info("Deleting non-default wallets for user: {}", user.getId());
-            walletService.deleteByNotDefaultByUser(user.getId());
+            walletService.deleteNotDefaultWalletsByUser(user.getId());
         } else {
             user.getRoles().add(role);
 

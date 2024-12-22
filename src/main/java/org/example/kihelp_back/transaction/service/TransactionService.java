@@ -35,7 +35,7 @@ public class TransactionService {
         }
 
         log.info("Attempting to update balance in wallet for user with telegram id: {}", transaction.getUser().getTelegramId());
-        walletService.updateDefaultWalletBalanceByUserTelegramId(transaction.getUser().getTelegramId(),
+        walletService.depositAmountToWalletByUserTelegramId(transaction.getUser().getTelegramId(),
                 transaction.getAmount());
 
         log.info("Successfully created transaction and update balance for user with telegram id: {}", transaction.getUser().getTelegramId());
