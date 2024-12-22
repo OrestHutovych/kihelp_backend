@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 
 import static org.example.kihelp_back.user.util.ErrorMessage.TELEGRAM_ID_NOT_NULL;
 
-public record UserRequest(
+public record UserAuthDto(
         @NotNull(message = TELEGRAM_ID_NOT_NULL)
         String telegramId,
         String username

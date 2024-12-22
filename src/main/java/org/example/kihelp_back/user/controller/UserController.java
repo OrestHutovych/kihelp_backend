@@ -25,28 +25,28 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public JwtResponse authUser(@Valid @RequestBody UserRequest user) {
+    public JwtDto authUser(@Valid @RequestBody UserAuthDto user) {
        return userCreateUseCase.authUser(user);
     }
 
     @PutMapping("/{telegram_id}/toggle_role")
     public void toggleRole(@PathVariable("telegram_id") String telegramId,
-                           @RequestBody UserToggleRoleRequest request) {
+                           @RequestBody UserToggleRoleDto request) {
         userUpdateUseCase.toggleRole(telegramId, request);
     }
 
     @GetMapping("/")
-    public List<UserResponse> getUsers() {
+    public List<UserDto> getUsers() {
         return userGetUseCase.getAllUsers();
     }
 
     @GetMapping("/role/{role_name}")
-    public List<UserResponse> getUsersByRole(@PathVariable("role_name") String roleName) {
+    public List<UserDto> getUsersByRole(@PathVariable("role_name") String roleName) {
         return userGetUseCase.getUserByRole(roleName);
     }
 
     @PatchMapping("/{telegram_id}/ban")
-    public void banUser(@PathVariable("telegram_id") String telegramId, @RequestBody UserBanRequest request) {
+    public void banUser(@PathVariable("telegram_id") String telegramId, @RequestBody UserToggleBanDto request) {
         userUpdateUseCase.changeBanValueByUser(telegramId, request);
     }
 }

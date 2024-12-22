@@ -1,10 +1,10 @@
 package org.example.kihelp_back.user.usecase;
 
-import org.example.kihelp_back.user.dto.UserResponse;
+import org.example.kihelp_back.user.dto.UserDto;
 
 import java.util.List;
 
 public interface UserGetUseCase {
-    List<UserResponse> getAllUsers();
-    List<UserResponse> getUserByRole(String roleName);
+    List<UserDto> getAllUsers();
+    List<UserDto> getUserByRole(String roleName);
 }

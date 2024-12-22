@@ -1,6 +1,6 @@
 package org.example.kihelp_back.user.dto;
 
-public record UserToggleRoleRequest(
+public record UserToggleRoleDto(
         String roleName
 ) {
 }

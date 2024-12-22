@@ -1,10 +1,10 @@
 package org.example.kihelp_back.user.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.user.dto.JwtResponse;
+import org.example.kihelp_back.user.dto.JwtDto;
 import org.example.kihelp_back.user.exception.UserUnauthorizedException;
-import org.example.kihelp_back.user.mapper.UserRequestToUserMapper;
-import org.example.kihelp_back.user.dto.UserRequest;
+import org.example.kihelp_back.user.mapper.UserDtoToUserMapper;
+import org.example.kihelp_back.user.dto.UserAuthDto;
 import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;
@@ -21,13 +21,13 @@ import static org.example.kihelp_back.user.util.ErrorMessage.USER_BAD_CREDENTIAL
 @Slf4j
 public class UserCreateUseCaseImpl implements UserCreateUseCase {
     private final UserService userService;
-    private final UserRequestToUserMapper userRequestToUserMapper;
+    private final UserDtoToUserMapper userRequestToUserMapper;
     private final RoleService roleService;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
 
     public UserCreateUseCaseImpl(UserService userService,
-                                 UserRequestToUserMapper userRequestToUserMapper,
+                                 UserDtoToUserMapper userRequestToUserMapper,
                                  RoleService roleService,
                                  JwtTokenUtils jwtTokenUtils,
                                  AuthenticationManager authenticationManager) {
@@ -39,7 +39,7 @@ public class UserCreateUseCaseImpl implements UserCreateUseCase {
     }
 
     @Override
-    public JwtResponse authUser(UserRequest request) {
+    public JwtDto authUser(UserAuthDto request) {
         var role = roleService.findByName("ROLE_USER");
         var user = userRequestToUserMapper.map(request, role);
 
@@ -60,6 +60,6 @@ public class UserCreateUseCaseImpl implements UserCreateUseCase {
         String jwtToken = jwtTokenUtils.generateToken(userDetails);
 
         log.info("Successfully generated jwy token for user with Telegram ID: {}", user.getTelegramId());
-        return new JwtResponse(jwtToken);
+        return new JwtDto(jwtToken);
     }
 }
