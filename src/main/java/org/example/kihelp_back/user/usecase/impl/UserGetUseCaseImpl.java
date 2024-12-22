@@ -25,6 +25,7 @@ public class UserGetUseCaseImpl implements UserGetUseCase {
     public List<UserResponse> getAllUsers() {
         var users = userService.getAll();
 
+        log.info("Attempting to map User to UserResponse");
         return users.stream()
                 .map(userToUserResponseMapper::map)
                 .toList();
@@ -34,6 +35,7 @@ public class UserGetUseCaseImpl implements UserGetUseCase {
     public List<UserResponse> getUserByRole(String roleName) {
         var users = userService.getByRole(roleName);
 
+        log.info("Attempting to map User to UserResponse");
         return users.stream()
                 .map(userToUserResponseMapper::map)
                 .toList();

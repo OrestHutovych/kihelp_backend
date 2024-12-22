@@ -43,9 +43,10 @@ public class UserCreateUseCaseImpl implements UserCreateUseCase {
         var role = roleService.findByName("ROLE_USER");
         var user = userRequestToUserMapper.map(request, role);
 
-        userService.save(user);
-
         try {
+            userService.save(user);
+
+            log.info("Authenticated user with Telegram ID: {}", user.getTelegramId());
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     request.telegramId(),
                     request.telegramId()
@@ -54,9 +55,11 @@ public class UserCreateUseCaseImpl implements UserCreateUseCase {
             throw new UserUnauthorizedException(USER_BAD_CREDENTIALS);
         }
 
+        log.info("Loading user details for Telegram ID: {}", user.getTelegramId());
         UserDetails userDetails = userService.loadUserByUsername(user.getTelegramId());
         String jwtToken = jwtTokenUtils.generateToken(userDetails);
 
+        log.info("Successfully generated jwy token for user with Telegram ID: {}", user.getTelegramId());
         return new JwtResponse(jwtToken);
     }
 }

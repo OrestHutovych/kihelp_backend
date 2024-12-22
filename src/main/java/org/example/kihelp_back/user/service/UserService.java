@@ -43,13 +43,11 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Attempting to load user by Telegram ID: {}", username);
         var user = findByTelegramId(username)
-                .orElseThrow(() -> {
-                    log.warn("User not found by Telegram ID: {}. Thrown UsernameNotFoundException", username);
-                    return new UsernameNotFoundException(
-                            String.format(USER_NOT_FOUND_BY_TG_ID, username)
-                    );
-                });
+                .orElseThrow(() -> new UsernameNotFoundException(
+                            String.format(USER_NOT_FOUND_BY_TG_ID, username))
+                );
 
+        log.info("Successfully loaded user with Telegram ID: {}", user.getTelegramId());
         return new org.springframework.security.core.userdetails.User(
                 String.valueOf(user.getTelegramId()),
                 user.getPassword(),
@@ -58,50 +56,45 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void save(User user) {
-        log.info("Starting the save process for user with Telegram ID: {}", user.getTelegramId());
+    public User save(User user) {
         var existingUser = findByTelegramId(user.getTelegramId());
 
+        log.info("Attempting to check if user with Telegram ID: {} exists if not then create.", user.getTelegramId());
         if (existingUser.isPresent()) {
-            log.info("User with Telegram ID {} already exists. Checking ban status.", user.getTelegramId());
-
             if (existingUser.get().isBanned()) {
-                log.warn("Attempt to save a banned user with Telegram ID: {}", user.getTelegramId());
                 throw new UserIsBannedException(String.format(USER_IS_BANNED, user.getTelegramId()));
             }
 
-            log.info("Updating username for user with Telegram ID: {}", user.getTelegramId());
             existingUser.get().setUsername(user.getUsername());
 
-            log.debug("Saving updated user: {}", existingUser.get());
-            userRepository.save(existingUser.get());
-            log.info("User with Telegram ID {} successfully updated.", user.getTelegramId());
+            log.info("Successfully saved user with Telegram ID: {}", user.getTelegramId());
+            return userRepository.save(existingUser.get());
         } else {
-            userRepository.save(user);
-            log.debug("User wallets: {}", user.getWallets());
+            log.info("Successfully saved user with Telegram ID: {}", user.getTelegramId());
+            return userRepository.save(user);
         }
     }
 
     public Optional<User> findByTelegramId(String telegramId) {
-        log.info("Searching for user with Telegram ID: {}", telegramId);
+        log.info("Attempting to find user by Telegram ID: {}", telegramId);
         var user = userRepository.findByTelegramId(telegramId);
-        if (user.isPresent()) {
-            log.debug("User with Telegram ID {} found: {}", telegramId, user.get());
-        } else {
+
+        if (user.isEmpty()) {
             log.warn("No user found with Telegram ID: {}", telegramId);
         }
+
         return user;
     }
 
     public User findById(Long id) {
         log.info("Attempting to find user by ID: {}", id);
-        return userRepository.findById(id).orElseThrow(() -> {
-            log.warn("User with ID {} not found. Thrown UserNotFoundException", id);
-            return new UserNotFoundException(String.format(USER_NOT_FOUND, id));
-        });
+        return userRepository.findById(id).orElseThrow(() ->
+            new UserNotFoundException(String.format(USER_NOT_FOUND, id))
+        );
     }
 
     public User findByJwt() {
+        log.info("Getting context from SecurityContextHolder");
         var securityContext = SecurityContextHolder.getContext();
         var authentication = securityContext.getAuthentication();
 
@@ -111,7 +104,6 @@ public class UserService implements UserDetailsService {
 
         var telegramId = authentication.getName();
 
-        log.info("Attempting to find user with Telegram ID: {}", telegramId);
         return findByTelegramId(telegramId)
                 .orElseThrow(() ->
                         new UserNotFoundException(String.format(USER_NOT_FOUND, telegramId))
@@ -120,24 +112,19 @@ public class UserService implements UserDetailsService {
 
     public List<User> getAll() {
         log.info("Fetching all users from the database.");
-        var users = userRepository.findAll();
-        log.debug("Found {} users in the database.", users.size());
-        return users;
+        return userRepository.findAll();
     }
 
     public List<User> getByRole(String roleName) {
-        log.debug("Attempting to find users by role: {}", roleName);
+        log.info("Starting to get users by role: {}", roleName);
         var exist = roleService.existsByName(roleName);
 
         if(!exist){
-            log.warn("Role with name {} not found. Thrown RoleNotFoundException", roleName);
             throw new RoleNotFoundException(String.format(ROLE_NOT_FOUND, roleName));
         }
 
         log.info("Fetching users by role name from the database.");
-        var users = userRepository.findByRoleName(roleName);
-        log.debug("Found {} users in the database.", users.size());
-        return users;
+        return userRepository.findByRoleName(roleName);
     }
 
     public void changeBan(String telegramId, boolean value) {
@@ -169,7 +156,6 @@ public class UserService implements UserDetailsService {
         var user = findByTelegramId(telegramId)
                 .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId)));
 
-        log.info("Validating user role by ROLE_USER");
         validateRoleUserChange(role);
 
         if (user.getRoles().contains(role)) {
@@ -191,12 +177,13 @@ public class UserService implements UserDetailsService {
             walletService.save(wallet);
         }
 
-        log.debug("Saving user with updated role: {}", role.getName());
+        log.info("Successfully saved user role and update wallet by Telegram ID: {}", telegramId);
         userRepository.save(user);
     }
 
 
     private void validateRoleUserChange(Role role) {
+        log.info("Validating user role by {}", role.getName());
         if ("ROLE_USER".equals(role.getName())) {
             throw new IllegalRoleChangeException(USER_ROLE_CHANGE_NOT_ALLOWED);
         }
