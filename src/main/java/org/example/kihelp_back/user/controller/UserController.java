@@ -30,18 +30,17 @@ public class UserController {
     }
 
     @PutMapping("/{telegram_id}/toggle_role")
-    public void toggleRole(@PathVariable("telegram_id") String telegramId,
-                           @RequestBody UserToggleRoleDto request) {
+    public void toggleRole(@PathVariable("telegram_id") String telegramId, @RequestBody UserToggleRoleDto request) {
         userUpdateUseCase.toggleRole(telegramId, request);
     }
 
     @GetMapping("/")
-    public List<UserDto> getUsers() {
+    public List<UserResponseDto> getUsers() {
         return userGetUseCase.getAllUsers();
     }
 
     @GetMapping("/role/{role_name}")
-    public List<UserDto> getUsersByRole(@PathVariable("role_name") String roleName) {
+    public List<UserResponseDto> getUsersByRole(@PathVariable("role_name") String roleName) {
         return userGetUseCase.getUserByRole(roleName);
     }
 

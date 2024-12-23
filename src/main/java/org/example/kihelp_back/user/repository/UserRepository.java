@@ -4,13 +4,15 @@ import org.example.kihelp_back.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    boolean existsByTelegramId(String telegramId);
+    @Transactional(readOnly = true)
     Optional<User> findByTelegramId(String telegramId);
+    @Transactional(readOnly = true)
     @Modifying
     @Query(value = "SELECT u.* FROM users u " +
             "JOIN users_roles ur ON u.id = ur.user_id " +

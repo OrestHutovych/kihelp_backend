@@ -1,8 +1,9 @@
 package org.example.kihelp_back.user.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.user.mapper.UserToUserDtoMapper;
-import org.example.kihelp_back.user.dto.UserDto;
+import org.example.kihelp_back.user.mapper.UserToUserResponseDtoMapper;
+import org.example.kihelp_back.user.dto.UserResponseDto;
+import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserGetUseCase;
 import org.springframework.stereotype.Component;
@@ -13,32 +14,37 @@ import java.util.List;
 @Slf4j
 public class UserGetUseCaseImpl implements UserGetUseCase {
     private final UserService userService;
-    private final UserToUserDtoMapper userToUserResponseMapper;
+    private final UserToUserResponseDtoMapper userToUserResponseDtoMapper;
 
     public UserGetUseCaseImpl(UserService userService,
-                              UserToUserDtoMapper userToUserResponseMapper) {
+                              UserToUserResponseDtoMapper userToUserResponseDtoMapper) {
         this.userService = userService;
-        this.userToUserResponseMapper = userToUserResponseMapper;
+        this.userToUserResponseDtoMapper = userToUserResponseDtoMapper;
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        var users = userService.getAll();
+    public List<UserResponseDto> getAllUsers() {
+        List<User> users = userService.getAll();
 
-        log.info("Attempting to map User to UserResponse");
-        return users.stream()
-                .map(userToUserResponseMapper::map)
+        log.info("Mapping User(s) {} to UserResponseDto(s)", users.size());
+        List<UserResponseDto> responseUser = users.stream()
+                .map(userToUserResponseDtoMapper::map)
                 .toList();
+
+        log.info("Successfully mapped UserResponseDto()s {} and return.", responseUser.size());
+        return responseUser;
     }
 
     @Override
-    public List<UserDto> getUserByRole(String roleName) {
-        var users = userService.getByRole(roleName);
+    public List<UserResponseDto> getUserByRole(String roleName) {
+        List<User> users = userService.getByRole(roleName);
 
-        log.info("Attempting to map User to UserResponse");
-        return users.stream()
-                .map(userToUserResponseMapper::map)
+        log.info("Mapping User(s) {} to UserResponseDto(s)", users.size());
+        List<UserResponseDto> responseUser =  users.stream()
+                .map(userToUserResponseDtoMapper::map)
                 .toList();
-    }
 
+        log.info("Successfully mapped UserResponseDto()s {} and return.", responseUser.size());
+        return responseUser;
+    }
 }

@@ -1,6 +1,6 @@
 package org.example.kihelp_back.user.dto;
 
-public record UserDto(
+public record UserResponseDto(
         String telegramId,
         String username
 ) {

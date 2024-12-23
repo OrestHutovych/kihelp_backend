@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import static org.example.kihelp_back.transaction.util.ErrorMessage.TRANSACTION_AMOUNT_MIN;
 import static org.example.kihelp_back.transaction.util.ErrorMessage.TRANSACTION_ID_NOT_BLANK;
 
-public record TransactionCreateDto(
+public record TransactionDepositDto(
         @NotBlank(message =  TRANSACTION_ID_NOT_BLANK)
         String transactionId,
         String initials,

@@ -7,6 +7,7 @@ import org.example.kihelp_back.wallet.exception.WalletNotFoundException;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.repository.WalletRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -51,18 +52,20 @@ public class WalletService {
         return walletRepository.findByUserTelegramId(telegramId);
     }
 
+    @Transactional
     public void depositAmountToWalletByUserTelegramId(String telegramId, BigDecimal amount) {
         log.info("Start deposit amount to wallet for user by telegram ID: {}", telegramId);
         List<Wallet> wallets = findByUserTelegramId(telegramId);
 
-        wallets.stream().findFirst().ifPresent(wallet -> {
-           if(wallet.isDefaultWallet()){
-               wallet.setBalance(wallet.getBalance().add(amount));
+        wallets.stream()
+                .filter(Wallet::isDefaultWallet)
+                .findFirst()
+                .ifPresent(wallet -> {
+                    wallet.setBalance(wallet.getBalance().add(amount));
 
-               log.info("Successfully deposit amount to wallet for user by telegram ID: {}", telegramId);
-               walletRepository.save(wallet);
-           }
-        });
+                    log.info("Successfully deposit amount to wallet for user by telegram ID: {}", telegramId);
+                    walletRepository.save(wallet);
+                });
     }
 
     public void deleteNotDefaultWalletsByUser(Long userId) {

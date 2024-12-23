@@ -10,7 +10,9 @@ import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.service.WalletService;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +32,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final RoleService roleService;
     private final WalletService walletService;
+
+    private static final String ROLE_NAME = "ROLE_DEVELOPER";
 
     public UserService(UserRepository userRepository,
                        RoleService roleService,
@@ -42,7 +47,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Attempting to load user by Telegram ID: {}", username);
-        var user = findByTelegramId(username)
+        User user = findByTelegramId(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
                             String.format(USER_NOT_FOUND_BY_TG_ID, username))
                 );
@@ -57,18 +62,18 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User save(User user) {
-        var existingUser = findByTelegramId(user.getTelegramId());
+        Optional<User> foundedUser = findByTelegramId(user.getTelegramId());
 
         log.info("Attempting to check if user with Telegram ID: {} exists if not then create.", user.getTelegramId());
-        if (existingUser.isPresent()) {
-            if (existingUser.get().isBanned()) {
+        if (foundedUser.isPresent()) {
+            if (foundedUser.get().isBanned()) {
                 throw new UserIsBannedException(String.format(USER_IS_BANNED, user.getTelegramId()));
             }
 
-            existingUser.get().setUsername(user.getUsername());
+            foundedUser.get().setUsername(user.getUsername());
 
             log.info("Successfully saved user with Telegram ID: {}", user.getTelegramId());
-            return userRepository.save(existingUser.get());
+            return userRepository.save(foundedUser.get());
         } else {
             log.info("Successfully saved user with Telegram ID: {}", user.getTelegramId());
             return userRepository.save(user);
@@ -77,13 +82,7 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> findByTelegramId(String telegramId) {
         log.info("Attempting to find user by Telegram ID: {}", telegramId);
-        var user = userRepository.findByTelegramId(telegramId);
-
-        if (user.isEmpty()) {
-            log.warn("No user found with Telegram ID: {}", telegramId);
-        }
-
-        return user;
+        return userRepository.findByTelegramId(telegramId);
     }
 
     public User findById(Long id) {
@@ -94,20 +93,22 @@ public class UserService implements UserDetailsService {
     }
 
     public User findByJwt() {
-        log.info("Getting context from SecurityContextHolder");
-        var securityContext = SecurityContextHolder.getContext();
-        var authentication = securityContext.getAuthentication();
+        log.info("Start finding User from SecurityContext");
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
 
         if (authentication == null) {
             throw new UserNotFoundException(USER_NOT_FOUND);
         }
 
-        var telegramId = authentication.getName();
-
-        return findByTelegramId(telegramId)
+        String telegramId = authentication.getName();
+        User foundedUser = findByTelegramId(telegramId)
                 .orElseThrow(() ->
                         new UserNotFoundException(String.format(USER_NOT_FOUND, telegramId))
                 );
+
+        log.info("Successfully returned User with Telegram ID: {}", foundedUser.getTelegramId());
+        return foundedUser;
     }
 
     public List<User> getAll() {
@@ -123,12 +124,12 @@ public class UserService implements UserDetailsService {
             throw new RoleNotFoundException(String.format(ROLE_NOT_FOUND, roleName));
         }
 
-        log.info("Fetching users by role name from the database.");
+        log.info("Successfully fetched users by role name from the database.");
         return userRepository.findByRoleName(roleName);
     }
 
     public void changeBan(String telegramId, boolean value) {
-        log.info("Attempting to change ban status user with Telegram ID: {}", telegramId);
+        log.info("Start to toggle role status to '{}' for user with Telegram ID: {}", value, telegramId);
 
         var user = findByTelegramId(telegramId)
                 .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId)));
@@ -138,12 +139,12 @@ public class UserService implements UserDetailsService {
             return;
         }
 
-        log.info("Changing ban status {} to {} user with Telegram ID: {}",user.isBanned(), value, user.getTelegramId());
         user.setBanned(value);
 
-        if(user.getRoles().contains("ROLE_DEVELOPER")){
-            log.info("Deleting developer user with Telegram ID: {}", user.getTelegramId());
-            user.getRoles().remove("ROLE_DEVELOPER");
+        if(user.getRoles().contains(ROLE_NAME)){
+            user.getRoles().remove(ROLE_NAME);
+
+            log.info("Attempting to delete not default wallets for user with telegram ID: {}", telegramId);
             walletService.deleteNotDefaultWalletsByUser(user.getId());
         }
 
@@ -152,9 +153,11 @@ public class UserService implements UserDetailsService {
     }
 
     public void changeRole(String telegramId, String roleName) {
-        var role = roleService.findByName(roleName);
-        var user = findByTelegramId(telegramId)
-                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId)));
+        Role role = roleService.findByName(roleName);
+        User user = findByTelegramId(telegramId)
+                .orElseThrow(() ->
+                        new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId))
+                );
 
         validateRoleUserChange(role);
 
@@ -167,7 +170,7 @@ public class UserService implements UserDetailsService {
             user.getRoles().add(role);
 
             var wallet = Wallet.builder()
-                    .balance(0.0)
+                    .balance(BigDecimal.ZERO)
                     .name("Dev гаманець")
                     .defaultWallet(false)
                     .user(user)

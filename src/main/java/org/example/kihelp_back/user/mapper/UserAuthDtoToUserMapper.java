@@ -5,5 +5,5 @@ import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.dto.UserAuthDto;
 
-public interface UserDtoToUserMapper extends MapperV2<User, UserAuthDto, Role> {
+public interface UserAuthDtoToUserMapper extends MapperV2<User, UserAuthDto, Role> {
 }

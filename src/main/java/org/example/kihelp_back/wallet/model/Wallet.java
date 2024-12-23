@@ -11,7 +11,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Entity
 @Builder
 @NoArgsConstructor
@@ -21,7 +20,7 @@ import java.util.Objects;
 })
 public class Wallet extends BaseEntity {
     @Column(name = "balance", nullable = false)
-    private BigDecimal balance = BigDecimal.valueOf(0.0);
+    private BigDecimal balance;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "default_wallet")

@@ -25,8 +25,8 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction save(Transaction transaction) {
-        var existByTransactionId = transactionRepository.existsByTransactionId(transaction.getTransactionId());
+    public Transaction deposit(Transaction transaction) {
+        boolean existByTransactionId = transactionRepository.existsByTransactionId(transaction.getTransactionId());
 
         if(existByTransactionId){
             throw new TransactionExistException(
@@ -49,7 +49,7 @@ public class TransactionService {
 
 
     public void deleteTransactionByTelegramId(String telegramId) {
-        var transactions = findTransactionsByUserTelegramId(telegramId);
+        List<Transaction> transactions = findTransactionsByUserTelegramId(telegramId);
 
         log.info("Successfully deleted transactions for user with telegram id: {}", telegramId);
         transactionRepository.deleteAll(transactions);

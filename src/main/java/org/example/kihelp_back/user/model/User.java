@@ -9,6 +9,7 @@ import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class User extends BaseEntity {
     private void createDefaultWallet() {
         Wallet defaultWallet = Wallet.builder()
                 .name("Загальний гаманець")
-                .balance(0.0)
+                .balance(BigDecimal.ZERO)
                 .defaultWallet(true)
                 .user(this)
                 .build();

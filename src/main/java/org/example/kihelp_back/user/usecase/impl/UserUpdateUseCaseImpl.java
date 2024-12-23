@@ -1,6 +1,5 @@
 package org.example.kihelp_back.user.usecase.impl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.user.dto.UserToggleBanDto;
 import org.example.kihelp_back.user.dto.UserToggleRoleDto;
 import org.example.kihelp_back.user.service.UserService;
@@ -8,7 +7,6 @@ import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.stereotype.Component;
 
 @Component
-@Slf4j
 public class UserUpdateUseCaseImpl implements UserUpdateUseCase {
     private final UserService userService;
 

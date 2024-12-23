@@ -25,6 +25,7 @@ public class Transaction extends BaseEntity {
     @Positive
     @Column(name = "amount", precision = 19, scale = 2)
     private BigDecimal amount;
+    private TransactionType type;
     @Column(name = "created_time_stamp")
     private Instant createdTimeStamp = Instant.now();
 
