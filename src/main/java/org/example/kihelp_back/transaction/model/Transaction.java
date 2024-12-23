@@ -27,6 +27,8 @@ public class Transaction extends BaseEntity {
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
     private TransactionType type;
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
     @Column(name = "created_time_stamp")
     private Instant createdTimeStamp = Instant.now();
 

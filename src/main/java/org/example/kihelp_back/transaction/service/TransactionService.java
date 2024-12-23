@@ -3,6 +3,7 @@ package org.example.kihelp_back.transaction.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
 import org.example.kihelp_back.transaction.model.Transaction;
+import org.example.kihelp_back.transaction.model.TransactionStatus;
 import org.example.kihelp_back.transaction.repository.TransactionRepository;
 import org.example.kihelp_back.wallet.service.WalletService;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,14 @@ public class TransactionService {
         log.info("Attempting to update balance in wallet for user with telegram id: {}", transaction.getUser().getTelegramId());
         walletService.depositAmountToWalletByUserTelegramId(transaction.getUser().getTelegramId(),
                 transaction.getAmount());
+        transaction.setStatus(TransactionStatus.COMPLETED);
 
         log.info("Successfully created transaction and update balance for user with telegram id: {}", transaction.getUser().getTelegramId());
         return transactionRepository.save(transaction);
     }
 
     @Transactional
-    public Transaction withdraw(Transaction transaction) {
+    public void withdraw(Transaction transaction) {
         boolean existByTransactionId = transactionRepository.existsByTransactionId(transaction.getTransactionId());
 
         if(existByTransactionId){
@@ -55,8 +57,10 @@ public class TransactionService {
         log.info("Attempting to update balance in wallet for user with telegram id: {}", transaction.getUser().getTelegramId());
         walletService.withdrawAmountFromWalletByUserTelegramId(transaction.getUser().getTelegramId(), transaction.getAmount());
 
+        transaction.setStatus(TransactionStatus.IN_PROGRESS);
+
         log.info("Successfully created transaction and update balance for user with telegram id: {}", transaction.getUser().getTelegramId());
-        return transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
     }
 
     public List<Transaction> findTransactionsByUserTelegramId(String telegramId) {
@@ -64,11 +68,11 @@ public class TransactionService {
         return transactionRepository.findAllByUserTelegramId(telegramId);
     }
 
-
     public void deleteTransactionByTelegramId(String telegramId) {
         List<Transaction> transactions = findTransactionsByUserTelegramId(telegramId);
 
         log.info("Successfully deleted transactions for user with telegram id: {}", telegramId);
         transactionRepository.deleteAll(transactions);
     }
+
 }

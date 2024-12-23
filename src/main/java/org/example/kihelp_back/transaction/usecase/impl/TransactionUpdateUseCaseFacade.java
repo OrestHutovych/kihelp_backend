@@ -1,6 +1,7 @@
 package org.example.kihelp_back.transaction.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.global.service.TelegramBotService;
 import org.example.kihelp_back.transaction.dto.TransactionDepositDto;
 import org.example.kihelp_back.transaction.dto.TransactionWithdrawDto;
 import org.example.kihelp_back.transaction.mapper.TransactionDepositDtoToTransactionMapper;
@@ -22,16 +23,19 @@ public class TransactionUpdateUseCaseFacade implements TransactionUpdateUseCase 
     private final UserService userService;
     private final TransactionDepositDtoToTransactionMapper transactionDepositDtoToTransactionMapper;
     private final TransactionWithdrawDtoToTransactionMapper transactionWithdrawDtoToTransactionMapper;
+    private final TelegramBotService telegramBotService;
 
     public TransactionUpdateUseCaseFacade(
             TransactionService transactionService,
             UserService userService,
             TransactionDepositDtoToTransactionMapper transactionDepositDtoToTransactionMapper,
-            TransactionWithdrawDtoToTransactionMapper transactionWithdrawDtoToTransactionMapper) {
+            TransactionWithdrawDtoToTransactionMapper transactionWithdrawDtoToTransactionMapper,
+            TelegramBotService telegramBotService) {
         this.transactionService = transactionService;
         this.userService = userService;
         this.transactionDepositDtoToTransactionMapper = transactionDepositDtoToTransactionMapper;
         this.transactionWithdrawDtoToTransactionMapper = transactionWithdrawDtoToTransactionMapper;
+        this.telegramBotService = telegramBotService;
     }
 
     @Override
@@ -58,5 +62,8 @@ public class TransactionUpdateUseCaseFacade implements TransactionUpdateUseCase 
         Transaction transaction = transactionWithdrawDtoToTransactionMapper.map(request, user);
 
         transactionService.withdraw(transaction);
+
+        log.info("Sending message about withdraw transaction: {} to admin(s)", transaction.getTransactionId());
+        telegramBotService.withdrawAdminMessage(transaction, request.cardNumber());
     }
 }

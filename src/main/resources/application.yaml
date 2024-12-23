@@ -33,6 +33,11 @@ jwt:
   secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
   lifetime: 60h
 
+telegram:
+  username: KI_help_bot
+  token: 6783069937:AAGIaDjG6GKufsvwCJ7nrjcEbq1BX84T46U
+
+
 #logging:
 #  level:
 #    org.example.kihelp_back: DEBUG
