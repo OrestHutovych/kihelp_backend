@@ -13,7 +13,6 @@ public record TransactionDepositDto(
         String transactionId,
         String initials,
         @Min(value = 10, message = TRANSACTION_AMOUNT_MIN)
-        BigDecimal amount,
-        String telegramId
+        BigDecimal amount
 ) {
 }

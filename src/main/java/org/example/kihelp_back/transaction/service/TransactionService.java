@@ -42,6 +42,23 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
+    @Transactional
+    public Transaction withdraw(Transaction transaction) {
+        boolean existByTransactionId = transactionRepository.existsByTransactionId(transaction.getTransactionId());
+
+        if(existByTransactionId){
+            throw new TransactionExistException(
+                    String.format(TRANSACTION_EXISTS, transaction.getTransactionId())
+            );
+        }
+
+        log.info("Attempting to update balance in wallet for user with telegram id: {}", transaction.getUser().getTelegramId());
+        walletService.withdrawAmountFromWalletByUserTelegramId(transaction.getUser().getTelegramId(), transaction.getAmount());
+
+        log.info("Successfully created transaction and update balance for user with telegram id: {}", transaction.getUser().getTelegramId());
+        return transactionRepository.save(transaction);
+    }
+
     public List<Transaction> findTransactionsByUserTelegramId(String telegramId) {
         log.info("Attempting to get all transaction by user telegram id: {}", telegramId);
         return transactionRepository.findAllByUserTelegramId(telegramId);

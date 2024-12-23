@@ -3,6 +3,7 @@ package org.example.kihelp_back.transaction.controller;
 import jakarta.validation.Valid;
 import org.example.kihelp_back.transaction.dto.TransactionDepositDto;
 import org.example.kihelp_back.transaction.dto.TransactionResponse;
+import org.example.kihelp_back.transaction.dto.TransactionWithdrawDto;
 import org.example.kihelp_back.transaction.usecase.TransactionUpdateUseCase;
 import org.example.kihelp_back.transaction.usecase.TransactionGetUseCase;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +22,17 @@ public class TransactionController {
         this.transactionCreateUseCase = transactionCreateUseCase;
     }
 
-    @PostMapping("/deposit")
-    public void createTransaction(@RequestBody @Valid TransactionDepositDto request){
-        transactionCreateUseCase.depositWallet(request);
+    @PostMapping("/deposit/{telegram_id}")
+    public void deposit(@PathVariable("telegram_id") String telegramId,
+                                  @RequestBody @Valid TransactionDepositDto request){
+        transactionCreateUseCase.depositWallet(telegramId, request);
     }
 
+    @PostMapping("/withdraw/{telegram_id}")
+    public void withdraw(@PathVariable("telegram_id") String telegramId,
+                         @RequestBody TransactionWithdrawDto request){
+        transactionCreateUseCase.withdrawWallet(telegramId, request);
+    }
 
     @GetMapping("/{telegram_id}")
     public List<TransactionResponse> getTransactions(@PathVariable("telegram_id") String telegramId) {

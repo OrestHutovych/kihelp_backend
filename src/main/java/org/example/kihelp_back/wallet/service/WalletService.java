@@ -1,6 +1,7 @@
 package org.example.kihelp_back.wallet.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.wallet.exception.WalletAmountNotValidException;
 import org.example.kihelp_back.wallet.exception.WalletDefaultExistException;
 import org.example.kihelp_back.wallet.exception.WalletExistException;
 import org.example.kihelp_back.wallet.exception.WalletNotFoundException;
@@ -64,6 +65,28 @@ public class WalletService {
                     wallet.setBalance(wallet.getBalance().add(amount));
 
                     log.info("Successfully deposit amount to wallet for user by telegram ID: {}", telegramId);
+                    walletRepository.save(wallet);
+                });
+    }
+
+    @Transactional
+    public void withdrawAmountFromWalletByUserTelegramId(String telegramId, BigDecimal amount) {
+        log.info("Start withdraw amount from wallet for user by telegram ID: {}", telegramId);
+        List<Wallet> wallets = findByUserTelegramId(telegramId);
+
+        wallets.stream()
+                .filter(w -> !w.isDefaultWallet())
+                .findFirst()
+                .ifPresent(wallet -> {
+                    if(wallet.getBalance().compareTo(amount) < 0) {
+                        throw new WalletAmountNotValidException(
+                                String.format(WALLET_AMOUNT_NOT_VALID, wallet.getName(), wallet.getBalance(), amount)
+                        );
+                    }
+
+                    wallet.setBalance(wallet.getBalance().subtract(amount));
+
+                    log.info("Successfully withdraw amount from wallet for user by telegram ID: {}", telegramId);
                     walletRepository.save(wallet);
                 });
     }

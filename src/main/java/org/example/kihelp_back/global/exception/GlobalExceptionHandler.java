@@ -13,10 +13,7 @@ import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
 import org.example.kihelp_back.user.exception.*;
-import org.example.kihelp_back.wallet.exception.WalletDefaultExistException;
-import org.example.kihelp_back.wallet.exception.WalletExistException;
-import org.example.kihelp_back.wallet.exception.WalletIsNotDefaultException;
-import org.example.kihelp_back.wallet.exception.WalletNotFoundException;
+import org.example.kihelp_back.wallet.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -177,7 +174,7 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(WalletDefaultExistException.class)
@@ -186,7 +183,7 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(WalletExistException.class)
@@ -195,7 +192,7 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(WalletIsNotDefaultException.class)
@@ -204,7 +201,7 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(WalletNotFoundException.class)
@@ -213,7 +210,7 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalRoleChangeException.class)
@@ -222,7 +219,7 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TransactionExistException.class)
@@ -231,6 +228,15 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(WalletAmountNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleWalletAmountNotValidException(WalletAmountNotValidException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
