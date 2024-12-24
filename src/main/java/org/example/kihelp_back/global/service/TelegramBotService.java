@@ -21,6 +21,9 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Value("${telegram.token}")
     private String botToken;
 
+    @Value("${telegram.chatId}")
+    private String chatId;
+
     @Override
     public String getBotUsername() {
         return botUsername;
@@ -36,9 +39,33 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     }
 
+    public void depositAdminMessage(Transaction transaction) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+
+        String message = String.format(
+                "Користувач (Username: `@%s`, Telegram ID: `%s`) поповнив банас на %sUAH.\n\n" +
+                        "Transaction ID: `%s`\n" +
+                        "#deposit",
+                transaction.getUser().getUsername(),
+                transaction.getUser().getTelegramId(),
+                transaction.getAmount(),
+                transaction.getTransactionId()
+        );
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public void withdrawAdminMessage(Transaction transaction, Long cardNumber) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId("-1002140659403");
+        sendMessage.setChatId(chatId);
 
         String message = String.format(
                 "Користувач (Username: `@%s`, Telegram ID: `%s`) надіслав запит на зняття %sUAH.\n\n" +
@@ -82,5 +109,4 @@ public class TelegramBotService extends TelegramLongPollingBot {
             throw new RuntimeException(e.getMessage());
         }
     }
-
 }

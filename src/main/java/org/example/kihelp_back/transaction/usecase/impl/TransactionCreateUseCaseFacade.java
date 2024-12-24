@@ -43,6 +43,9 @@ public class TransactionCreateUseCaseFacade implements TransactionCreateUseCase 
         Transaction transaction = transactionDepositDtoToTransactionMapper.map(request, user);
 
         transactionService.deposit(transaction);
+
+        log.info("Sending message about deposit transaction: {} to admin(s)", transaction.getTransactionId());
+        telegramBotService.depositAdminMessage(transaction);
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
 import org.example.kihelp_back.transaction.exception.TransactionNotFoundException;
 import org.example.kihelp_back.transaction.exception.TransactionStatusNotFoundException;
+import org.example.kihelp_back.transaction.exception.TransactionTypeNotAllowedException;
 import org.example.kihelp_back.user.exception.*;
 import org.example.kihelp_back.wallet.exception.*;
 import org.slf4j.Logger;
@@ -253,6 +254,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TransactionStatusNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTransactionStatusNotFoundException(TransactionStatusNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TransactionTypeNotAllowedException.class)
+    public ResponseEntity<Map<String, String>> handleTransactionTypeNotAllowedException(TransactionTypeNotAllowedException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("message", ex.getMessage());
 

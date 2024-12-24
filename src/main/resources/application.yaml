@@ -36,6 +36,7 @@ jwt:
 telegram:
   username: KI_help_bot
   token: 6783069937:AAGIaDjG6GKufsvwCJ7nrjcEbq1BX84T46U
+  chatId: -1002140659403
 
 
 #logging:
