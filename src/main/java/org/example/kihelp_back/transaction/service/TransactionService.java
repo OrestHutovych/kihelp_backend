@@ -3,9 +3,11 @@ package org.example.kihelp_back.transaction.service;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
 import org.example.kihelp_back.transaction.exception.TransactionNotFoundException;
+import org.example.kihelp_back.transaction.exception.TransactionTypeNotAllowedException;
 import org.example.kihelp_back.transaction.exception.TransactionStatusNotFoundException;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.transaction.model.TransactionStatus;
+import org.example.kihelp_back.transaction.model.TransactionType;
 import org.example.kihelp_back.transaction.repository.TransactionRepository;
 import org.example.kihelp_back.wallet.service.WalletService;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class TransactionService {
 
     @Transactional
     public Transaction deposit(Transaction transaction) {
+        log.info("Start deposit amount to user wallet with Telegram id: {}", transaction.getUser().getTelegramId());
         boolean existByTransactionId = transactionRepository.existsByTransactionId(transaction.getTransactionId());
 
         if(existByTransactionId){
@@ -48,6 +51,7 @@ public class TransactionService {
 
     @Transactional
     public void withdraw(Transaction transaction) {
+        log.info("Start withdraw amount from user wallet with Telegram id: {}", transaction.getUser().getTelegramId());
         boolean existByTransactionId = transactionRepository.existsByTransactionId(transaction.getTransactionId());
 
         if(existByTransactionId){
@@ -67,11 +71,19 @@ public class TransactionService {
 
     @Transactional
     public void toggleWithdrawStatus(String transactionId, String transactionStatus) {
+        log.info("Start toggle status of transaction with transactionId: {}", transactionId);
         Transaction transaction = findTransactionByTransactionId(transactionId);
+
+        if(!transaction.getType().equals(TransactionType.WITHDRAW)){
+            throw new TransactionTypeNotAllowedException(
+                    String.format(TRANSACTION_TYPE_IS_NOT_WITHDRAW, transaction.getTransactionId())
+            );
+        }
 
         transaction.setStatus(resolveTransactionStatus(transactionStatus));
 
         transactionRepository.save(transaction);
+        log.info("Successfully updated status of transaction to {} with transactionId: {}", transactionStatus, transactionId);
     }
 
     public List<Transaction> findTransactionsByUserTelegramId(String telegramId) {
@@ -80,6 +92,7 @@ public class TransactionService {
     }
 
     public Transaction findTransactionByTransactionId(String transactionId) {
+        log.info("Attempting to get transaction by transaction id: {}", transactionId);
         return transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException
                         (String.format(TRANSACTION_NOT_FOUND, transactionId))
