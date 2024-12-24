@@ -31,16 +31,15 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+    private static final String MESSAGE_FIELD = "message";
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = "message";
+        ex.getBindingResult().getAllErrors().forEach(error -> {
             String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
+            errors.put(MESSAGE_FIELD, errorMessage);
         });
-
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
@@ -48,7 +47,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -57,7 +56,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SubjectExistException.class)
     public ResponseEntity<Map<String, String>> handleSubjectExistException(SubjectExistException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -66,7 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SubjectNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleSubjectNotFoundException(SubjectNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -75,7 +74,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TeacherExistException.class)
     public ResponseEntity<Map<String, String>> handleTeacherExistException(TeacherExistException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -84,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TeacherNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTeacherNotFoundException(TeacherNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -93,7 +92,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TaskExistException.class)
     public ResponseEntity<Map<String, String>> handleTaskExistException(TaskExistException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -102,7 +101,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TypeNotValidException.class)
     public ResponseEntity<Map<String, String>> handleTypeNotValidException(TypeNotValidException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -111,7 +110,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ArgumentExistException.class)
     public ResponseEntity<Map<String, String>> handleArgumentExistException(ArgumentExistException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -120,7 +119,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ArgumentNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleArgumentNotFoundException(ArgumentNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -129,7 +128,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTaskNotFoundException(TaskNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -138,7 +137,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserIsBannedException.class)
     public ResponseEntity<Map<String, String>> handleUserIsBannedException(UserIsBannedException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -147,7 +146,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RoleNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleRoleNotFoundException(RoleNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -156,7 +155,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFoundException(UserNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -165,7 +164,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserUnauthorizedException.class)
     public ResponseEntity<Map<String, String>> handleUserUnauthorizedException(UserUnauthorizedException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
@@ -174,7 +173,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TaskDeveloperNotValidException.class)
     public ResponseEntity<Map<String, String>> handleTaskDeveloperNotValidException(TaskDeveloperNotValidException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -183,7 +182,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WalletDefaultExistException.class)
     public ResponseEntity<Map<String, String>> handleWalletDefaultExistException(WalletDefaultExistException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -192,7 +191,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WalletExistException.class)
     public ResponseEntity<Map<String, String>> handleWalletExistException(WalletExistException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -201,7 +200,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WalletIsNotDefaultException.class)
     public ResponseEntity<Map<String, String>> handleWalletIsNotDefaultException(WalletIsNotDefaultException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -210,7 +209,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WalletNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleWalletNotFoundException(WalletNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -219,7 +218,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalRoleChangeException.class)
     public ResponseEntity<Map<String, String>> handleIllegalRoleChangeException(IllegalRoleChangeException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -228,7 +227,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionExistException.class)
     public ResponseEntity<Map<String, String>> handleTransactionExistException(TransactionExistException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -237,7 +236,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WalletAmountNotValidException.class)
     public ResponseEntity<Map<String, String>> handleWalletAmountNotValidException(WalletAmountNotValidException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -246,7 +245,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTransactionNotFoundException(TransactionNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -255,7 +254,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionStatusNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleTransactionStatusNotFoundException(TransactionStatusNotFoundException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -264,7 +263,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionTypeNotAllowedException.class)
     public ResponseEntity<Map<String, String>> handleTransactionTypeNotAllowedException(TransactionTypeNotAllowedException ex) {
         Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TelegramException.class)
+    public ResponseEntity<Map<String, String>> handleTelegramException(TelegramException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);

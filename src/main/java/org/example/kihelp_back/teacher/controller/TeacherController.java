@@ -36,7 +36,7 @@ public class TeacherController {
     }
 
     @GetMapping("/teacher/by/subject/{id}")
-    public List<TeacherResponse> getTeachersBySubject(@PathVariable("id") Integer subjectId){
+    public List<TeacherResponse> getTeachersBySubject(@PathVariable("id") Long subjectId){
         return teacherGetUseCase.getTeachersBySubject(subjectId);
     }
 

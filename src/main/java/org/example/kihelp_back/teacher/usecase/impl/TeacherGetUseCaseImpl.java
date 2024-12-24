@@ -23,7 +23,7 @@ public class TeacherGetUseCaseImpl implements TeacherGetUseCase {
     }
 
     @Override
-    public List<TeacherResponse> getTeachersBySubject(Integer subjectId) {
+    public List<TeacherResponse> getTeachersBySubject(Long subjectId) {
         log.debug("Start fetching teachers for subject ID: {}", subjectId);
         var teachers = teacherService.getTeachersBySubject(subjectId);
         log.debug("Fetched {} teacher(s) for subject ID: {}", teachers.size(), subjectId);

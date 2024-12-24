@@ -1,5 +1,6 @@
 package org.example.kihelp_back.global.service;
 
+import org.example.kihelp_back.global.exception.TelegramException;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.example.kihelp_back.global.util.ErrorMessage.TELEGRAM_ERROR;
 
 @Service
 public class TelegramBotService extends TelegramLongPollingBot {
@@ -43,10 +46,12 @@ public class TelegramBotService extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
 
-        String message = String.format(
-                "Користувач (Username: `@%s`, Telegram ID: `%s`) поповнив банас на %sUAH.\n\n" +
-                        "Transaction ID: `%s`\n" +
-                        "#deposit",
+        String message = String.format("""
+                Користувач (Username: `@%s`, Telegram ID: `%s`) поповнив банас на %sUAH.
+        
+                Transaction ID: `%s`
+                #deposit
+                """,
                 transaction.getUser().getUsername(),
                 transaction.getUser().getTelegramId(),
                 transaction.getAmount(),
@@ -59,7 +64,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
         }
     }
 
@@ -67,11 +76,13 @@ public class TelegramBotService extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
 
-        String message = String.format(
-                "Користувач (Username: `@%s`, Telegram ID: `%s`) надіслав запит на зняття %sUAH.\n\n" +
-                        "Transaction ID: `%s`\n" +
-                        "Номер картки: `%s`\n" +
-                        "#withdraw",
+        String message = String.format("""
+                Користувач (Username: `@%s`, Telegram ID: `%s`) надіслав запит на зняття %sUAH.
+                
+                "Transaction ID: `%s`
+                "Номер картки: `%s`
+                "#withdraw
+                """,
                 transaction.getUser().getUsername(),
                 transaction.getUser().getTelegramId(),
                 transaction.getAmount(),
@@ -106,7 +117,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
         }
     }
 }

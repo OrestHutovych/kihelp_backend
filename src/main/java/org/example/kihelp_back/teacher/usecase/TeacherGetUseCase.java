@@ -5,5 +5,5 @@ import org.example.kihelp_back.teacher.dto.TeacherResponse;
 import java.util.List;
 
 public interface TeacherGetUseCase {
-    List<TeacherResponse> getTeachersBySubject(Integer subjectId);
+    List<TeacherResponse> getTeachersBySubject(Long subjectId);
 }

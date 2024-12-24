@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TeacherService {
     void create(Teacher teacher);
-    List<Teacher> getTeachersBySubject(Integer subjectId);
+    List<Teacher> getTeachersBySubject(Long subjectId);
     Teacher getTeacherById(Integer id);
     void delete(Integer teacherId);
     void update(Integer id, String name);

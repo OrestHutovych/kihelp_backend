@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/subjects")
+@RequestMapping("/api/v1/subject")
 public class SubjectController {
     private final SubjectCreateUseCase subjectCreateUseCase;
     private final SubjectGetUseCase subjectGetUseCase;
@@ -30,7 +30,7 @@ public class SubjectController {
         this.subjectUpdateUseCase = subjectUpdateUseCase;
     }
 
-    @PostMapping("/subject")
+    @PostMapping("/add")
     public void createSubject(@Valid @RequestBody SubjectRequest request) {
         subjectCreateUseCase.create(request);
     }
@@ -41,12 +41,13 @@ public class SubjectController {
     }
 
     @PutMapping("/subject/{id}")
-    public void updateSubject(@PathVariable("id") Integer id, @Valid @RequestBody SubjectUpdateRequest request) {
+    public void updateSubject(@PathVariable("id") Long id, @Valid @RequestBody SubjectUpdateRequest request) {
         subjectUpdateUseCase.updateSubject(id, request);
     }
 
     @DeleteMapping("/subject/{id}")
-    public void deleteSubject(@PathVariable("id") Integer id) {
+    public void deleteSubject(@PathVariable("id") Long id) {
+        //todo check cascade delete
         subjectDeleteUseCase.deleteSubject(id);
     }
 }

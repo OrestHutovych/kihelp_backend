@@ -41,7 +41,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> getTeachersBySubject(Integer subjectId) {
+    public List<Teacher> getTeachersBySubject(Long subjectId) {
         log.debug("Finding teachers by subject id {}", subjectId);
         var teachers = teacherRepository.findTeacherBySubjectId(subjectId);
         log.debug("Found {} teachers for subject id {}", teachers.size(), subjectId);

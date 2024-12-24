@@ -6,5 +6,5 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 public interface SubjectUpdateUseCase {
-    void updateSubject(Integer id, @Valid SubjectUpdateRequest subject);
+    void updateSubject(Long id, @Valid SubjectUpdateRequest subject);
 }

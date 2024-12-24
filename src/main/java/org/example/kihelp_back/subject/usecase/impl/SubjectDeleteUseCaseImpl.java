@@ -13,7 +13,7 @@ public class SubjectDeleteUseCaseImpl implements SubjectDeleteUseCase {
     }
 
     @Override
-    public void deleteSubject(Integer id) {
+    public void deleteSubject(Long id) {
         subjectService.delete(id);
     }
 }

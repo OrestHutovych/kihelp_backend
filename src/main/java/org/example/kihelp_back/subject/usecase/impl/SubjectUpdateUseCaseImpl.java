@@ -14,7 +14,7 @@ public class SubjectUpdateUseCaseImpl implements SubjectUpdateUseCase {
     }
 
     @Override
-    public void updateSubject(Integer id, SubjectUpdateRequest subject) {
+    public void updateSubject(Long id, SubjectUpdateRequest subject) {
         subjectService.update(id, subject.name());
     }
 }
