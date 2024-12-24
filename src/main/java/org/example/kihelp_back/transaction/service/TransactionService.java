@@ -2,6 +2,8 @@ package org.example.kihelp_back.transaction.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
+import org.example.kihelp_back.transaction.exception.TransactionNotFoundException;
+import org.example.kihelp_back.transaction.exception.TransactionStatusNotFoundException;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.transaction.model.TransactionStatus;
 import org.example.kihelp_back.transaction.repository.TransactionRepository;
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.example.kihelp_back.transaction.util.ErrorMessage.TRANSACTION_EXISTS;
+import static org.example.kihelp_back.transaction.util.ErrorMessage.*;
 
 @Service
 @Slf4j
@@ -63,16 +65,32 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
+    @Transactional
+    public void toggleWithdrawStatus(String transactionId, String transactionStatus) {
+        Transaction transaction = findTransactionByTransactionId(transactionId);
+
+        transaction.setStatus(resolveTransactionStatus(transactionStatus));
+
+        transactionRepository.save(transaction);
+    }
+
     public List<Transaction> findTransactionsByUserTelegramId(String telegramId) {
         log.info("Attempting to get all transaction by user telegram id: {}", telegramId);
         return transactionRepository.findAllByUserTelegramId(telegramId);
     }
 
-    public void deleteTransactionByTelegramId(String telegramId) {
-        List<Transaction> transactions = findTransactionsByUserTelegramId(telegramId);
-
-        log.info("Successfully deleted transactions for user with telegram id: {}", telegramId);
-        transactionRepository.deleteAll(transactions);
+    public Transaction findTransactionByTransactionId(String transactionId) {
+        return transactionRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> new TransactionNotFoundException
+                        (String.format(TRANSACTION_NOT_FOUND, transactionId))
+                );
     }
 
+    private TransactionStatus resolveTransactionStatus(String status) {
+        try {
+            return TransactionStatus.valueOf(status);
+        } catch (IllegalArgumentException e) {
+            throw new TransactionStatusNotFoundException(String.format(TRANSACTION_STATUS_NOT_FOUND, status));
+        }
+    }
 }

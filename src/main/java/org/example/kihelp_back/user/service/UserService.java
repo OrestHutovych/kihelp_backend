@@ -47,10 +47,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Attempting to load user by Telegram ID: {}", username);
-        User user = findByTelegramId(username)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                            String.format(USER_NOT_FOUND_BY_TG_ID, username))
-                );
+        User user = findByTelegramId(username);
 
         log.info("Successfully loaded user with Telegram ID: {}", user.getTelegramId());
         return new org.springframework.security.core.userdetails.User(
@@ -62,27 +59,32 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User save(User user) {
-        Optional<User> foundedUser = findByTelegramId(user.getTelegramId());
+        boolean existUser = userRepository.existsByTelegramId(user.getTelegramId());
 
         log.info("Attempting to check if user with Telegram ID: {} exists if not then create.", user.getTelegramId());
-        if (foundedUser.isPresent()) {
-            if (foundedUser.get().isBanned()) {
+        if (existUser) {
+            User foundedUser = findByTelegramId(user.getTelegramId());
+
+            if (foundedUser.isBanned()) {
                 throw new UserIsBannedException(String.format(USER_IS_BANNED, user.getTelegramId()));
             }
 
-            foundedUser.get().setUsername(user.getUsername());
+            foundedUser.setUsername(user.getUsername());
 
             log.info("Successfully saved user with Telegram ID: {}", user.getTelegramId());
-            return userRepository.save(foundedUser.get());
+            return userRepository.save(foundedUser);
         } else {
             log.info("Successfully saved user with Telegram ID: {}", user.getTelegramId());
             return userRepository.save(user);
         }
     }
 
-    public Optional<User> findByTelegramId(String telegramId) {
+    public User findByTelegramId(String telegramId) {
         log.info("Attempting to find user by Telegram ID: {}", telegramId);
-        return userRepository.findByTelegramId(telegramId);
+        return userRepository.findByTelegramId(telegramId)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_BY_TG_ID, telegramId))
+                );
     }
 
     public User findById(Long id) {
@@ -102,10 +104,7 @@ public class UserService implements UserDetailsService {
         }
 
         String telegramId = authentication.getName();
-        User foundedUser = findByTelegramId(telegramId)
-                .orElseThrow(() ->
-                        new UserNotFoundException(String.format(USER_NOT_FOUND, telegramId))
-                );
+        User foundedUser = findByTelegramId(telegramId);
 
         log.info("Successfully returned User with Telegram ID: {}", foundedUser.getTelegramId());
         return foundedUser;
@@ -118,9 +117,9 @@ public class UserService implements UserDetailsService {
 
     public List<User> getByRole(String roleName) {
         log.info("Starting to get users by role: {}", roleName);
-        var exist = roleService.existsByName(roleName);
+        boolean existRole = roleService.existsByName(roleName);
 
-        if(!exist){
+        if(!existRole){
             throw new RoleNotFoundException(String.format(ROLE_NOT_FOUND, roleName));
         }
 
@@ -131,8 +130,7 @@ public class UserService implements UserDetailsService {
     public void changeBan(String telegramId, boolean value) {
         log.info("Start to toggle role status to '{}' for user with Telegram ID: {}", value, telegramId);
 
-        var user = findByTelegramId(telegramId)
-                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId)));
+        User user = findByTelegramId(telegramId);
 
         if (user.isBanned() == value) {
             log.warn("Ban status is already '{}' for user with Telegram ID: {}", value, telegramId);
@@ -154,10 +152,7 @@ public class UserService implements UserDetailsService {
 
     public void changeRole(String telegramId, String roleName) {
         Role role = roleService.findByName(roleName);
-        User user = findByTelegramId(telegramId)
-                .orElseThrow(() ->
-                        new UserNotFoundException(String.format(USER_NOT_FOUND_BY_TG_ID, telegramId))
-                );
+        User user = findByTelegramId(telegramId);
 
         validateRoleUserChange(role);
 

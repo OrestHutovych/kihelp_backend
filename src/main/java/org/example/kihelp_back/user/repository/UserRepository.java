@@ -20,4 +20,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE r.name = :roleName",
             nativeQuery = true)
     List<User> findByRoleName(String roleName);
+    boolean existsByTelegramId(String telegramId);
 }
