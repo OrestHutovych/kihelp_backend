@@ -30,22 +30,22 @@ public class TeacherController {
         this.teacherUpdateUseCase = teacherUpdateUseCase;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public void createTeacher(@Valid @RequestBody TeacherCreateDto request){
         teacherCreateUseCase.createTeacher(request);
     }
 
-    @GetMapping("/{subject_id}")
+    @GetMapping("/getBySubject/{subject_id}")
     public List<TeacherDto> getTeachersBySubject(@PathVariable("subject_id") Long subjectId){
         return teacherGetUseCase.getTeachersBySubject(subjectId);
     }
 
-    @DeleteMapping("/{teacher_id}")
+    @DeleteMapping("/delete/{teacher_id}")
     public void deleteTeacher(@PathVariable("teacher_id") Long teacherId){
         teacherDeleteUseCase.deleteTeacher(teacherId);
     }
 
-    @PutMapping("/teacher/{teacher_id}")
+    @PutMapping("/changeAnInitials/{teacher_id}")
     public void updateTeacher(@PathVariable("teacher_id") Long teacherId,
                               @Valid @RequestBody TeacherUpdateRequest request){
         teacherUpdateUseCase.updateTeacher(teacherId, request);

@@ -6,6 +6,7 @@ import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.teacher.model.Teacher;
 import org.example.kihelp_back.teacher.repository.TeacherRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class TeacherService{
         this.teacherRepository = teacherRepository;
     }
 
+    @Transactional
     public void create(Teacher teacher) {
         log.info("Start creating teacher for subject with ID: {}", teacher.getSubject().getId());
         boolean exist = teacherRepository.existsByNameAndSubjectId(teacher.getName(), teacher.getSubject().getId());
