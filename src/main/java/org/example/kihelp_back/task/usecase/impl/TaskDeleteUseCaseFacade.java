@@ -5,15 +5,15 @@ import org.example.kihelp_back.task.usecase.TaskDeleteUseCase;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TaskDeleteUseCaseImpl implements TaskDeleteUseCase {
+public class TaskDeleteUseCaseFacade implements TaskDeleteUseCase {
     private final TaskService taskService;
 
-    public TaskDeleteUseCaseImpl(TaskService taskService) {
+    public TaskDeleteUseCaseFacade(TaskService taskService) {
         this.taskService = taskService;
     }
 
     @Override
-    public void deleteTask(Integer taskId) {
+    public void deleteTask(Long taskId) {
         taskService.delete(taskId);
     }
 }

@@ -1,7 +1,7 @@
 package org.example.kihelp_back.task.usecase;
 
-import org.example.kihelp_back.task.dto.TaskUpdateRequest;
+import org.example.kihelp_back.task.dto.TaskUpdateDto;
 
 public interface TaskUpdateUseCase {
-    void updateTask(Integer taskId, TaskUpdateRequest request);
+    void updateTask(Long taskId, TaskUpdateDto request);
 }

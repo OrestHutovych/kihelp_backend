@@ -1,8 +1,8 @@
 package org.example.kihelp_back.task.usecase;
 
-import org.example.kihelp_back.task.dto.TaskProcessRequest;
-import org.example.kihelp_back.task.dto.TaskProcessResponse;
+import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
+import org.example.kihelp_back.task.dto.TaskProcessDto;
 
 public interface TaskProcessUseCase {
-    TaskProcessResponse processTask(Integer taskId, TaskProcessRequest request);
+    TaskProcessDto processTask(Long taskId, TaskProcessCreateDto request);
 }

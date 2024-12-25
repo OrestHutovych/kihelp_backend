@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/tasks")
+@RequestMapping("/api/v1/task")
 public class TaskController {
     private final TaskCreateUseCase taskCreateUseCase;
     private final TaskGetUseCase taskGetUseCase;
@@ -28,28 +28,30 @@ public class TaskController {
         this.taskUpdateUseCase = taskUpdateUseCase;
     }
 
-    @PostMapping("/task")
-    public void createTask(@Valid @RequestBody TaskRequest taskRequest) {
+    @PostMapping("/create")
+    public void createTask(@Valid @RequestBody TaskCreateDto taskRequest) {
         taskCreateUseCase.createTask(taskRequest);
     }
 
-    @GetMapping("/task/by/teacher/{id}")
-    public List<TaskResponse> getTasksByTeacher(@PathVariable("id") Integer teacherId) {
-        return taskGetUseCase.getTasksByTeacher(teacherId);
-    }
-
-    @PostMapping("/task/process/{id}")
-    public TaskProcessResponse processTask(@PathVariable("id") Integer taskId, @RequestBody TaskProcessRequest request) {
+    @PostMapping("/process/{task_id}")
+    public TaskProcessDto processTask(@PathVariable("task_id") Long taskId,
+                                      @RequestBody TaskProcessCreateDto request) {
         return taskProcessUseCase.processTask(taskId, request);
     }
 
-    @PatchMapping("/task/{id}")
-    public void updateTask(@PathVariable("id") Integer taskId, @RequestBody @Valid TaskUpdateRequest request){
+    @GetMapping("/getTasksByTeacher/{teacher_id}")
+    public List<TaskDto> getTasksByTeacher(@PathVariable("teacher_id") Long teacherId) {
+        return taskGetUseCase.getTasksByTeacher(teacherId);
+    }
+
+    @PatchMapping("/update/{task_id}")
+    public void updateTask(@PathVariable("task_id") Long taskId,
+                           @RequestBody TaskUpdateDto request){
         taskUpdateUseCase.updateTask(taskId, request);
     }
 
-    @DeleteMapping("/task/{id}")
-    public void deleteTask(@PathVariable("id") Integer taskId) {
+    @DeleteMapping("/delete/{task_id}")
+    public void deleteTask(@PathVariable("task_id") Long taskId) {
         taskDeleteUseCase.deleteTask(taskId);
     }
 }

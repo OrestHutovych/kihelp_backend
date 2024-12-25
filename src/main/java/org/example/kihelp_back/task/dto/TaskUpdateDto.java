@@ -1,6 +1,6 @@
 package org.example.kihelp_back.task.dto;
 
-public record TaskUpdateRequest(
+public record TaskUpdateDto(
         String title,
         String description,
         String identifier,

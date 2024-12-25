@@ -5,8 +5,8 @@ import org.example.kihelp_back.argument.model.Argument;
 import java.time.Instant;
 import java.util.List;
 
-public record TaskResponse(
-        Integer id,
+public record TaskDto(
+        Long id,
         String title,
         String description,
         String identifier,
@@ -16,7 +16,7 @@ public record TaskResponse(
         String type,
         Long developerId,
         boolean autoGenerate,
-        Instant createdTimeStamp,
+        Instant createdAt,
         List<Argument> arguments,
         Long teacherId
 ) {

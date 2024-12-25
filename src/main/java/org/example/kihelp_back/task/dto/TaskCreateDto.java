@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.example.kihelp_back.task.util.ErrorMessage.*;
 
-public record TaskRequest(
+public record TaskCreateDto(
         @NotBlank(message = TITLE_BLANK_NOT_VALID)
         String title,
         String description,
@@ -17,7 +17,7 @@ public record TaskRequest(
         String type,
         Long developerId,
         boolean autoGenerate,
-        Integer teacherId,
+        Long teacherId,
         List<Integer> args
 ) {
 }

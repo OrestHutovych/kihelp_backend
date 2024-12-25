@@ -1,16 +1,16 @@
 package org.example.kihelp_back.task.mapper.impl;
 
-import org.example.kihelp_back.task.mapper.TaskToTaskResponseMapper;
+import org.example.kihelp_back.task.mapper.TaskToTaskDtoMapper;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.dto.TaskResponse;
+import org.example.kihelp_back.task.dto.TaskDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TaskToTaskResponseMapperImpl implements TaskToTaskResponseMapper {
+public class TaskToTaskDtoMapperImpl implements TaskToTaskDtoMapper {
 
     @Override
-    public TaskResponse map(Task task) {
-        return new TaskResponse(
+    public TaskDto map(Task task) {
+        return new TaskDto(
               task.getId(),
               task.getTitle(),
               task.getDescription(),
@@ -21,7 +21,7 @@ public class TaskToTaskResponseMapperImpl implements TaskToTaskResponseMapper {
               task.getType().name(),
               task.getDeveloper().getId(),
               task.isAutoGenerate(),
-              task.getCreatedTimeStamp(),
+              task.getCreatedAt(),
               task.getArguments(),
               task.getTeacher().getId()
         );
