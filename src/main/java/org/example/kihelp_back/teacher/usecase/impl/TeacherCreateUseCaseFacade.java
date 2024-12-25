@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class TeacherCreateUseCaseImpl implements TeacherCreateUseCase {
+public class TeacherCreateUseCaseFacade implements TeacherCreateUseCase {
     private final TeacherService teacherService;
     private final SubjectService subjectService;
     private final TeacherCreateDtoToTeacherMapper teacherCreateDtoToTeacherMapper;
 
-    public TeacherCreateUseCaseImpl(TeacherService teacherService,
-                                    SubjectService subjectService,
-                                    TeacherCreateDtoToTeacherMapper teacherCreateDtoToTeacherMapper) {
+    public TeacherCreateUseCaseFacade(TeacherService teacherService,
+                                      SubjectService subjectService,
+                                      TeacherCreateDtoToTeacherMapper teacherCreateDtoToTeacherMapper) {
         this.teacherService = teacherService;
         this.subjectService = subjectService;
         this.teacherCreateDtoToTeacherMapper = teacherCreateDtoToTeacherMapper;

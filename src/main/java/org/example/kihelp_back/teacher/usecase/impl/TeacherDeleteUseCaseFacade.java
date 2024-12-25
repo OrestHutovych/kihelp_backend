@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class TeacherDeleteUseCaseImpl implements TeacherDeleteUseCase {
+public class TeacherDeleteUseCaseFacade implements TeacherDeleteUseCase {
     private final TeacherService teacherService;
 
-    public TeacherDeleteUseCaseImpl(TeacherService teacherService) {
+    public TeacherDeleteUseCaseFacade(TeacherService teacherService) {
         this.teacherService = teacherService;
     }
 

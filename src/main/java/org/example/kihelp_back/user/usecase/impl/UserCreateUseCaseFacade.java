@@ -23,18 +23,18 @@ import static org.example.kihelp_back.user.util.ErrorMessage.USER_BAD_CREDENTIAL
 
 @Component
 @Slf4j
-public class UserCreateUseCaseImpl implements UserCreateUseCase {
+public class UserCreateUseCaseFacade implements UserCreateUseCase {
     private final UserService userService;
     private final UserAuthDtoToUserMapper userRequestToUserMapper;
     private final RoleService roleService;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
 
-    public UserCreateUseCaseImpl(UserService userService,
-                                 UserAuthDtoToUserMapper userRequestToUserMapper,
-                                 RoleService roleService,
-                                 JwtTokenUtils jwtTokenUtils,
-                                 AuthenticationManager authenticationManager
+    public UserCreateUseCaseFacade(UserService userService,
+                                   UserAuthDtoToUserMapper userRequestToUserMapper,
+                                   RoleService roleService,
+                                   JwtTokenUtils jwtTokenUtils,
+                                   AuthenticationManager authenticationManager
     ) {
         this.userService = userService;
         this.userRequestToUserMapper = userRequestToUserMapper;

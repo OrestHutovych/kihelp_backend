@@ -6,10 +6,10 @@ import org.example.kihelp_back.teacher.usecase.TeacherUpdateUseCase;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TeacherUpdateUseCaseImpl implements TeacherUpdateUseCase {
+public class TeacherUpdateUseCaseFacade implements TeacherUpdateUseCase {
     private final TeacherService teacherService;
 
-    public TeacherUpdateUseCaseImpl(TeacherService teacherService) {
+    public TeacherUpdateUseCaseFacade(TeacherService teacherService) {
         this.teacherService = teacherService;
     }
 

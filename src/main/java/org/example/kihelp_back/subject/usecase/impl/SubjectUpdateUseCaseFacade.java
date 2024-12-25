@@ -6,10 +6,10 @@ import org.example.kihelp_back.subject.usecase.SubjectUpdateUseCase;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SubjectUpdateUseCaseImpl implements SubjectUpdateUseCase {
+public class SubjectUpdateUseCaseFacade implements SubjectUpdateUseCase {
     private final SubjectService subjectService;
 
-    public SubjectUpdateUseCaseImpl(SubjectService subjectService) {
+    public SubjectUpdateUseCaseFacade(SubjectService subjectService) {
         this.subjectService = subjectService;
     }
 

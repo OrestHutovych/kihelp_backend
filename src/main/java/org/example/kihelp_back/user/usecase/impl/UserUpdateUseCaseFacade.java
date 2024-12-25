@@ -7,10 +7,10 @@ import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserUpdateUseCaseImpl implements UserUpdateUseCase {
+public class UserUpdateUseCaseFacade implements UserUpdateUseCase {
     private final UserService userService;
 
-    public UserUpdateUseCaseImpl(UserService userService) {
+    public UserUpdateUseCaseFacade(UserService userService) {
         this.userService = userService;
     }
 

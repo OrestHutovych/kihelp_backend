@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class TeacherGetUseCaseImpl implements TeacherGetUseCase {
+public class TeacherGetUseCaseFacade implements TeacherGetUseCase {
     private final TeacherService teacherService;
     private final TeacherToTeacherDtoMapper teacherToTeacherDtoMapper;
 
-    public TeacherGetUseCaseImpl(TeacherService teacherService,
-                                 TeacherToTeacherDtoMapper teacherToTeacherDtoMapper) {
+    public TeacherGetUseCaseFacade(TeacherService teacherService,
+                                   TeacherToTeacherDtoMapper teacherToTeacherDtoMapper) {
         this.teacherService = teacherService;
         this.teacherToTeacherDtoMapper = teacherToTeacherDtoMapper;
     }

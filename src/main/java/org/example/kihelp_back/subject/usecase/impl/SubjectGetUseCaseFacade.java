@@ -12,12 +12,12 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class SubjectGetUseCaseImpl implements SubjectGetUseCase {
+public class SubjectGetUseCaseFacade implements SubjectGetUseCase {
     private final SubjectService subjectService;
     private final SubjectToSubjectResponseMapper subjectToSubjectResponseMapper;
 
-    public SubjectGetUseCaseImpl(SubjectService subjectService,
-                                 SubjectToSubjectResponseMapper subjectToSubjectResponseMapper) {
+    public SubjectGetUseCaseFacade(SubjectService subjectService,
+                                   SubjectToSubjectResponseMapper subjectToSubjectResponseMapper) {
         this.subjectService = subjectService;
         this.subjectToSubjectResponseMapper = subjectToSubjectResponseMapper;
     }

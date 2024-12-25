@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class SubjectCreateUseCaseImpl implements SubjectCreateUseCase {
+public class SubjectCreateUseCaseFacade implements SubjectCreateUseCase {
     private final SubjectService subjectService;
     private final SubjectCreateDtoToSubjectMapper subjectCreateDtoToSubjectMapper;
 
-    public SubjectCreateUseCaseImpl(SubjectService subjectService,
-                                    SubjectCreateDtoToSubjectMapper subjectCreateDtoToSubjectMapper) {
+    public SubjectCreateUseCaseFacade(SubjectService subjectService,
+                                      SubjectCreateDtoToSubjectMapper subjectCreateDtoToSubjectMapper) {
         this.subjectService = subjectService;
         this.subjectCreateDtoToSubjectMapper = subjectCreateDtoToSubjectMapper;
     }

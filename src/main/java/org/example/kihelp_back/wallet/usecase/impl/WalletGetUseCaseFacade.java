@@ -12,12 +12,12 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class WalletGetUseCaseImpl implements WalletGetUseCase {
+public class WalletGetUseCaseFacade implements WalletGetUseCase {
     private final WalletService walletService;
     private final WalletToWalletResponseDtoMapper walletToWalletResponseMapper;
 
-    public WalletGetUseCaseImpl(WalletService walletService,
-                                WalletToWalletResponseDtoMapper walletToWalletResponseMapper) {
+    public WalletGetUseCaseFacade(WalletService walletService,
+                                  WalletToWalletResponseDtoMapper walletToWalletResponseMapper) {
         this.walletService = walletService;
         this.walletToWalletResponseMapper = walletToWalletResponseMapper;
     }

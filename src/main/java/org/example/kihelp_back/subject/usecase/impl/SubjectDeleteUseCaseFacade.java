@@ -5,10 +5,10 @@ import org.example.kihelp_back.subject.usecase.SubjectDeleteUseCase;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SubjectDeleteUseCaseImpl implements SubjectDeleteUseCase {
+public class SubjectDeleteUseCaseFacade implements SubjectDeleteUseCase {
     private final SubjectService subjectService;
 
-    public SubjectDeleteUseCaseImpl(SubjectService subjectService) {
+    public SubjectDeleteUseCaseFacade(SubjectService subjectService) {
         this.subjectService = subjectService;
     }
 

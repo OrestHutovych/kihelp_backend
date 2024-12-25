@@ -12,12 +12,12 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class UserGetUseCaseImpl implements UserGetUseCase {
+public class UserGetUseCaseFacade implements UserGetUseCase {
     private final UserService userService;
     private final UserToUserResponseDtoMapper userToUserResponseDtoMapper;
 
-    public UserGetUseCaseImpl(UserService userService,
-                              UserToUserResponseDtoMapper userToUserResponseDtoMapper) {
+    public UserGetUseCaseFacade(UserService userService,
+                                UserToUserResponseDtoMapper userToUserResponseDtoMapper) {
         this.userService = userService;
         this.userToUserResponseDtoMapper = userToUserResponseDtoMapper;
     }
