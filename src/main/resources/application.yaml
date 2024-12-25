@@ -34,8 +34,8 @@ jwt:
   lifetime: 60h
 
 telegram:
-  username: KI_help_bot
-  token: 6783069937:AAGIaDjG6GKufsvwCJ7nrjcEbq1BX84T46U
+  username: helper_web_best_hackothon_bot
+  token: 6721007474:AAH3Dn8kwjx6JmEZHadMo7xYoRR9tmOTfgI
   chatId: -1002140659403
 
 

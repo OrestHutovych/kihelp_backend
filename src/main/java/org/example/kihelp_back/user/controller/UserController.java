@@ -8,6 +8,7 @@ import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -25,8 +26,8 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public JwtDto authUser(@Valid @RequestBody UserAuthDto user) {
-       return userCreateUseCase.authUser(user);
+    public JwtDto authUser(@RequestBody Map<String, String> query) {
+       return userCreateUseCase.authUser(query);
     }
 
     @PutMapping("/{telegram_id}/toggle_role")
