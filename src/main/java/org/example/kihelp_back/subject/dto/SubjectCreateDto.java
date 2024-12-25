@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import static org.example.kihelp_back.subject.util.ErrorMessages.COURSE_VALUE;
 import static org.example.kihelp_back.subject.util.ErrorMessages.SUBJECT_NAME_NOT_VALID;
 
-public record SubjectRequest(
+public record SubjectCreateDto(
         @NotBlank(message = SUBJECT_NAME_NOT_VALID)
         String name,
         @Min(value = 1, message = COURSE_VALUE)

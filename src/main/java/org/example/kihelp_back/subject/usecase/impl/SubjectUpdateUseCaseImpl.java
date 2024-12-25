@@ -1,6 +1,6 @@
 package org.example.kihelp_back.subject.usecase.impl;
 
-import org.example.kihelp_back.subject.dto.SubjectUpdateRequest;
+import org.example.kihelp_back.subject.dto.SubjectUpdateDto;
 import org.example.kihelp_back.subject.service.SubjectService;
 import org.example.kihelp_back.subject.usecase.SubjectUpdateUseCase;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class SubjectUpdateUseCaseImpl implements SubjectUpdateUseCase {
     }
 
     @Override
-    public void updateSubject(Long id, SubjectUpdateRequest subject) {
+    public void updateSubject(Long id, SubjectUpdateDto subject) {
         subjectService.update(id, subject.name());
     }
 }

@@ -1,8 +1,8 @@
 package org.example.kihelp_back.subject.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.subject.mapper.SubjectRequestToSubjectMapper;
-import org.example.kihelp_back.subject.dto.SubjectRequest;
+import org.example.kihelp_back.subject.mapper.SubjectCreateDtoToSubjectMapper;
+import org.example.kihelp_back.subject.dto.SubjectCreateDto;
 import org.example.kihelp_back.subject.model.Subject;
 import org.example.kihelp_back.subject.service.SubjectService;
 import org.example.kihelp_back.subject.usecase.SubjectCreateUseCase;
@@ -12,17 +12,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SubjectCreateUseCaseImpl implements SubjectCreateUseCase {
     private final SubjectService subjectService;
-    private final SubjectRequestToSubjectMapper subjectRequestToSubjectMapper;
+    private final SubjectCreateDtoToSubjectMapper subjectCreateDtoToSubjectMapper;
 
-    public SubjectCreateUseCaseImpl(SubjectService subjectService, SubjectRequestToSubjectMapper subjectRequestToSubjectMapper) {
+    public SubjectCreateUseCaseImpl(SubjectService subjectService,
+                                    SubjectCreateDtoToSubjectMapper subjectCreateDtoToSubjectMapper) {
         this.subjectService = subjectService;
-        this.subjectRequestToSubjectMapper = subjectRequestToSubjectMapper;
+        this.subjectCreateDtoToSubjectMapper = subjectCreateDtoToSubjectMapper;
     }
 
     @Override
-    public void create(SubjectRequest request) {
+    public void create(SubjectCreateDto request) {
         log.info("Attempting to mapping SubjectRequest to Subject: {}", request.name());
-        Subject subject = subjectRequestToSubjectMapper.map(request);
+        Subject subject = subjectCreateDtoToSubjectMapper.map(request);
 
         subjectService.save(subject);
     }

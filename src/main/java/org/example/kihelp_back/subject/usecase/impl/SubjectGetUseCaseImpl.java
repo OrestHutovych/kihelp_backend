@@ -2,7 +2,8 @@ package org.example.kihelp_back.subject.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.subject.mapper.SubjectToSubjectResponseMapper;
-import org.example.kihelp_back.subject.dto.SubjectResponse;
+import org.example.kihelp_back.subject.dto.SubjectDto;
+import org.example.kihelp_back.subject.model.Subject;
 import org.example.kihelp_back.subject.service.SubjectService;
 import org.example.kihelp_back.subject.usecase.SubjectGetUseCase;
 import org.springframework.stereotype.Component;
@@ -22,20 +23,13 @@ public class SubjectGetUseCaseImpl implements SubjectGetUseCase {
     }
 
     @Override
-    public List<SubjectResponse> getSubjectsByCourseNumber(Integer courseNumber) {
-        log.debug("Start fetching subject for course number: {}", courseNumber);
-        var subjects = subjectService.getSubjectsByCourseNumber(courseNumber);
-        log.debug("Fetched {} subjects(s) for course number: {}", subjects.size(), courseNumber);
+    public List<SubjectDto> getSubjectsByCourseNumber(Integer courseNumber) {
+        List<Subject> subjects = subjectService.getSubjectsByCourseNumber(courseNumber);
 
         log.debug("Mapping subjects(s) {} to SubjectResponse DTOs.", subjects.size());
-        var subjectsResponse = subjects
+        return subjects
                 .stream()
                 .map(subjectToSubjectResponseMapper::map)
                 .toList();
-        log.debug("Successfully mapped {} subjects(s) to SubjectResponse DTOs for course number: {}",
-                subjectsResponse.size(), courseNumber
-        );
-
-        return subjectsResponse;
     }
 }

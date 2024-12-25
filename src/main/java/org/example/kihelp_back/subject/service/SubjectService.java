@@ -5,8 +5,8 @@ import org.example.kihelp_back.subject.exception.SubjectExistException;
 import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
 import org.example.kihelp_back.subject.model.Subject;
 import org.example.kihelp_back.subject.repository.SubjectRepository;
-import org.example.kihelp_back.teacher.service.TeacherService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,14 +17,12 @@ import static org.example.kihelp_back.subject.util.ErrorMessages.SUBJECT_NOT_FOU
 @Slf4j
 public class SubjectService{
     private final SubjectRepository subjectRepository;
-    private final TeacherService teacherService;
 
-    public SubjectService(SubjectRepository subjectRepository,
-                          TeacherService teacherService) {
+    public SubjectService(SubjectRepository subjectRepository) {
         this.subjectRepository = subjectRepository;
-        this.teacherService = teacherService;
     }
 
+    @Transactional
     public Subject save(Subject subject) {
         log.info("Start saving subject with name: {}", subject.getName());
         boolean existSubject = subjectRepository.existsByNameAndCourseNumber(subject.getName(), subject.getCourseNumber());
@@ -52,22 +50,22 @@ public class SubjectService{
                 );
     }
 
+    @Transactional
     public void delete(Long id) {
+        log.info("Start deleting subject with id: {}", id);
         Subject subject = getSubjectById(id);
 
-//        teacherService.delete(id);
         subjectRepository.delete(subject);
+        log.info("Successfully deleted subject with id: {}", id);
     }
 
+    @Transactional
     public Subject update(Long id, String name) {
-        log.debug("Attempting to find subject with id '{}'", id);
-        var subject = getSubjectById(id);
-        log.debug("Successfully found subject: {}", subject);
-
-        log.debug("Updating name of subject with id '{}' to '{}'", id, name);
+        log.info("Start updating subject with id: {}", id);
+        Subject subject = getSubjectById(id);
         subject.setName(name);
-        log.debug("Successfully updated subject: {}", subject);
 
+        log.info("Successfully updated subject with id: {}", id);
         return subjectRepository.save(subject);
     }
 }

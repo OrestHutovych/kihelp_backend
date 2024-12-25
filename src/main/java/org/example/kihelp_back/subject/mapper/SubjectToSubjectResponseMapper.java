@@ -2,7 +2,7 @@ package org.example.kihelp_back.subject.mapper;
 
 import org.example.kihelp_back.global.mapper.Mapper;
 import org.example.kihelp_back.subject.model.Subject;
-import org.example.kihelp_back.subject.dto.SubjectResponse;
+import org.example.kihelp_back.subject.dto.SubjectDto;
 
-public interface SubjectToSubjectResponseMapper extends Mapper<SubjectResponse, Subject> {
+public interface SubjectToSubjectResponseMapper extends Mapper<SubjectDto, Subject> {
 }

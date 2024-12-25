@@ -1,9 +1,9 @@
 package org.example.kihelp_back.subject.usecase;
 
-import org.example.kihelp_back.subject.dto.SubjectResponse;
+import org.example.kihelp_back.subject.dto.SubjectDto;
 
 import java.util.List;
 
 public interface SubjectGetUseCase {
-    List<SubjectResponse> getSubjectsByCourseNumber(Integer courseNumber);
+    List<SubjectDto> getSubjectsByCourseNumber(Integer courseNumber);
 }

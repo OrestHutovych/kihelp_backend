@@ -1,9 +1,9 @@
 package org.example.kihelp_back.subject.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.subject.dto.SubjectRequest;
-import org.example.kihelp_back.subject.dto.SubjectResponse;
-import org.example.kihelp_back.subject.dto.SubjectUpdateRequest;
+import org.example.kihelp_back.subject.dto.SubjectCreateDto;
+import org.example.kihelp_back.subject.dto.SubjectDto;
+import org.example.kihelp_back.subject.dto.SubjectUpdateDto;
 import org.example.kihelp_back.subject.usecase.SubjectCreateUseCase;
 import org.example.kihelp_back.subject.usecase.SubjectDeleteUseCase;
 import org.example.kihelp_back.subject.usecase.SubjectGetUseCase;
@@ -31,23 +31,23 @@ public class SubjectController {
     }
 
     @PostMapping("/add")
-    public void createSubject(@Valid @RequestBody SubjectRequest request) {
+    public void createSubject(@Valid @RequestBody SubjectCreateDto request) {
         subjectCreateUseCase.create(request);
     }
 
-    @GetMapping("/subject/by/course_number/{number}")
-    public List<SubjectResponse> getSubjectByCourseNumber(@PathVariable("number") Integer number) {
+    @GetMapping("/course_number/{number}")
+    public List<SubjectDto> getSubjectByCourseNumber(@PathVariable("number") Integer number) {
         return subjectGetUseCase.getSubjectsByCourseNumber(number);
     }
 
-    @PutMapping("/subject/{id}")
-    public void updateSubject(@PathVariable("id") Long id, @Valid @RequestBody SubjectUpdateRequest request) {
-        subjectUpdateUseCase.updateSubject(id, request);
+    @PutMapping("/{subject_id}")
+    public void updateSubject(@PathVariable("subject_id") Long subjectId,
+                              @Valid @RequestBody SubjectUpdateDto request) {
+        subjectUpdateUseCase.updateSubject(subjectId, request);
     }
 
-    @DeleteMapping("/subject/{id}")
-    public void deleteSubject(@PathVariable("id") Long id) {
-        //todo check cascade delete
-        subjectDeleteUseCase.deleteSubject(id);
+    @DeleteMapping("/{subject_id}")
+    public void deleteSubject(@PathVariable("subject_id") Long subjectId) {
+        subjectDeleteUseCase.deleteSubject(subjectId);
     }
 }
