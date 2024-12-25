@@ -1,9 +1,11 @@
 package org.example.kihelp_back.teacher.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.subject.model.Subject;
 import org.example.kihelp_back.subject.service.SubjectService;
-import org.example.kihelp_back.teacher.mapper.TeacherRequestToTeacherMapper;
-import org.example.kihelp_back.teacher.dto.TeacherRequest;
+import org.example.kihelp_back.teacher.mapper.TeacherCreateDtoToTeacherMapper;
+import org.example.kihelp_back.teacher.dto.TeacherCreateDto;
+import org.example.kihelp_back.teacher.model.Teacher;
 import org.example.kihelp_back.teacher.service.TeacherService;
 import org.example.kihelp_back.teacher.usecase.TeacherCreateUseCase;
 import org.springframework.stereotype.Component;
@@ -13,26 +15,22 @@ import org.springframework.stereotype.Component;
 public class TeacherCreateUseCaseImpl implements TeacherCreateUseCase {
     private final TeacherService teacherService;
     private final SubjectService subjectService;
-    private final TeacherRequestToTeacherMapper teacherRequestToTeacherMapper;
+    private final TeacherCreateDtoToTeacherMapper teacherCreateDtoToTeacherMapper;
 
     public TeacherCreateUseCaseImpl(TeacherService teacherService,
                                     SubjectService subjectService,
-                                    TeacherRequestToTeacherMapper teacherRequestToTeacherMapper) {
+                                    TeacherCreateDtoToTeacherMapper teacherCreateDtoToTeacherMapper) {
         this.teacherService = teacherService;
         this.subjectService = subjectService;
-        this.teacherRequestToTeacherMapper = teacherRequestToTeacherMapper;
+        this.teacherCreateDtoToTeacherMapper = teacherCreateDtoToTeacherMapper;
     }
 
     @Override
-    public void createTeacher(TeacherRequest request) {
-        log.debug("Fetching subject with ID: {}", request.subjectId());
-        var subject = subjectService.getSubjectById(request.subjectId());
-        log.debug("Successfully fetched subject: {}", subject);
+    public void createTeacher(TeacherCreateDto request) {
+        Subject subject = subjectService.getSubjectById(request.subjectId());
 
-        log.debug("Mapping TeacherRequest {} to Teacher entity.", request);
-        var teacher = teacherRequestToTeacherMapper.map(request, subject);
-        log.debug("Mapped Teacher entity: {}", teacher);
-
+        log.info("Attempting to map TeacherCreateDto {} to Teacher", request.name());
+        Teacher teacher = teacherCreateDtoToTeacherMapper.map(request, subject);
 
         teacherService.create(teacher);
     }

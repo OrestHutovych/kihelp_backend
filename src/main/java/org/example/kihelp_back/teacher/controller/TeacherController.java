@@ -1,8 +1,8 @@
 package org.example.kihelp_back.teacher.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.teacher.dto.TeacherRequest;
-import org.example.kihelp_back.teacher.dto.TeacherResponse;
+import org.example.kihelp_back.teacher.dto.TeacherCreateDto;
+import org.example.kihelp_back.teacher.dto.TeacherDto;
 import org.example.kihelp_back.teacher.dto.TeacherUpdateRequest;
 import org.example.kihelp_back.teacher.usecase.TeacherCreateUseCase;
 import org.example.kihelp_back.teacher.usecase.TeacherDeleteUseCase;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/teachers")
+@RequestMapping("/api/v1/teacher")
 public class TeacherController {
     private final TeacherCreateUseCase teacherCreateUseCase;
     private final TeacherGetUseCase teacherGetUseCase;
@@ -30,23 +30,24 @@ public class TeacherController {
         this.teacherUpdateUseCase = teacherUpdateUseCase;
     }
 
-    @PostMapping("/teacher")
-    public void createTeacher(@Valid @RequestBody TeacherRequest request){
+    @PostMapping("/add")
+    public void createTeacher(@Valid @RequestBody TeacherCreateDto request){
         teacherCreateUseCase.createTeacher(request);
     }
 
-    @GetMapping("/teacher/by/subject/{id}")
-    public List<TeacherResponse> getTeachersBySubject(@PathVariable("id") Long subjectId){
+    @GetMapping("/{subject_id}")
+    public List<TeacherDto> getTeachersBySubject(@PathVariable("subject_id") Long subjectId){
         return teacherGetUseCase.getTeachersBySubject(subjectId);
     }
 
-    @DeleteMapping("/teacher/{id}")
-    public void deleteTeacher(@PathVariable("id") Integer teacherId){
+    @DeleteMapping("/{teacher_id}")
+    public void deleteTeacher(@PathVariable("teacher_id") Long teacherId){
         teacherDeleteUseCase.deleteTeacher(teacherId);
     }
 
-    @PutMapping("/teacher/{id}")
-    public void updateTeacher(@PathVariable("id") Integer teacherId, @Valid @RequestBody TeacherUpdateRequest request){
+    @PutMapping("/teacher/{teacher_id}")
+    public void updateTeacher(@PathVariable("teacher_id") Long teacherId,
+                              @Valid @RequestBody TeacherUpdateRequest request){
         teacherUpdateUseCase.updateTeacher(teacherId, request);
     }
 }

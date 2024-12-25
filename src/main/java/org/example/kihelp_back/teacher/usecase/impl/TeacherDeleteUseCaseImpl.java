@@ -15,7 +15,7 @@ public class TeacherDeleteUseCaseImpl implements TeacherDeleteUseCase {
     }
 
     @Override
-    public void deleteTeacher(Integer teacherId) {
+    public void deleteTeacher(Long teacherId) {
         teacherService.delete(teacherId);
     }
 }

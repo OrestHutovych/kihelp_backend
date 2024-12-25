@@ -18,6 +18,6 @@ public record TaskResponse(
         boolean autoGenerate,
         Instant createdTimeStamp,
         List<Argument> arguments,
-        Integer teacherId
+        Long teacherId
 ) {
 }

@@ -14,7 +14,7 @@ public class TeacherUpdateUseCaseImpl implements TeacherUpdateUseCase {
     }
 
     @Override
-    public void updateTeacher(Integer teacherId, TeacherUpdateRequest request) {
+    public void updateTeacher(Long teacherId, TeacherUpdateRequest request) {
         teacherService.update(teacherId, request.name());
     }
 }

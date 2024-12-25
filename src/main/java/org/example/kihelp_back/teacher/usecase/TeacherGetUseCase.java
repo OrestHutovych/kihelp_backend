@@ -1,9 +1,9 @@
 package org.example.kihelp_back.teacher.usecase;
 
-import org.example.kihelp_back.teacher.dto.TeacherResponse;
+import org.example.kihelp_back.teacher.dto.TeacherDto;
 
 import java.util.List;
 
 public interface TeacherGetUseCase {
-    List<TeacherResponse> getTeachersBySubject(Long subjectId);
+    List<TeacherDto> getTeachersBySubject(Long subjectId);
 }

@@ -1,16 +1,16 @@
 package org.example.kihelp_back.teacher.mapper.impl;
 
-import org.example.kihelp_back.teacher.mapper.TeacherToTeacherResponseMapper;
+import org.example.kihelp_back.teacher.mapper.TeacherToTeacherDtoMapper;
 import org.example.kihelp_back.teacher.model.Teacher;
-import org.example.kihelp_back.teacher.dto.TeacherResponse;
+import org.example.kihelp_back.teacher.dto.TeacherDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TeacherToTeacherResponseMapperImpl implements TeacherToTeacherResponseMapper {
+public class TeacherToTeacherDtoMapperImpl implements TeacherToTeacherDtoMapper {
 
     @Override
-    public TeacherResponse map(Teacher teacher) {
-        return new TeacherResponse(
+    public TeacherDto map(Teacher teacher) {
+        return new TeacherDto(
                 teacher.getId(),
                 teacher.getName(),
                 teacher.getSubject().getId()

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
-    boolean existsByTitleAndTeacherId(String title, Integer teacherId);
+    boolean existsByTitleAndTeacherId(String title, Long teacherId);
     List<Task> findByTeacherId(Integer teacherId);
     @Modifying
     @Transactional

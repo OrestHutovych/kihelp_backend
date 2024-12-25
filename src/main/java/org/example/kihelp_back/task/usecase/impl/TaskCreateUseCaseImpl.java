@@ -67,7 +67,7 @@ public class TaskCreateUseCaseImpl implements TaskCreateUseCase {
         }
 
         log.debug("Attempting to find teacher with id '{}'", taskRequest.teacherId());
-        var teacher = teacherService.getTeacherById(taskRequest.teacherId());
+        var teacher = teacherService.getTeacherById(1L);
         log.debug("Successfully found teacher: {}", teacher);
 
         log.debug("Attempting to find arguments by id: {}", taskRequest.args());
