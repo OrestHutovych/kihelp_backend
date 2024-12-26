@@ -1,7 +1,7 @@
 package org.example.kihelp_back.argument.usecase;
 
-import org.example.kihelp_back.argument.dto.ArgumentUpdateRequest;
+import org.example.kihelp_back.argument.dto.ArgumentUpdateDto;
 
 public interface ArgumentUpdateUseCase {
-    void updateArgument(Integer argumentId, ArgumentUpdateRequest request);
+    void updateArgument(Long argumentId, ArgumentUpdateDto request);
 }

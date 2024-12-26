@@ -1,7 +1,6 @@
 package org.example.kihelp_back.argument.dto;
 
-public record ArgumentResponse(
-        Integer id,
+public record ArgumentUpdateDto(
         String name,
         String description
 ) {

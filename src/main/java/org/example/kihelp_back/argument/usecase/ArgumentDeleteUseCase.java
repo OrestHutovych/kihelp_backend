@@ -1,5 +1,5 @@
 package org.example.kihelp_back.argument.usecase;
 
 public interface ArgumentDeleteUseCase {
-    void deleteArgument(Integer argumentId);
+    void deleteArgument(Long argumentId);
 }

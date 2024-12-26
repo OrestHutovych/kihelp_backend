@@ -18,6 +18,6 @@ public record TaskCreateDto(
         Long developerId,
         boolean autoGenerate,
         Long teacherId,
-        List<Integer> args
+        List<Long> args
 ) {
 }

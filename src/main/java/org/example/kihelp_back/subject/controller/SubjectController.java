@@ -30,7 +30,7 @@ public class SubjectController {
         this.subjectUpdateUseCase = subjectUpdateUseCase;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public void createSubject(@Valid @RequestBody SubjectCreateDto request) {
         subjectCreateUseCase.create(request);
     }

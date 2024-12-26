@@ -1,9 +1,9 @@
 package org.example.kihelp_back.argument.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.argument.dto.ArgumentRequest;
-import org.example.kihelp_back.argument.dto.ArgumentResponse;
-import org.example.kihelp_back.argument.dto.ArgumentUpdateRequest;
+import org.example.kihelp_back.argument.dto.ArgumentCreateDto;
+import org.example.kihelp_back.argument.dto.ArgumentDto;
+import org.example.kihelp_back.argument.dto.ArgumentUpdateDto;
 import org.example.kihelp_back.argument.usecase.ArgumentCreateUseCase;
 import org.example.kihelp_back.argument.usecase.ArgumentDeleteUseCase;
 import org.example.kihelp_back.argument.usecase.ArgumentGetUseCase;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/arguments")
+@RequestMapping("/api/v1/argument")
 public class ArgumentController {
     private final ArgumentCreateUseCase argumentCreateUseCase;
     private final ArgumentGetUseCase argumentGetUseCase;
@@ -30,23 +30,24 @@ public class ArgumentController {
         this.argumentUpdateUseCase = argumentUpdateUseCase;
     }
 
-    @PostMapping("/argument")
-    public void create(@Valid @RequestBody ArgumentRequest request) {
+    @PostMapping("/create")
+    public void create(@Valid @RequestBody ArgumentCreateDto request) {
         argumentCreateUseCase.createArgument(request);
     }
 
-    @GetMapping("/argument")
-    public List<ArgumentResponse> getArguments() {
+    @GetMapping("/all")
+    public List<ArgumentDto> getArguments() {
         return argumentGetUseCase.getArguments();
     }
 
-    @DeleteMapping("/argument/{id}")
-    public void deleteArgument(@PathVariable("id") Integer argumentId) {
+    @DeleteMapping("/delete/{argument_id}")
+    public void deleteArgument(@PathVariable("argument_id") Long argumentId) {
         argumentDeleteUseCase.deleteArgument(argumentId);
     }
 
-    @PatchMapping("/argument/{id}")
-    public void updateArgument(@PathVariable("id") Integer argumentId, @Valid @RequestBody ArgumentUpdateRequest request) {
+    @PatchMapping("/update/{argument_id}")
+    public void updateArgument(@PathVariable("argument_id") Long argumentId,
+                               @Valid @RequestBody ArgumentUpdateDto request) {
         argumentUpdateUseCase.updateArgument(argumentId, request);
     }
 }
