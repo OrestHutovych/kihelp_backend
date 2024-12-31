@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.example.kihelp_back.global.model.BaseEntity;
+import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.hibernate.proxy.HibernateProxy;
@@ -43,8 +44,11 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Wallet> wallets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<History> histories;
 
     @PostPersist
     private void createDefaultWallet() {

@@ -2,8 +2,7 @@ package org.example.kihelp_back.history.dto;
 
 import java.time.Instant;
 
-public record HistoryResponse(
-        Long id,
+public record HistoryDto(
         String nameOfSubject,
         String nameOfTask,
         String link,
