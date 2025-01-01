@@ -1,8 +1,9 @@
 package org.example.kihelp_back.task.usecase;
 
 import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
-import org.example.kihelp_back.task.dto.TaskProcessDto;
+
+import java.util.Map;
 
 public interface TaskProcessUseCase {
-    TaskProcessDto processTask(Long taskId, TaskProcessCreateDto request);
+    Map<String, String> processTask(Long taskId, TaskProcessCreateDto request);
 }

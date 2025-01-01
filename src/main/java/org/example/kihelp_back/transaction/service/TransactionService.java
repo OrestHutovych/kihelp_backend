@@ -61,7 +61,7 @@ public class TransactionService {
         }
 
         log.info("Attempting to update balance in wallet for user with telegram id: {}", transaction.getUser().getTelegramId());
-        walletService.withdrawAmountFromWalletByUserTelegramId(transaction.getUser().getTelegramId(), transaction.getAmount());
+        walletService.withdrawAmountFromDevWalletByUserTelegramId(transaction.getUser().getTelegramId(), transaction.getAmount());
 
         transaction.setStatus(TransactionStatus.IN_PROGRESS);
 

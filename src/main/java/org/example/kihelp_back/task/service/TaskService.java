@@ -1,20 +1,17 @@
 package org.example.kihelp_back.task.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
-import org.example.kihelp_back.task.dto.TaskProcessDto;
-import org.example.kihelp_back.task.exception.TaskDeveloperNotValidException;
-import org.example.kihelp_back.task.exception.TaskExistException;
-import org.example.kihelp_back.task.exception.TaskNotFoundException;
-import org.example.kihelp_back.task.exception.TypeNotValidException;
+import org.example.kihelp_back.task.dto.*;
+import org.example.kihelp_back.task.exception.*;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.dto.TaskUpdateDto;
 import org.example.kihelp_back.task.model.Type;
 import org.example.kihelp_back.task.repository.TaskRepository;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -25,11 +22,14 @@ import static org.example.kihelp_back.task.util.ErrorMessage.*;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
+    private final RestTemplate restTemplate;
 
     public TaskService(TaskRepository taskRepository,
-                       UserService userService) {
+                       UserService userService,
+                       RestTemplate restTemplate) {
         this.taskRepository = taskRepository;
         this.userService = userService;
+        this.restTemplate = restTemplate;
     }
 
     @Transactional
@@ -47,12 +47,29 @@ public class TaskService {
         log.info("Successfully created task for teacher with ID: {}", task.getTeacher().getId());
     }
 
-    @Transactional
-    public TaskProcessDto process(Long taskId, TaskProcessCreateDto request) {
-        Task task = getTaskById(taskId);
+    public TaskGenerateDto process(User user, Task task, TaskProcessCreateDto request) {
+        log.info("Start process task '{}' for user with Telegram ID: {}", task.getTitle(), user.getTelegramId());
 
-        //todo functionality process task
-        return null;
+        TaskGenerateCreateDto taskGenerateDto = new TaskGenerateCreateDto(
+                user.getTelegramId(),
+                task.getTitle(),
+                task.getTeacher().getName(),
+                task.getTeacher().getSubject().getName(),
+                task.getIdentifier(),
+                request.arguments()
+        );
+
+        TaskGenerateDto processResponse;
+
+        try {
+            log.info("Attempting to send request to task generate service for user with Telegram ID: {}", user.getTelegramId());
+            processResponse = restTemplate.postForObject("http://127.0.0.1:8083/tasks/generate", taskGenerateDto, TaskGenerateDto.class);
+        } catch (HttpServerErrorException e) {
+            throw new TaskProcessException(e.getMessage());
+        }
+
+        log.info("Successfully processed task '{}' for telegram ID: {}", task.getTitle(), user.getTelegramId());
+        return processResponse;
     }
 
     public List<Task> getByTeacher(Long teacherId) {

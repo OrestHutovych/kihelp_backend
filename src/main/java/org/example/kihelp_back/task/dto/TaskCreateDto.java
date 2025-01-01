@@ -3,6 +3,7 @@ package org.example.kihelp_back.task.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.example.kihelp_back.task.util.ErrorMessage.*;
@@ -13,7 +14,7 @@ public record TaskCreateDto(
         String description,
         String identifier,
         @Min(value = 1, message = PRICE_MIN_NOT_VALID)
-        Integer price,
+        BigDecimal price,
         String type,
         Long developerId,
         boolean autoGenerate,

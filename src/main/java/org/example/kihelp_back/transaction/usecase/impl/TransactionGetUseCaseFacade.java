@@ -27,6 +27,6 @@ public class TransactionGetUseCaseFacade implements TransactionGetUseCase {
         
         return transactions.stream()
                 .map(transactionToTransactionResponseMapper::map)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

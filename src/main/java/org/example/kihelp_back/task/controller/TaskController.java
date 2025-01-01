@@ -6,6 +6,7 @@ import org.example.kihelp_back.task.usecase.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/task")
@@ -34,8 +35,8 @@ public class TaskController {
     }
 
     @PostMapping("/process/{task_id}")
-    public TaskProcessDto processTask(@PathVariable("task_id") Long taskId,
-                                      @RequestBody TaskProcessCreateDto request) {
+    public Map<String, String> processTask(@PathVariable("task_id") Long taskId,
+                                           @RequestBody TaskProcessCreateDto request) {
         return taskProcessUseCase.processTask(taskId, request);
     }
 

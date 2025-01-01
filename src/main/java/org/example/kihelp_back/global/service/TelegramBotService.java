@@ -21,6 +21,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
     @Value("${telegram.username}")
     private String botUsername;
 
+    @lombok.Getter
     @Value("${telegram.token}")
     private String botToken;
 
@@ -33,13 +34,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
     }
 
     @Override
-    public String getBotToken() {
-        return botToken;
-    }
-
-    @Override
     public void onUpdateReceived(Update update) {
-
+        throw new UnsupportedOperationException();
     }
 
     public void depositAdminMessage(Transaction transaction) {

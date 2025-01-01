@@ -10,6 +10,7 @@ import org.example.kihelp_back.teacher.model.Teacher;
 import org.example.kihelp_back.user.model.User;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class TaskCreateDtoToTaskMapperImpl implements TaskCreateDtoToTaskRespons
         task.setDescription(taskRequest.description());
         task.setIdentifier(taskRequest.identifier());
         task.setPrice(taskRequest.price());
-        task.setDiscount(0.0);
+        task.setDiscount(BigDecimal.ZERO);
         task.setVisible(false);
         task.setType(resolveType(taskRequest.type()));
         task.setDeveloper(developer);

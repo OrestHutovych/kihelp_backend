@@ -5,10 +5,7 @@ import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.subject.exception.SubjectExistException;
 import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
-import org.example.kihelp_back.task.exception.TaskDeveloperNotValidException;
-import org.example.kihelp_back.task.exception.TaskExistException;
-import org.example.kihelp_back.task.exception.TaskNotFoundException;
-import org.example.kihelp_back.task.exception.TypeNotValidException;
+import org.example.kihelp_back.task.exception.*;
 import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
@@ -271,6 +268,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TelegramException.class)
     public ResponseEntity<Map<String, String>> handleTelegramException(TelegramException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaskProcessException.class)
+    public ResponseEntity<Map<String, String>> handleTaskProcessException(TaskProcessException ex) {
         Map<String, String> error = new HashMap<>();
         error.put(MESSAGE_FIELD, ex.getMessage());
 

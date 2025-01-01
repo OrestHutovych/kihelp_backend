@@ -70,12 +70,34 @@ public class WalletService {
     }
 
     @Transactional
-    public void withdrawAmountFromWalletByUserTelegramId(String telegramId, BigDecimal amount) {
+    public void withdrawAmountFromDevWalletByUserTelegramId(String telegramId, BigDecimal amount) {
         log.info("Start withdraw amount from wallet for user by telegram ID: {}", telegramId);
         List<Wallet> wallets = findByUserTelegramId(telegramId);
 
         wallets.stream()
                 .filter(w -> !w.isDefaultWallet())
+                .findFirst()
+                .ifPresent(wallet -> {
+                    if(wallet.getBalance().compareTo(amount) < 0) {
+                        throw new WalletAmountNotValidException(
+                                String.format(WALLET_AMOUNT_NOT_VALID, wallet.getName(), wallet.getBalance(), amount)
+                        );
+                    }
+
+                    wallet.setBalance(wallet.getBalance().subtract(amount));
+
+                    log.info("Successfully withdraw amount from wallet for user by telegram ID: {}", telegramId);
+                    walletRepository.save(wallet);
+                });
+    }
+
+    @Transactional
+    public void withdrawAmountFromMainWalletByUserTelegramId(String telegramId, BigDecimal amount) {
+        log.info("Start withdraw amount from wallet for user by telegram ID: {}", telegramId);
+        List<Wallet> wallets = findByUserTelegramId(telegramId);
+
+        wallets.stream()
+                .filter(Wallet::isDefaultWallet)
                 .findFirst()
                 .ifPresent(wallet -> {
                     if(wallet.getBalance().compareTo(amount) < 0) {

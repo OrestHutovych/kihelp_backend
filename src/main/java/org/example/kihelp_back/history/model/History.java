@@ -13,13 +13,15 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Builder
 @RequiredArgsConstructor
 @Entity
 @Table(name = "histories")
+@AllArgsConstructor
 public class History extends BaseEntity {
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
     private String name;
-    @Column(name = "link", nullable = false)
+    @Column(name = "link")
     private String link;
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

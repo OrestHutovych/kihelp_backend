@@ -9,6 +9,7 @@ import org.example.kihelp_back.teacher.model.Teacher;
 import org.example.kihelp_back.user.model.User;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -29,9 +30,9 @@ public class Task extends BaseEntity {
     @Column(name = "identifier", nullable = false)
     private String identifier;
     @Column(name = "price")
-    private Integer price;
+    private BigDecimal price;
     @Column(name = "discount")
-    private Double discount;
+    private BigDecimal discount;
     @Column(name = "visible")
     private boolean visible;
     @Enumerated(EnumType.STRING)

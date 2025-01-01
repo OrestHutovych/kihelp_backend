@@ -6,7 +6,6 @@ import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.argument.dto.ArgumentUpdateDto;
 import org.example.kihelp_back.argument.repository.ArgumentRepository;
-import org.example.kihelp_back.task.service.TaskService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +18,9 @@ import static org.example.kihelp_back.argument.util.MessageError.ARGUMENT_NOT_FO
 @Slf4j
 public class ArgumentService {
     private final ArgumentRepository argumentRepository;
-    private final TaskService taskService;
 
-    public ArgumentService(ArgumentRepository argumentRepository,
-                           TaskService taskService) {
+    public ArgumentService(ArgumentRepository argumentRepository) {
         this.argumentRepository = argumentRepository;
-        this.taskService = taskService;
     }
 
     @Transactional
