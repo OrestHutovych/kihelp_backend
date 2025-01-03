@@ -5,7 +5,9 @@ import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.repository.HistoryRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Slf4j
@@ -25,5 +27,22 @@ public class HistoryService {
     public List<History> getHistoryByUser(String telegramId) {
         log.info("Attempting to fetch history for user with Telegram ID: {}", telegramId);
         return historyRepository.findAllByUserTelegramId(telegramId);
+    }
+
+    public boolean detectResellerActivity(String telegramId, Long taskId) {
+        log.info("Start detecting user with Telegram ID: {} by reseller activity", telegramId);
+        List<History> histories = historyRepository.findAllByTaskId(taskId);
+        Set<String> uniqueArguments = new HashSet<>();
+
+        for (History history : histories) {
+            uniqueArguments.add(history.getArguments());
+            if (uniqueArguments.size() >= 3) {
+                log.info("Successfully detected reseller activity for user with Telegram ID: {} ", telegramId);
+                return true;
+            }
+        }
+
+        log.info("User with Telegram ID: {} passed the reseller activity check.", telegramId);
+        return false;
     }
 }

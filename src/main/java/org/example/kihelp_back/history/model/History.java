@@ -23,6 +23,8 @@ public class History extends BaseEntity {
     private String name;
     @Column(name = "link")
     private String link;
+    @Column(name = "arguments")
+    private String arguments;
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

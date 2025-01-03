@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface HistoryGetUseCase {
     List<HistoryDto> getHistoriesByUserTelegramId(String telegramId);
+    boolean detectResellerActivity(String telegramId, Long taskId);
 }

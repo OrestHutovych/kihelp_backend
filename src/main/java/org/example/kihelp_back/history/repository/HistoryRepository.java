@@ -10,5 +10,5 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
     @Transactional(readOnly = true)
     List<History> findAllByUserTelegramId(String telegramId);
     @Transactional(readOnly = true)
-    List<History> findAllByTaskId(Integer taskId);
+    List<History> findAllByTaskId(Long taskId);
 }

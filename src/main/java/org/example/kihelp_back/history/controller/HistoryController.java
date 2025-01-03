@@ -22,4 +22,9 @@ public class HistoryController {
     public List<HistoryDto> getHistoriesByTelegramId(@PathVariable("telegram_id") String telegramId){
         return historyGetUseCase.getHistoriesByUserTelegramId(telegramId);
     }
+
+    @GetMapping("/reseller-check/{telegram_id}/{task_id}")
+    public boolean resellerCheck(@PathVariable("telegram_id") String telegramId, @PathVariable("task_id") Long taskId){
+        return historyGetUseCase.detectResellerActivity(telegramId, taskId);
+    }
 }

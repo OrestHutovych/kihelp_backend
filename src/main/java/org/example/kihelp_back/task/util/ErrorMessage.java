@@ -10,4 +10,5 @@ public class ErrorMessage {
     public static final String IDENTIFIER_BLANK_NOT_VALID = "Ідентифікатор завдання не може бути порожнім.";
     public static final String PRICE_MIN_NOT_VALID = "Ціна повинна бути більшою за 1 UAH.";
     public static final String DEVELOPER_NOT_VALID = "У розробника з Telegram ID '%s' відсутня роль Developer.";
+    public static final String USER_BANNED_BY_RESELLER_ACTIVITY = "Користувача з Telegram ID '%s' було забанено за підозрілу активність. Bиявлено повторні спроби масового придбання завдань.";
 }

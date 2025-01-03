@@ -31,4 +31,9 @@ public class HistoryGetUseCaseFacade implements HistoryGetUseCase {
                 .map(historyToHistoryDtoMapper::map)
                 .toList();
     }
+
+    @Override
+    public boolean detectResellerActivity(String telegramId, Long taskId) {
+        return historyService.detectResellerActivity(telegramId, taskId);
+    }
 }
