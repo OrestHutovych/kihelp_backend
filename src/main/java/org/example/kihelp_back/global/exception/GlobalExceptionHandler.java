@@ -5,6 +5,7 @@ import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.subject.exception.SubjectExistException;
 import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
+import org.example.kihelp_back.support.exception.SupportFileLimitException;
 import org.example.kihelp_back.task.exception.*;
 import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
@@ -277,6 +278,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskProcessException.class)
     public ResponseEntity<Map<String, String>> handleTaskProcessException(TaskProcessException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SupportFileLimitException.class)
+    public ResponseEntity<Map<String, String>> handleSupportFileLimitException(SupportFileLimitException ex) {
         Map<String, String> error = new HashMap<>();
         error.put(MESSAGE_FIELD, ex.getMessage());
 

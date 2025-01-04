@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public record TransactionResponse (
+public record TransactionResponseDto(
         Long id,
         String transactionId,
         String initials,

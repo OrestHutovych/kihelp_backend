@@ -1,19 +1,26 @@
 package org.example.kihelp_back.global.service;
 
 import org.example.kihelp_back.global.exception.TelegramException;
+import org.example.kihelp_back.support.dto.SupportDto;
 import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
 import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.user.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -188,4 +195,60 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
+    public void supportMessageSentToAdmin(User user, SupportDto supportDto) {
+        String chatId = "1176171881";
+        String message = String.format(
+                """
+                🚀 *Нове повідомлення від користувача:*
+                 • *Username:* `@%s`
+                 • *Telegram ID:* `%s`
+                
+                📝 *Повідомлення:* `%s`
+                
+                #support
+                """,
+                user.getUsername(),
+                user.getTelegramId(),
+                supportDto.message()
+        );
+
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            Message sentMessage = execute(sendMessage);
+            int messageId = sentMessage.getMessageId();
+
+            for (MultipartFile file : supportDto.files()) {
+                processAndSendFile(chatId, messageId, file);
+            }
+        } catch (TelegramApiException e) {
+            throw new TelegramException(String.format(TELEGRAM_ERROR, e.getMessage()));
+        }
+    }
+
+    private void processAndSendFile(String chatId, int messageId, MultipartFile file) {
+        File tempFile = null;
+        try {
+            tempFile = File.createTempFile("file", file.getOriginalFilename());
+            file.transferTo(tempFile);
+
+            InputFile inputFile = new InputFile(tempFile);
+
+            SendDocument sendDocument = new SendDocument();
+            sendDocument.setChatId(chatId);
+            sendDocument.setDocument(inputFile);
+            sendDocument.setReplyToMessageId(messageId);
+
+            execute(sendDocument);
+        } catch (IOException | TelegramApiException e) {
+            throw new TelegramException(String.format(TELEGRAM_ERROR, e.getMessage()));
+        } finally {
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
+    }
 }

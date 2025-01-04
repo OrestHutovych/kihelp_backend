@@ -2,7 +2,7 @@ package org.example.kihelp_back.transaction.controller;
 
 import jakarta.validation.Valid;
 import org.example.kihelp_back.transaction.dto.TransactionDepositDto;
-import org.example.kihelp_back.transaction.dto.TransactionResponse;
+import org.example.kihelp_back.transaction.dto.TransactionResponseDto;
 import org.example.kihelp_back.transaction.dto.TransactionWithdrawDto;
 import org.example.kihelp_back.transaction.dto.TransactionWithdrawStatusDto;
 import org.example.kihelp_back.transaction.usecase.TransactionCreateUseCase;
@@ -40,7 +40,7 @@ public class TransactionController {
     }
 
     @GetMapping("/{telegram_id}")
-    public List<TransactionResponse> getTransactions(@PathVariable("telegram_id") String telegramId) {
+    public List<TransactionResponseDto> getTransactions(@PathVariable("telegram_id") String telegramId) {
         return transactionGetUseCase.getAllTransactionsByUserTelegramId(telegramId);
     }
 

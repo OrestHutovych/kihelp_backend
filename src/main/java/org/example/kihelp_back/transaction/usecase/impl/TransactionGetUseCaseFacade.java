@@ -1,13 +1,12 @@
 package org.example.kihelp_back.transaction.usecase.impl;
 
-import org.example.kihelp_back.transaction.dto.TransactionResponse;
+import org.example.kihelp_back.transaction.dto.TransactionResponseDto;
 import org.example.kihelp_back.transaction.mapper.TransactionToTransactionResponseMapper;
 import org.example.kihelp_back.transaction.service.TransactionService;
 import org.example.kihelp_back.transaction.usecase.TransactionGetUseCase;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class TransactionGetUseCaseFacade implements TransactionGetUseCase {
@@ -21,7 +20,7 @@ public class TransactionGetUseCaseFacade implements TransactionGetUseCase {
     }
 
     @Override
-    public List<TransactionResponse> getAllTransactionsByUserTelegramId(String telegramId) {
+    public List<TransactionResponseDto> getAllTransactionsByUserTelegramId(String telegramId) {
         var transactions = transactionService.findTransactionsByUserTelegramId(telegramId);
 
         
