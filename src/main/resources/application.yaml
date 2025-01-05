@@ -20,19 +20,19 @@ spring:
       max-file-size: 5MB
       max-request-size: 5MB
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, prometheus
-  metrics:
-    distribution:
-      percentiles-histogram:
-        "[http.server.requests]": true
-  prometheus:
-    metrics:
-      export:
-        enabled: true
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, prometheus
+#  metrics:
+#    distribution:
+#      percentiles-histogram:
+#        "[http.server.requests]": true
+#  prometheus:
+#    metrics:
+#      export:
+#        enabled: true
 
 jwt:
   secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
