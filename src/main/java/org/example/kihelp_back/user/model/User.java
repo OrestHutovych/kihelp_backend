@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.example.kihelp_back.global.model.BaseEntity;
 import org.example.kihelp_back.history.model.History;
+import org.example.kihelp_back.invite.model.Invite;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.hibernate.proxy.HibernateProxy;

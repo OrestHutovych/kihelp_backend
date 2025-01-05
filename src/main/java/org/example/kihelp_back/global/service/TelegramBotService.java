@@ -229,6 +229,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
+
     private void processAndSendFile(String chatId, int messageId, MultipartFile file) {
         File tempFile = null;
         try {

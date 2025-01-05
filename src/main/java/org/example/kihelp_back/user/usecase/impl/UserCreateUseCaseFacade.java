@@ -70,4 +70,12 @@ public class UserCreateUseCaseFacade implements UserCreateUseCase {
         log.info("Successfully generated jwy token for user with Telegram ID: {}", mappedUser.getTelegramId());
         return new JwtDto(jwtToken);
     }
+
+    @Override
+    public User create(Map<String, String> query) {
+        Role role = roleService.findByName("ROLE_USER");
+        User mappedUser = userRequestToUserMapper.map(query, role);
+
+        return userService.save(mappedUser);
+    }
 }

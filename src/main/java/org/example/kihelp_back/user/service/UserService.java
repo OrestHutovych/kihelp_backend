@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import static org.example.kihelp_back.user.util.ErrorMessage.*;
 
@@ -179,6 +178,9 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public boolean existByTelegramId(String telegramId) {
+        return userRepository.existsByTelegramId(telegramId);
+    }
 
     private void validateRoleUserChange(Role role) {
         log.info("Validating user role by {}", role.getName());

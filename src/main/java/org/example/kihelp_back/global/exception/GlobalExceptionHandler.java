@@ -293,4 +293,13 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserExistException.class)
+    public ResponseEntity<Map<String, String>> handleUserExistException(UserExistException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 }
