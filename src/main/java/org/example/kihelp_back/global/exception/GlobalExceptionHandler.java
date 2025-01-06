@@ -228,7 +228,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(WalletAmountNotValidException.class)
@@ -296,6 +296,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserExistException.class)
     public ResponseEntity<Map<String, String>> handleUserExistException(UserExistException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserRoleNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleUserRoleNotValidException(UserRoleNotValidException ex) {
         Map<String, String> error = new HashMap<>();
         error.put(MESSAGE_FIELD, ex.getMessage());
 

@@ -2,8 +2,6 @@ package org.example.kihelp_back.global.service;
 
 import org.example.kihelp_back.global.exception.TelegramException;
 import org.example.kihelp_back.support.dto.SupportDto;
-import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
-import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.user.model.User;
 import org.springframework.beans.factory.annotation.Value;
@@ -142,65 +140,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
-    public void manualTaskGenerationMessage(User user, Task task, Long historyId, TaskProcessCreateDto createDto) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(task.getDeveloper().getTelegramId());
-
-        String message = String.format("""
-        🚀 *Нове замовлення від користувача:*
-        • *Username:* `@%s`
-        • *Telegram ID:* `%s`
-    
-        📝 *Деталі замовлення:*
-        • *Task ID:* `%s`
-        • *Предмет:* `%s`
-        • *Викладач:* `%s`
-        • *Завдання:* `%s`
-        • *Аргументи до завдання:* `%s`
-    
-        🔔 Зверніться до користувача протягом *1 години* для уточнення деталей замовлення.
-        
-        #order
-        """,
-                user.getUsername(),
-                user.getTelegramId(),
-                historyId,
-                task.getTeacher().getSubject().getName(),
-                task.getTeacher().getName(),
-                task.getTitle(),
-                createDto.arguments().toString()
-        );
-
-        sendMessage.setText(message);
-        sendMessage.setParseMode("Markdown");
-
-        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-        List<InlineKeyboardButton> row = new ArrayList<>();
-
-        InlineKeyboardButton uploadButton = new InlineKeyboardButton();
-        uploadButton.setText("📎 Завантажити файл");
-        uploadButton.setCallbackData("upload_file:" + task.getId());
-
-        InlineKeyboardButton confirmButton = new InlineKeyboardButton();
-        confirmButton.setText("✅ Підтвердити виконання");
-        confirmButton.setCallbackData("confirm_task_completion:" + task.getId());
-
-        row.add(uploadButton);
-        row.add(confirmButton);
-        keyboardMarkup.setKeyboard(Collections.singletonList(row));
-
-        sendMessage.setReplyMarkup(keyboardMarkup);
-
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new TelegramException(
-                    String.format(
-                            TELEGRAM_ERROR, e.getMessage()
-                    )
-            );
-        }
-    }
     public void supportMessageSentToAdmin(User user, SupportDto supportDto) {
         String chatId = "1176171881";
         String message = String.format(

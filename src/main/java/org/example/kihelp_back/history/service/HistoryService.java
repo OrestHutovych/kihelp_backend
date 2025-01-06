@@ -19,10 +19,10 @@ public class HistoryService {
         this.historyRepository = historyRepository;
     }
 
-    public History save(History history) {
+    public void save(History history) {
         log.info("Start saving history for user with Telegram ID: {}", history.getUser().getTelegramId());
+        historyRepository.save(history);
         log.info("Successfully saved history for user with Telegram ID: {}", history.getUser().getTelegramId());
-        return historyRepository.save(history);
     }
 
     public List<History> getHistoryByUser(String telegramId) {
@@ -31,6 +31,7 @@ public class HistoryService {
     }
 
     public List<History> getHistoryInProgresByDeveloper(String developerTelegramId) {
+        log.info("Attempting to fetch history for developer with Telegram ID: {} by status IN_PROGRES.", developerTelegramId);
         return historyRepository.findTaskInProgressByDeveloperTelegramId(developerTelegramId, HistoryStatus.IN_PROGRESS);
     }
 

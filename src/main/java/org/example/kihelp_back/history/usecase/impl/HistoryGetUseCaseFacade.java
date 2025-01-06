@@ -52,6 +52,7 @@ public class HistoryGetUseCaseFacade implements HistoryGetUseCase {
         if(developer.getRoles().stream().anyMatch(role -> "ROLE_DEVELOPER".equals(role.getName()))) {
             List<History> historiesForDeveloper = historyService.getHistoryInProgresByDeveloper(developer.getTelegramId());
 
+            log.info("Attempting to map History {} to TaskDeveloperDto and return it", historiesForDeveloper.size());
             return historiesForDeveloper.stream()
                     .map(historyToTaskDeveloperDtoMapper::map)
                     .toList();

@@ -1,7 +1,6 @@
 package org.example.kihelp_back.task.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.global.service.TelegramBotService;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.model.HistoryStatus;
 import org.example.kihelp_back.history.service.HistoryService;
@@ -33,18 +32,15 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
     private final HistoryService historyService;
     private final UserService userService;
     private final WalletService walletService;
-    private final TelegramBotService telegramBotService;
 
     public TaskProcessUseCaseFacade(TaskService taskService,
                                     HistoryService historyService,
                                     UserService userService,
-                                    WalletService walletService,
-                                    TelegramBotService telegramBotService) {
+                                    WalletService walletService) {
         this.taskService = taskService;
         this.historyService = historyService;
         this.userService = userService;
         this.walletService = walletService;
-        this.telegramBotService = telegramBotService;
     }
 
     @Override
