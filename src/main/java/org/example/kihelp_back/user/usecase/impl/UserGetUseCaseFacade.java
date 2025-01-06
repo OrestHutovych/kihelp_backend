@@ -23,19 +23,6 @@ public class UserGetUseCaseFacade implements UserGetUseCase {
     }
 
     @Override
-    public List<UserResponseDto> getAllUsers() {
-        List<User> users = userService.getAll();
-
-        log.info("Mapping User(s) {} to UserResponseDto(s)", users.size());
-        List<UserResponseDto> responseUser = users.stream()
-                .map(userToUserResponseDtoMapper::map)
-                .toList();
-
-        log.info("Successfully mapped UserResponseDto()s {} and return.", responseUser.size());
-        return responseUser;
-    }
-
-    @Override
     public List<UserResponseDto> getUserByRole(String roleName) {
         List<User> users = userService.getByRole(roleName);
 

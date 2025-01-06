@@ -34,11 +34,6 @@ public class UserController {
         userUpdateUseCase.toggleRole(telegramId, request);
     }
 
-    @GetMapping("/")
-    public List<UserResponseDto> getUsers() {
-        return userGetUseCase.getAllUsers();
-    }
-
     @GetMapping("/role/{role_name}")
     public List<UserResponseDto> getUsersByRole(@PathVariable("role_name") String roleName) {
         return userGetUseCase.getUserByRole(roleName);
