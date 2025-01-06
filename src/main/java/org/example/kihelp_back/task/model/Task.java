@@ -37,7 +37,7 @@ public class Task extends BaseEntity {
     private boolean visible;
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private Type type;
+    private TaskType type;
     @Column(name = "auto_generate", nullable = false)
     private boolean autoGenerate;
     @Column(name = "created_at")

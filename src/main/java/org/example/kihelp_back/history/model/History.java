@@ -25,6 +25,9 @@ public class History extends BaseEntity {
     private String link;
     @Column(name = "arguments")
     private String arguments;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private HistoryStatus status;
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 

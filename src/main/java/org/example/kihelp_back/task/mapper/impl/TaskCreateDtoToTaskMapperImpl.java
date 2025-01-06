@@ -5,7 +5,7 @@ import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.task.mapper.TaskCreateDtoToTaskResponse;
 import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.task.dto.TaskCreateDto;
-import org.example.kihelp_back.task.model.Type;
+import org.example.kihelp_back.task.model.TaskType;
 import org.example.kihelp_back.teacher.model.Teacher;
 import org.example.kihelp_back.user.model.User;
 import org.springframework.stereotype.Component;
@@ -38,9 +38,9 @@ public class TaskCreateDtoToTaskMapperImpl implements TaskCreateDtoToTaskRespons
         return task;
     }
 
-    private Type resolveType(String type) {
+    private TaskType resolveType(String type) {
         try {
-            return Type.valueOf(type);
+            return TaskType.valueOf(type);
         } catch (IllegalArgumentException e) {
             throw new TypeNotValidException(String.format(TYPE_NOT_VALID, type));
         }

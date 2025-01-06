@@ -1,6 +1,7 @@
 package org.example.kihelp_back.history.controller;
 
 import org.example.kihelp_back.history.dto.HistoryDto;
+import org.example.kihelp_back.history.dto.TaskDeveloperDto;
 import org.example.kihelp_back.history.usecase.HistoryGetUseCase;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,11 @@ public class HistoryController {
     @GetMapping("/getHistoriesByTelegramId/{telegram_id}")
     public List<HistoryDto> getHistoriesByTelegramId(@PathVariable("telegram_id") String telegramId){
         return historyGetUseCase.getHistoriesByUserTelegramId(telegramId);
+    }
+
+    @GetMapping("/getTaskInProgresByDeveloper")
+    public List<TaskDeveloperDto> getTaskInProgresByDeveloper(){
+        return historyGetUseCase.getTaskInProgressByDeveloperId();
     }
 
     @GetMapping("/reseller-check/{telegram_id}/{task_id}")

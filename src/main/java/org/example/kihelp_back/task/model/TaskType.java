@@ -1,6 +1,6 @@
 package org.example.kihelp_back.task.model;
 
-public enum Type {
+public enum TaskType {
     REGULAR,
     TEST
 }

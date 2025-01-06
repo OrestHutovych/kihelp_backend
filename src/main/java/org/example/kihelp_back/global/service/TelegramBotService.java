@@ -142,27 +142,29 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
-    public void manualTaskGenerationMessage(User user, Task task, TaskProcessCreateDto createDto) {
+    public void manualTaskGenerationMessage(User user, Task task, Long historyId, TaskProcessCreateDto createDto) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(user.getTelegramId());
+        sendMessage.setChatId(task.getDeveloper().getTelegramId());
 
         String message = String.format("""
-            🚀 *Нове замовлення від користувача:*
-            • *Username:* `@%s`
-            • *Telegram ID:* `%s`
+        🚀 *Нове замовлення від користувача:*
+        • *Username:* `@%s`
+        • *Telegram ID:* `%s`
+    
+        📝 *Деталі замовлення:*
+        • *Task ID:* `%s`
+        • *Предмет:* `%s`
+        • *Викладач:* `%s`
+        • *Завдання:* `%s`
+        • *Аргументи до завдання:* `%s`
+    
+        🔔 Зверніться до користувача протягом *1 години* для уточнення деталей замовлення.
         
-            📝 *Деталі замовлення:*
-            • *Предмет:* `%s`
-            • *Викладач:* `%s`
-            • *Завдання:* `%s`
-            • *Аргументи до завдання:* `%s`
-        
-            🔔 Зверніться до користувача протягом *1 години* для уточнення деталей замовлення.
-            
-            #order
-            """,
+        #order
+        """,
                 user.getUsername(),
                 user.getTelegramId(),
+                historyId,
                 task.getTeacher().getSubject().getName(),
                 task.getTeacher().getName(),
                 task.getTitle(),
@@ -175,10 +177,15 @@ public class TelegramBotService extends TelegramLongPollingBot {
         InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
         List<InlineKeyboardButton> row = new ArrayList<>();
 
+        InlineKeyboardButton uploadButton = new InlineKeyboardButton();
+        uploadButton.setText("📎 Завантажити файл");
+        uploadButton.setCallbackData("upload_file:" + task.getId());
+
         InlineKeyboardButton confirmButton = new InlineKeyboardButton();
         confirmButton.setText("✅ Підтвердити виконання");
         confirmButton.setCallbackData("confirm_task_completion:" + task.getId());
 
+        row.add(uploadButton);
         row.add(confirmButton);
         keyboardMarkup.setKeyboard(Collections.singletonList(row));
 
@@ -194,7 +201,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
             );
         }
     }
-
     public void supportMessageSentToAdmin(User user, SupportDto supportDto) {
         String chatId = "1176171881";
         String message = String.format(

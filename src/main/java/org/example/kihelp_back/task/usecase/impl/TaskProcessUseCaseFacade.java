@@ -3,6 +3,7 @@ package org.example.kihelp_back.task.usecase.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.global.service.TelegramBotService;
 import org.example.kihelp_back.history.model.History;
+import org.example.kihelp_back.history.model.HistoryStatus;
 import org.example.kihelp_back.history.service.HistoryService;
 import org.example.kihelp_back.task.dto.TaskGenerateDto;
 import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
@@ -99,6 +100,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
                 .name(taskProcessResponse.fileName())
                 .link(taskProcessResponse.link())
                 .arguments(request.arguments().toString())
+                .status(HistoryStatus.COMPLETED)
                 .createdAt(taskProcessResponse.createdAt())
                 .user(targetUser)
                 .task(task)
@@ -119,6 +121,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
         History historyToSave = History
                 .builder()
                 .arguments(request.arguments().toString())
+                .status(HistoryStatus.IN_PROGRESS)
                 .createdAt(Instant.now())
                 .user(targetUser)
                 .task(task)
@@ -133,8 +136,5 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
                 "щоб уточнити деталі для подальшої розробки" +
                 "завдання відносно вашого запиту.");
         processResponse.put("createdAt", Instant.now().toString());
-
-        log.info("Attempting to send message abpout task to developer with Telegram ID: {}", task.getDeveloper().getTelegramId());
-        telegramBotService.manualTaskGenerationMessage(targetUser, task, request);
     }
 }
