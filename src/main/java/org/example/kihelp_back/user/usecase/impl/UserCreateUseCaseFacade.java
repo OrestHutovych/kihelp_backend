@@ -51,6 +51,8 @@ public class UserCreateUseCaseFacade implements UserCreateUseCase {
         Role role = roleService.findByName("ROLE_USER");
         User mappedUser = userRequestToUserMapper.map(query, role);
 
+        System.out.println("query: " + query.get("hash"));
+
         try {
             userService.save(mappedUser);
 
