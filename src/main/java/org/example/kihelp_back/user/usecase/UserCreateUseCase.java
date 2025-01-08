@@ -8,6 +8,6 @@ import java.util.Map;
 
 @Validated
 public interface UserCreateUseCase {
-    JwtDto authUser(Map<String, String> query);
+    JwtDto authUser(String initData);
     User create(Map<String, String> query);
 }

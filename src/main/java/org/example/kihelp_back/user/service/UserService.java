@@ -20,8 +20,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.List;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 import static org.example.kihelp_back.user.util.ErrorMessage.*;
 
@@ -33,6 +39,9 @@ public class UserService implements UserDetailsService {
     private final WalletService walletService;
 
     private static final String ROLE_NAME = "ROLE_DEVELOPER";
+
+    private static final String BOT_TOKEN = "6721007474:AAH3Dn8kwjx6JmEZHadMo7xYoRR9tmOTfgI";
+    private static final String HMAC_SHA256 = "HmacSHA256";
 
     public UserService(UserRepository userRepository,
                        RoleService roleService,
@@ -77,6 +86,81 @@ public class UserService implements UserDetailsService {
             return userRepository.save(user);
         }
     }
+
+    public static boolean validateUser(String initData){
+        if (initData.length() > 1) {
+            initData = initData.substring(1, initData.length() - 1);
+        }
+
+        Map<String, String> paramsMap = parseUrlParams(initData);
+
+        String receivedHash = paramsMap.get("hash");
+
+        if (receivedHash == null) {
+            return false;
+        }
+
+        paramsMap.remove("hash");
+
+        List<String> sortedKeys = new ArrayList<>(paramsMap.keySet());
+        Collections.sort(sortedKeys);
+
+        StringBuilder checkParamList = new StringBuilder();
+        for (String key : sortedKeys) {
+            checkParamList.append(key).append("=").append(paramsMap.get(key)).append("\n");
+        }
+
+        if (!checkParamList.isEmpty()) {
+            checkParamList.setLength(checkParamList.length() - 1);
+        }
+
+        try {
+            SecretKeySpec secretKey = new SecretKeySpec("WebAppData".getBytes(StandardCharsets.UTF_8), HMAC_SHA256);
+
+            Mac mac = Mac.getInstance(HMAC_SHA256);
+            mac.init(secretKey);
+
+            byte[] secretHash = mac.doFinal(BOT_TOKEN.getBytes(StandardCharsets.UTF_8));
+
+            SecretKeySpec secretForData = new SecretKeySpec(secretHash, HMAC_SHA256);
+            mac.init(secretForData);
+            byte[] calculatedHashBytes = mac.doFinal(checkParamList.toString().getBytes(StandardCharsets.UTF_8));
+
+            return Arrays.equals(calculatedHashBytes, hexStringToByteArray(receivedHash));
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i + 1), 16));
+        }
+        return data;
+    }
+
+    public static Map<String, String> parseUrlParams(String urlParams) {
+        Map<String, String> params = new HashMap<>();
+        String[] pairs = urlParams.split("&");
+        for (String pair : pairs) {
+            String[] keyValue = pair.split("=", 2);
+            if (keyValue.length == 2) {
+                try {
+                    String key = URLDecoder.decode(keyValue[0], "UTF-8");
+                    String value = URLDecoder.decode(keyValue[1], "UTF-8");
+                    params.put(key, value);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return params;
+    }
+
 
     public User findByTelegramId(String telegramId) {
         log.info("Attempting to find user by Telegram ID: {}", telegramId);

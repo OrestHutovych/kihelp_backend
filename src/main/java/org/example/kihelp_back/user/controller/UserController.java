@@ -25,8 +25,8 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public JwtDto authUser(@RequestBody Map<String, String> query) {
-       return userCreateUseCase.authUser(query);
+    public JwtDto authUser(@RequestBody String initData) {
+       return userCreateUseCase.authUser(initData);
     }
 
     @PutMapping("/{telegram_id}/toggle_role")

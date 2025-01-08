@@ -18,12 +18,12 @@ public class UserAuthDtoToUserMapperImpl implements UserAuthDtoToUserMapper {
     }
 
     @Override
-    public User map(Map<String, String> userRequest, Role role) {
+    public User map(Map<String, Object> userRequest, Role role) {
         User user = new User();
 
-        user.setTelegramId(userRequest.get("id"));
-        user.setUsername(userRequest.get("username"));
-        user.setPassword(passwordEncoder.encode(userRequest.get("id")));
+        user.setTelegramId(String.valueOf(userRequest.get("id")));
+        user.setUsername(String.valueOf( userRequest.get("username")));
+        user.setPassword(passwordEncoder.encode(String.valueOf(userRequest.get("id"))));
         user.setRoles(List.of(role));
 
         return user;

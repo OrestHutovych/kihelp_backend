@@ -1,5 +1,6 @@
 package org.example.kihelp_back.user.usecase.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.user.dto.JwtDto;
 import org.example.kihelp_back.user.exception.UserUnauthorizedException;
@@ -43,41 +44,50 @@ public class UserCreateUseCaseFacade implements UserCreateUseCase {
         this.authenticationManager = authenticationManager;
     }
 
-    @Value("${telegram.token}")
-    private String botToken;
-
     @Override
-    public JwtDto authUser(Map<String, String> query) {
-        Role role = roleService.findByName("ROLE_USER");
-        User mappedUser = userRequestToUserMapper.map(query, role);
+    public JwtDto authUser(String initData) {
+        boolean valid = userService.validateUser(initData);
 
-        System.out.println("query: " + query.get("hash"));
-
-        try {
-            userService.save(mappedUser);
-
-            log.info("Authenticated user with Telegram ID: {}", mappedUser.getTelegramId());
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    mappedUser.getTelegramId(),
-                    mappedUser.getTelegramId()
-            ));
-        } catch (BadCredentialsException e) {
+        if(!valid) {
             throw new UserUnauthorizedException(USER_BAD_CREDENTIALS);
         }
 
-        log.info("Loading user details for Telegram ID: {}", mappedUser.getTelegramId());
-        UserDetails userDetails = userService.loadUserByUsername(mappedUser.getTelegramId());
-        String jwtToken = jwtTokenUtils.generateToken(userDetails);
+        Map<String, String> query = userService.parseUrlParams(initData);
+        String queryUser = query.get("user");
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Map<String, Object> userQuery = objectMapper.readValue(queryUser, Map.class);
+            Role role = roleService.findByName("ROLE_USER");
+            User mappedUser = userRequestToUserMapper.map(userQuery, role);
 
-        log.info("Successfully generated jwy token for user with Telegram ID: {}", mappedUser.getTelegramId());
-        return new JwtDto(jwtToken);
+            try {
+                userService.save(mappedUser);
+
+                log.info("Authenticated user with Telegram ID: {}", mappedUser.getTelegramId());
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                        mappedUser.getTelegramId(),
+                        mappedUser.getTelegramId()
+                ));
+            } catch (BadCredentialsException e) {
+                throw new UserUnauthorizedException(USER_BAD_CREDENTIALS);
+            }
+
+            log.info("Loading user details for Telegram ID: {}", mappedUser.getTelegramId());
+            UserDetails userDetails = userService.loadUserByUsername(mappedUser.getTelegramId());
+            String jwtToken = jwtTokenUtils.generateToken(userDetails);
+
+            log.info("Successfully generated jwy token for user with Telegram ID: {}", mappedUser.getTelegramId());
+            return new JwtDto(jwtToken);
+        }catch (Exception e) {
+            throw new UserUnauthorizedException(e.getMessage());
+        }
     }
 
     @Override
     public User create(Map<String, String> query) {
         Role role = roleService.findByName("ROLE_USER");
-        User mappedUser = userRequestToUserMapper.map(query, role);
+//        User mappedUser = userRequestToUserMapper.map(query, role);
 
-        return userService.save(mappedUser);
+        return userService.save(new User());
     }
 }
