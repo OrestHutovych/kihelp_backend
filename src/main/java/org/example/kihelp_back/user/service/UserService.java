@@ -10,6 +10,7 @@ import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.service.WalletService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -40,8 +41,8 @@ public class UserService implements UserDetailsService {
 
     private static final String ROLE_NAME = "ROLE_DEVELOPER";
 
-    private static final String BOT_TOKEN = "6721007474:AAH3Dn8kwjx6JmEZHadMo7xYoRR9tmOTfgI";
-    private static final String HMAC_SHA256 = "HmacSHA256";
+    @Value("${telegram.token}")
+    private String botToken;
 
     public UserService(UserRepository userRepository,
                        RoleService roleService,
@@ -87,7 +88,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public static boolean validateUser(String initData){
+    public boolean validateUser(String initData){
         if (initData.length() > 1) {
             initData = initData.substring(1, initData.length() - 1);
         }
@@ -115,14 +116,14 @@ public class UserService implements UserDetailsService {
         }
 
         try {
-            SecretKeySpec secretKey = new SecretKeySpec("WebAppData".getBytes(StandardCharsets.UTF_8), HMAC_SHA256);
+            SecretKeySpec secretKey = new SecretKeySpec("WebAppData".getBytes(StandardCharsets.UTF_8), "WebAppData");
 
-            Mac mac = Mac.getInstance(HMAC_SHA256);
+            Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(secretKey);
 
-            byte[] secretHash = mac.doFinal(BOT_TOKEN.getBytes(StandardCharsets.UTF_8));
+            byte[] secretHash = mac.doFinal(botToken.getBytes(StandardCharsets.UTF_8));
 
-            SecretKeySpec secretForData = new SecretKeySpec(secretHash, HMAC_SHA256);
+            SecretKeySpec secretForData = new SecretKeySpec(secretHash, "HmacSHA256");
             mac.init(secretForData);
             byte[] calculatedHashBytes = mac.doFinal(checkParamList.toString().getBytes(StandardCharsets.UTF_8));
 
@@ -133,7 +134,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private static byte[] hexStringToByteArray(String s) {
+    private byte[] hexStringToByteArray(String s) {
         int len = s.length();
         byte[] data = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {
@@ -143,7 +144,7 @@ public class UserService implements UserDetailsService {
         return data;
     }
 
-    public static Map<String, String> parseUrlParams(String urlParams) {
+    public Map<String, String> parseUrlParams(String urlParams) {
         Map<String, String> params = new HashMap<>();
         String[] pairs = urlParams.split("&");
         for (String pair : pairs) {
@@ -161,11 +162,10 @@ public class UserService implements UserDetailsService {
         return params;
     }
 
-
     public User findByTelegramId(String telegramId) {
         log.info("Attempting to find user by Telegram ID: {}", telegramId);
         return userRepository.findByTelegramId(telegramId)
-                .orElseThrow(() -> new UsernameNotFoundException(
+                .orElseThrow(() -> new UserNotFoundException(
                         String.format(USER_NOT_FOUND_BY_TG_ID, telegramId))
                 );
     }

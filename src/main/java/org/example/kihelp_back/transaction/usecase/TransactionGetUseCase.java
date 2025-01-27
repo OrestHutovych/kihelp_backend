@@ -1,9 +1,10 @@
 package org.example.kihelp_back.transaction.usecase;
 
-import org.example.kihelp_back.transaction.dto.TransactionResponseDto;
+import org.example.kihelp_back.transaction.dto.TransactionDto;
+import org.example.kihelp_back.transaction.dto.TransactionPageDto;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface TransactionGetUseCase {
-    List<TransactionResponseDto> getAllTransactionsByUserTelegramId(String telegramId);
+    Collection<TransactionDto> getAllTransactionsByUserTelegramId(String telegramId, TransactionPageDto pageDto);
 }

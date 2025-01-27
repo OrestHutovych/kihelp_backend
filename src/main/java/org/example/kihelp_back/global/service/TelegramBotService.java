@@ -20,7 +20,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.example.kihelp_back.global.util.ErrorMessage.TELEGRAM_ERROR;
@@ -82,7 +81,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
-    public void withdrawAdminMessage(Transaction transaction, Long cardNumber) {
+    public void withdrawAdminMessage(Transaction transaction, String cardNumber) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
 

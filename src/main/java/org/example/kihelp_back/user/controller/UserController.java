@@ -7,10 +7,9 @@ import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserCreateUseCase userCreateUseCase;
     private final UserGetUseCase userGetUseCase;

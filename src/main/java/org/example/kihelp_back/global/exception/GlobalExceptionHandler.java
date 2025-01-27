@@ -11,12 +11,8 @@ import org.example.kihelp_back.teacher.exception.TeacherExistException;
 import org.example.kihelp_back.teacher.exception.TeacherNotFoundException;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
 import org.example.kihelp_back.transaction.exception.TransactionNotFoundException;
-import org.example.kihelp_back.transaction.exception.TransactionStatusNotFoundException;
-import org.example.kihelp_back.transaction.exception.TransactionTypeNotAllowedException;
 import org.example.kihelp_back.user.exception.*;
 import org.example.kihelp_back.wallet.exception.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -66,7 +62,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TeacherExistException.class)
@@ -84,7 +80,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TaskExistException.class)
@@ -120,7 +116,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TaskNotFoundException.class)
@@ -129,7 +125,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserIsBannedException.class)
@@ -147,7 +143,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -156,7 +152,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserUnauthorizedException.class)
@@ -210,7 +206,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(IllegalRoleChangeException.class)
@@ -246,25 +242,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(TransactionStatusNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleTransactionStatusNotFoundException(TransactionStatusNotFoundException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put(MESSAGE_FIELD, ex.getMessage());
-
-        log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(TransactionTypeNotAllowedException.class)
-    public ResponseEntity<Map<String, String>> handleTransactionTypeNotAllowedException(TransactionTypeNotAllowedException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put(MESSAGE_FIELD, ex.getMessage());
-
-        log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TelegramException.class)
@@ -305,6 +283,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserRoleNotValidException.class)
     public ResponseEntity<Map<String, String>> handleUserRoleNotValidException(UserRoleNotValidException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MonobankApiException.class)
+    public ResponseEntity<Map<String, String>> handleMonobankApiException(MonobankApiException ex) {
         Map<String, String> error = new HashMap<>();
         error.put(MESSAGE_FIELD, ex.getMessage());
 

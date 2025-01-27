@@ -23,14 +23,16 @@ public class Transaction extends BaseEntity {
     @Column(name = "initials")
     private String initials;
     @Positive
-    @Column(name = "amount", precision = 19, scale = 2)
+    @Column(name = "amount", precision = 19, scale = 3)
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_type")
     private TransactionType type;
     @Enumerated(EnumType.STRING)
+    @Column(name = "transaction_status")
     private TransactionStatus status;
-    @Column(name = "created_time_stamp")
-    private Instant createdTimeStamp = Instant.now();
+    @Column(name = "created_at")
+    private Instant createdAt = Instant.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -44,8 +46,8 @@ public class Transaction extends BaseEntity {
         Class<?> oEffectiveClass = o instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Transaction that = (Transaction) o;
-        return getId() != null && Objects.equals(getId(), that.getId());
+        Transaction transactionHistory = (Transaction) o;
+        return getId() != null && Objects.equals(getId(), transactionHistory.getId());
     }
 
     @Override

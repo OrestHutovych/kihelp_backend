@@ -19,6 +19,7 @@
         <logstash.varsion>7.0</logstash.varsion>
         <loki.version>1.5.2</loki.version>
         <jjwt.version>0.12.6</jjwt.version>
+        <org.mapstruct.version>1.6.3</org.mapstruct.version>
     </properties>
 
     <dependencies>
@@ -106,7 +107,10 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.15.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

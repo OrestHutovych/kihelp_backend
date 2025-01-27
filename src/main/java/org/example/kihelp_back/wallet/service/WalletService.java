@@ -13,12 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.example.kihelp_back.wallet.util.ErrorMessage.*;
+import static org.example.kihelp_back.wallet.util.WalletErrorMessage.*;
 
 @Service
 @Slf4j
 public class WalletService {
     private final WalletRepository walletRepository;
+
 
     public WalletService(WalletRepository walletRepository) {
         this.walletRepository = walletRepository;
@@ -53,42 +54,50 @@ public class WalletService {
         return walletRepository.findByUserTelegramId(telegramId);
     }
 
-    @Transactional
-    public void depositAmountToWalletByUserTelegramId(String telegramId, BigDecimal amount) {
-        log.info("Start deposit amount to wallet for user by telegram ID: {}", telegramId);
-        List<Wallet> wallets = findByUserTelegramId(telegramId);
-
-        wallets.stream()
-                .filter(Wallet::isDefaultWallet)
-                .findFirst()
-                .ifPresent(wallet -> {
-                    wallet.setBalance(wallet.getBalance().add(amount));
-
-                    log.info("Successfully deposit amount to wallet for user by telegram ID: {}", telegramId);
-                    walletRepository.save(wallet);
-                });
+    public List<Wallet> findByUserId(Long userId) {
+        return walletRepository.findByUserId(userId);
     }
 
     @Transactional
-    public void withdrawAmountFromDevWalletByUserTelegramId(String telegramId, BigDecimal amount) {
-        log.info("Start withdraw amount from wallet for user by telegram ID: {}", telegramId);
-        List<Wallet> wallets = findByUserTelegramId(telegramId);
+    public void depositAmountToWalletByUserTelegramId(Long userId, BigDecimal amount) {
+        log.info("Start deposit amount to wallet for user by ID: {}", userId);
+        List<Wallet> walletsByUser = findByUserId(userId);
 
-        wallets.stream()
+        Wallet mainWallet = walletsByUser.stream()
+                .filter(Wallet::isDefaultWallet)
+                .findFirst()
+                .orElseThrow(() -> new WalletNotFoundException(
+                        WALLET_NOT_FOUND
+                ));
+
+        mainWallet.setBalance(mainWallet.getBalance().add(amount));
+
+        walletRepository.save(mainWallet);
+        log.info("Successfully deposit amount to wallet for user by ID: {}", userId);
+    }
+
+    @Transactional
+    public void withdrawAmountFromDevWalletByUserTelegramId(Long userId, BigDecimal amount) {
+        log.info("Start withdraw amount from wallet for user by ID: {}", userId);
+        List<Wallet> walletsByUser = findByUserId(userId);
+
+        Wallet devWallet = walletsByUser.stream()
                 .filter(w -> !w.isDefaultWallet())
                 .findFirst()
-                .ifPresent(wallet -> {
-                    if(wallet.getBalance().compareTo(amount) < 0) {
-                        throw new WalletAmountNotValidException(
-                                String.format(WALLET_AMOUNT_NOT_VALID, wallet.getName(), wallet.getBalance(), amount)
-                        );
-                    }
+                .orElseThrow(() -> new WalletNotFoundException(
+                        DEV_WALLET_NOT_FOUND
+                ));
 
-                    wallet.setBalance(wallet.getBalance().subtract(amount));
+        if (devWallet.getBalance().compareTo(amount) < 0) {
+            throw new IllegalArgumentException(
+              String.format(WALLET_AMOUNT_NOT_VALID, devWallet.getName(), devWallet.getBalance(), amount)
+            );
+        }
 
-                    log.info("Successfully withdraw amount from wallet for user by telegram ID: {}", telegramId);
-                    walletRepository.save(wallet);
-                });
+        devWallet.setBalance(devWallet.getBalance().subtract(amount));
+
+        walletRepository.save(devWallet);
+        log.info("Successfully withdraw amount from wallet for user by ID: {}", userId);
     }
 
     @Transactional

@@ -11,9 +11,7 @@ import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;
 import org.example.kihelp_back.user.util.JwtTokenUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -30,47 +28,44 @@ public class UserCreateUseCaseFacade implements UserCreateUseCase {
     private final RoleService roleService;
     private final JwtTokenUtils jwtTokenUtils;
     private final AuthenticationManager authenticationManager;
+    private final ObjectMapper objectMapper;
 
     public UserCreateUseCaseFacade(UserService userService,
                                    UserAuthDtoToUserMapper userRequestToUserMapper,
                                    RoleService roleService,
                                    JwtTokenUtils jwtTokenUtils,
-                                   AuthenticationManager authenticationManager
+                                   AuthenticationManager authenticationManager,
+                                   ObjectMapper objectMapper
     ) {
         this.userService = userService;
         this.userRequestToUserMapper = userRequestToUserMapper;
         this.roleService = roleService;
         this.jwtTokenUtils = jwtTokenUtils;
         this.authenticationManager = authenticationManager;
+        this.objectMapper = objectMapper;
     }
 
     @Override
     public JwtDto authUser(String initData) {
-        boolean valid = userService.validateUser(initData);
-
-        if(!valid) {
+        if(!userService.validateUser(initData)) {
             throw new UserUnauthorizedException(USER_BAD_CREDENTIALS);
         }
 
-        Map<String, String> query = userService.parseUrlParams(initData);
-        String queryUser = query.get("user");
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Map<String, Object> userQuery = objectMapper.readValue(queryUser, Map.class);
+            Map<String, String> query = userService.parseUrlParams(initData);
+            String queryUser = query.get("user");
+
+            Map<String, String> userQuery = objectMapper.readValue(queryUser, Map.class);
             Role role = roleService.findByName("ROLE_USER");
             User mappedUser = userRequestToUserMapper.map(userQuery, role);
 
-            try {
-                userService.save(mappedUser);
+            userService.save(mappedUser);
 
-                log.info("Authenticated user with Telegram ID: {}", mappedUser.getTelegramId());
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                        mappedUser.getTelegramId(),
-                        mappedUser.getTelegramId()
-                ));
-            } catch (BadCredentialsException e) {
-                throw new UserUnauthorizedException(USER_BAD_CREDENTIALS);
-            }
+            log.info("Authenticated user with Telegram ID: {}", mappedUser.getTelegramId());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    mappedUser.getTelegramId(),
+                    mappedUser.getTelegramId()
+            ));
 
             log.info("Loading user details for Telegram ID: {}", mappedUser.getTelegramId());
             UserDetails userDetails = userService.loadUserByUsername(mappedUser.getTelegramId());
@@ -79,15 +74,15 @@ public class UserCreateUseCaseFacade implements UserCreateUseCase {
             log.info("Successfully generated jwy token for user with Telegram ID: {}", mappedUser.getTelegramId());
             return new JwtDto(jwtToken);
         }catch (Exception e) {
-            throw new UserUnauthorizedException(e.getMessage());
+            throw new UserUnauthorizedException(USER_BAD_CREDENTIALS);
         }
     }
 
     @Override
     public User create(Map<String, String> query) {
         Role role = roleService.findByName("ROLE_USER");
-//        User mappedUser = userRequestToUserMapper.map(query, role);
+        User mappedUser = userRequestToUserMapper.map(query, role);
 
-        return userService.save(new User());
+        return userService.save(mappedUser);
     }
 }

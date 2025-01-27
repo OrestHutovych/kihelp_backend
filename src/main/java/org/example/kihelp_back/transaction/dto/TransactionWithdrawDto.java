@@ -1,9 +1,11 @@
 package org.example.kihelp_back.transaction.dto;
 
+import org.example.kihelp_back.user.model.User;
+
 import java.math.BigDecimal;
 
 public record TransactionWithdrawDto(
-        Long cardNumber,
-        BigDecimal amount
+        BigDecimal amount,
+        User user
 ) {
 }

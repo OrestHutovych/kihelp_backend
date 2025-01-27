@@ -1,47 +1,32 @@
 package org.example.kihelp_back.transaction.controller;
 
-import jakarta.validation.Valid;
-import org.example.kihelp_back.transaction.dto.TransactionDepositDto;
-import org.example.kihelp_back.transaction.dto.TransactionResponseDto;
-import org.example.kihelp_back.transaction.dto.TransactionWithdrawDto;
+import org.example.kihelp_back.transaction.dto.TransactionDto;
+import org.example.kihelp_back.transaction.dto.TransactionPageDto;
 import org.example.kihelp_back.transaction.dto.TransactionWithdrawStatusDto;
-import org.example.kihelp_back.transaction.usecase.TransactionCreateUseCase;
 import org.example.kihelp_back.transaction.usecase.TransactionUpdateUseCase;
 import org.example.kihelp_back.transaction.usecase.TransactionGetUseCase;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
-@RequestMapping("/api/v1/transaction")
+@RequestMapping("/api/v1/transactions")
 public class TransactionController {
-    private final TransactionCreateUseCase transactionCreateUseCase;
     private final TransactionGetUseCase transactionGetUseCase;
     private final TransactionUpdateUseCase transactionUpdateUseCase;
 
-    public TransactionController(TransactionCreateUseCase transactionCreateUseCase,
-                                 TransactionGetUseCase transactionGetUseCase,
+    public TransactionController(TransactionGetUseCase transactionGetUseCase,
                                  TransactionUpdateUseCase transactionUpdateUseCase) {
-        this.transactionCreateUseCase = transactionCreateUseCase;
         this.transactionGetUseCase = transactionGetUseCase;
         this.transactionUpdateUseCase = transactionUpdateUseCase;
     }
 
-    @PostMapping("/deposit/{telegram_id}")
-    public void deposit(@PathVariable("telegram_id") String telegramId,
-                                  @RequestBody @Valid TransactionDepositDto request){
-        transactionCreateUseCase.depositWallet(telegramId, request);
-    }
-
-    @PostMapping("/withdraw/{telegram_id}")
-    public void withdraw(@PathVariable("telegram_id") String telegramId,
-                         @RequestBody TransactionWithdrawDto request){
-        transactionCreateUseCase.withdrawWallet(telegramId, request);
-    }
-
-    @GetMapping("/{telegram_id}")
-    public List<TransactionResponseDto> getTransactions(@PathVariable("telegram_id") String telegramId) {
-        return transactionGetUseCase.getAllTransactionsByUserTelegramId(telegramId);
+    @GetMapping("/history/{telegram_id}")
+    public Collection<TransactionDto> getTransactions(@PathVariable("telegram_id") String telegramId,
+                                                      @RequestParam(name = "page") int page,
+                                                      @RequestParam(name = "limit") int limit) {
+        TransactionPageDto pageDto = new TransactionPageDto(page, limit);
+        return transactionGetUseCase.getAllTransactionsByUserTelegramId(telegramId, pageDto);
     }
 
     @PutMapping("/toggle_withdraw_status")
