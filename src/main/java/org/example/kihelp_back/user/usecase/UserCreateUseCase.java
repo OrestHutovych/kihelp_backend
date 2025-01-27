@@ -9,5 +9,5 @@ import java.util.Map;
 @Validated
 public interface UserCreateUseCase {
     JwtDto authUser(String initData);
-    User create(Map<String, String> query);
+    User save(Map<String, String> query);
 }

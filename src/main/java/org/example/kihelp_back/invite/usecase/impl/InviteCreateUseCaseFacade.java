@@ -46,7 +46,7 @@ public class InviteCreateUseCaseFacade implements InviteCreateUseCase {
         userCreateDto.put("id", inviteCreateDto.inviteeTelegramId());
         userCreateDto.put("username", "");
 
-        User invitee = userCreateUseCase.create(userCreateDto);
+        User invitee = userCreateUseCase.save(userCreateDto);
         Invite invite = inviteCreateDtoToInviteMapper.map(inviteCreateDto, inviter, invitee);
 
         inviteService.create(invite);

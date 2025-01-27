@@ -6,7 +6,7 @@ import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.repository.RoleRepository;
 import org.springframework.stereotype.Component;
 
-import static org.example.kihelp_back.user.util.ErrorMessage.ROLE_NOT_FOUND;
+import static org.example.kihelp_back.user.util.UserErrorMessage.ROLE_NOT_FOUND;
 
 @Component
 @Slf4j

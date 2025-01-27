@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.example.kihelp_back.task.util.ErrorMessage.USER_BANNED_BY_RESELLER_ACTIVITY;
-import static org.example.kihelp_back.user.util.ErrorMessage.USER_IS_BANNED;
+import static org.example.kihelp_back.user.util.UserErrorMessage.USER_IS_BANNED;
 
 @Component
 @Slf4j

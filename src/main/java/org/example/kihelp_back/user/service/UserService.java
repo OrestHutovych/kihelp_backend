@@ -30,7 +30,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static org.example.kihelp_back.user.util.ErrorMessage.*;
+import static org.example.kihelp_back.user.util.UserErrorMessage.*;
 
 @Service
 @Slf4j

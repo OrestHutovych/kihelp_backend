@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.example.kihelp_back.user.util.ErrorMessage.JWT_TOKEN_EXPIRED;
+import static org.example.kihelp_back.user.util.UserErrorMessage.JWT_TOKEN_EXPIRED;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
