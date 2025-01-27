@@ -59,7 +59,7 @@ public class WalletService {
     }
 
     @Transactional
-    public void depositAmountToWalletByUserTelegramId(Long userId, BigDecimal amount) {
+    public void depositAmountToWalletByUserId(Long userId, BigDecimal amount) {
         log.info("Start deposit amount to wallet for user by ID: {}", userId);
         List<Wallet> walletsByUser = findByUserId(userId);
 
@@ -77,7 +77,25 @@ public class WalletService {
     }
 
     @Transactional
-    public void withdrawAmountFromDevWalletByUserTelegramId(Long userId, BigDecimal amount) {
+    public void depositAmountToDevWalletByUserId(Long userId, BigDecimal amount) {
+        log.info("Start deposit amount to wallet for user by ID: {}", userId);
+        List<Wallet> walletsByUser = findByUserId(userId);
+
+        Wallet mainWallet = walletsByUser.stream()
+                .filter(w -> !w.isDefaultWallet())
+                .findFirst()
+                .orElseThrow(() -> new WalletNotFoundException(
+                        WALLET_NOT_FOUND
+                ));
+
+        mainWallet.setBalance(mainWallet.getBalance().add(amount));
+
+        walletRepository.save(mainWallet);
+        log.info("Successfully deposit amount to wallet for user by ID: {}", userId);
+    }
+
+    @Transactional
+    public void withdrawAmountFromDevWalletByUserId(Long userId, BigDecimal amount) {
         log.info("Start withdraw amount from wallet for user by ID: {}", userId);
         List<Wallet> walletsByUser = findByUserId(userId);
 

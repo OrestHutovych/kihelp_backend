@@ -61,7 +61,7 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
     public void deposit(WalletDepositDto request) {
         User targetUser = userService.findByTelegramId(request.userTelegramId());
 
-        walletService.depositAmountToWalletByUserTelegramId(targetUser.getId(), request.amount());
+        walletService.depositAmountToWalletByUserId(targetUser.getId(), request.amount());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
             throw new IllegalArgumentException(WALLET_WITHDRAW_AMOUNT_NOT_VALID);
         }
 
-        walletService.withdrawAmountFromDevWalletByUserTelegramId(targetUser.getId(), request.amount());
+        walletService.withdrawAmountFromDevWalletByUserId(targetUser.getId(), request.amount());
 
         TransactionWithdrawDto withdrawDto = new TransactionWithdrawDto(
                 request.amount(),
@@ -144,7 +144,7 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
                 throw new WalletAmountNotValidException(MIN_AMOUNT);
             } else {
                 User targetUser = userService.findByTelegramId(transaction.get("comment"));
-                walletService.depositAmountToWalletByUserTelegramId(targetUser.getId(), amount);
+                walletService.depositAmountToWalletByUserId(targetUser.getId(), amount);
 
                 TransactionCreateDto dto = new TransactionCreateDto(
                         transaction.get("id"),

@@ -17,4 +17,5 @@ public class TransactionUpdateUseCaseFacade implements TransactionUpdateUseCase 
     public void toggleWithdrawStatus(TransactionWithdrawStatusDto request) {
         transactionService.toggleWithdrawStatus(request.transactionId());
     }
+
 }

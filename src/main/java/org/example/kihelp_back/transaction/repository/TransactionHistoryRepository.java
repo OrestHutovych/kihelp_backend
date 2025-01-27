@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TransactionHistoryRepository extends JpaRepository<Transaction, Long> {
@@ -21,4 +22,11 @@ public interface TransactionHistoryRepository extends JpaRepository<Transaction,
        WHERE t.user.id = :userId AND t.status = 'COMPLETED'
     """)
     Page<Transaction> findAllCompletedTransactionByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    @Transactional(readOnly = true)
+    @Query("""
+       SELECT t FROM Transaction t
+       WHERE t.status = 'IN_PROGRESS' AND t.type = 'WITHDRAW'
+    """)
+    List<Transaction> findAllInProgressWithdrawTransactions();
 }
