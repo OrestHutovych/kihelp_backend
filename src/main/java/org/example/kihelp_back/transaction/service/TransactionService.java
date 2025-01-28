@@ -1,6 +1,7 @@
 package org.example.kihelp_back.transaction.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.kihelp_back.global.service.TelegramBotService;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
 import org.example.kihelp_back.transaction.exception.TransactionNotFoundException;
 import org.example.kihelp_back.transaction.model.Transaction;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.example.kihelp_back.transaction.util.TransactionErrorMessage.*;
@@ -25,11 +27,14 @@ import static org.example.kihelp_back.transaction.util.TransactionErrorMessage.*
 public class TransactionService {
     private final TransactionHistoryRepository transactionRepository;
     private final WalletService walletService;
+    private final TelegramBotService telegramBotService;
 
     public TransactionService(TransactionHistoryRepository transactionRepository,
-                              WalletService walletService) {
+                              WalletService walletService,
+                              TelegramBotService telegramBotService) {
         this.transactionRepository = transactionRepository;
         this.walletService = walletService;
+        this.telegramBotService = telegramBotService;
     }
 
     @Transactional
@@ -89,24 +94,32 @@ public class TransactionService {
         return transactionRepository.findAllInProgressWithdrawTransactions();
     }
 
-    //    @Scheduled(fixedRateString = "3600000")
-    @Scheduled(fixedRateString = "60000")
+    @Scheduled(fixedRateString = "600000")
     @Transactional
     public void changeFailedStatusWithdrawTransaction(){
         List<Transaction> transactions = findAllInProgressWithdrawTransactions();
 
         transactions.forEach(t -> {
+            Instant failedTime = t.getCreatedAt().plus(24, ChronoUnit.HOURS);
+            Instant notificationTime = failedTime.minus(2, ChronoUnit.HOURS);
+
+            if (!t.isWarningSent() && Instant.now().isAfter(notificationTime) && Instant.now().isBefore(failedTime)) {
+                telegramBotService.warnWithdrawAdminMessage(t);
+
+                t.setWarningSent(true);
+                transactionRepository.save(t);
+            }
+
             long daysBetween = Duration.between(t.getCreatedAt(), Instant.now()).toDays();
 
             if(daysBetween >= 1){
                 t.setStatus(TransactionStatus.FAILED);
 
-                transactionRepository.save(t);
+                Transaction failedTransaction = transactionRepository.save(t);
                 walletService.depositAmountToDevWalletByUserId(t.getUser().getId(), t.getAmount());
-            }
 
-            // todo send message to admin(s) chat before 2 hours to failed withdraw transaction
-            // todo send message to user chat if transaction changed status to failed
+                telegramBotService.failedWithdrawTransaction(failedTransaction);
+            }
         });
     }
 }

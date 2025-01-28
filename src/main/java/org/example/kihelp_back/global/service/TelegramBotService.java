@@ -173,6 +173,71 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
+    public void warnWithdrawAdminMessage(Transaction transaction) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+
+        String message = String.format("""
+                💳 *Спливває час на зняття коштів для користувача:*
+                • *Username:* `@%s`
+                • *Telegram ID:* `%s`
+                • *Сума:* `%s UAH`
+            
+                🔗 *Деталі транзакції:*
+                • *Transaction ID:* `%s`
+            
+                #warn
+                """,
+                transaction.getUser().getUsername(),
+                transaction.getUser().getTelegramId(),
+                transaction.getAmount(),
+                transaction.getTransactionId()
+        );
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
+        }
+    }
+
+    public void failedWithdrawTransaction(Transaction transaction) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(transaction.getUser().getTelegramId());
+
+        String message = String.format("""
+                💳 *Ваш запит на зняття грошей не був успішно оброблений. Попробуйте ще раз створити транзакцію.*
+               
+                🔗 *Деталі транзакції:*
+                • *Transaction ID:* `%s`
+                • *Сума:* `%s`
+            
+                #failed
+                """,
+                transaction.getTransactionId(),
+                transaction.getAmount()
+        );
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
+        }
+    }
 
     private void processAndSendFile(String chatId, int messageId, MultipartFile file) {
         File tempFile = null;

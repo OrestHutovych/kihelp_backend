@@ -31,6 +31,8 @@ public class Transaction extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_status")
     private TransactionStatus status;
+    @Column(name = "warning_sent")
+    private boolean warningSent = false;
     @Column(name = "created_at")
     private Instant createdAt = Instant.now();
 
