@@ -6,6 +6,8 @@ import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.repository.RoleRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static org.example.kihelp_back.user.util.UserErrorMessage.ROLE_NOT_FOUND;
 
 @Component
@@ -28,5 +30,15 @@ public class RoleService {
     public boolean existsByName(String name) {
         log.info("Checking if role with name {} exists", name);
         return roleRepository.existsByName(name);
+    }
+
+    public void createRolesIfNotExists(List<String> roleNames) {
+        for (String roleName : roleNames) {
+            if (!roleRepository.existsByName(roleName)) {
+                Role role = new Role();
+                role.setName(roleName);
+                roleRepository.save(role);
+            }
+        }
     }
 }
