@@ -1,9 +1,10 @@
 package org.example.kihelp_back.task.dto;
 
 import org.example.kihelp_back.argument.model.Argument;
+import org.example.kihelp_back.teacher.dto.TeacherDto;
+import org.example.kihelp_back.user.dto.UserDto;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 
 public record TaskDto(
@@ -15,10 +16,10 @@ public record TaskDto(
         BigDecimal discount,
         boolean visible,
         String type,
-        Long developerId,
+        UserDto developer,
         boolean autoGenerate,
-        Instant createdAt,
+        String createdAt,
         List<Argument> arguments,
-        Long teacherId
+        TeacherDto teacherId
 ) {
 }
