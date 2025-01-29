@@ -1,6 +1,7 @@
 package org.example.kihelp_back.wallet.controller;
 
 import jakarta.validation.Valid;
+import org.example.kihelp_back.wallet.dto.JarDto;
 import org.example.kihelp_back.wallet.dto.WalletDepositDto;
 import org.example.kihelp_back.wallet.dto.WalletDto;
 import org.example.kihelp_back.wallet.dto.WalletWithdrawDto;
@@ -25,6 +26,11 @@ public class WalletController {
     @GetMapping("/")
     public List<WalletDto> getWalletsByUser() {
         return walletGetUseCase.getWalletsByUser();
+    }
+
+    @GetMapping("/jar")
+    public JarDto getJarForDeposit(){
+        return walletGetUseCase.getJarForDeposit();
     }
 
     @PutMapping("/deposit")

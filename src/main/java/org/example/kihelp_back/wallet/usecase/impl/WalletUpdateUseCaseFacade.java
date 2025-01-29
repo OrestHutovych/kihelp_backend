@@ -158,6 +158,8 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
                 Transaction processedTransaction = transactionCreateUseCase.createDepositTransaction(targetUser.getTelegramId(), dto);
 
                 // todo add send message about deposit to chat user in telegram
+
+                telegramBotService.depositAdminMessage(processedTransaction);
             }
         }
     }

@@ -11,4 +11,5 @@ public class WalletErrorMessage {
     public static final String MIN_AMOUNT = "Мінімальна сума поповнення 10 UAH.";
     public static final String CARD_NUMBER_NOT_VALID = "Невірний номер картки.";
     public static final String WALLET_WITHDRAW_AMOUNT_NOT_VALID = "Мінімальна сума виводу 1000 UAH.";
+    public static final String WALLET_JAR_INFO = "Не знайдено банки для поповнення.";
 }
