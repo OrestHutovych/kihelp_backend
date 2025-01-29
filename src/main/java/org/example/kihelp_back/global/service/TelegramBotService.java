@@ -239,6 +239,65 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
+    public void failedDepositTransaction(Transaction transaction, String errorMessage) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(transaction.getUser().getTelegramId());
+
+        String message = String.format("""
+            💳 *Ваш запит на поповнення коштів не було успішно оброблено.*
+            
+            ❌ *Помилка:* %s
+            
+            #failed
+            """, errorMessage
+        );
+
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
+        }
+    }
+
+    public void depositUserMessage(Transaction transaction) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(transaction.getUser().getTelegramId());
+
+        String message = String.format("""
+                💰 *Успішне поповнення балансу*
+                • *Сума поповнення:* `%s UAH`
+            
+                🔗 *Деталі транзакції:*
+                • *Transaction ID:* `%s`
+            
+                #deposit
+                """,
+                transaction.getAmount(),
+                transaction.getTransactionId()
+        );
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
+        }
+    }
+
     private void processAndSendFile(String chatId, int messageId, MultipartFile file) {
         File tempFile = null;
         try {

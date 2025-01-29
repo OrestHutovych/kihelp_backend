@@ -135,32 +135,49 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
     }
 
     private void processTransaction(Map<String, String> transaction) {
+        String comment = transaction.get("comment");
+        if ("На чорну картку".equals(comment)) {
+            return;
+        }
+
         BigDecimal amount = BigDecimal.valueOf(Long.parseLong(transaction.get("amount")))
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-        if(!transaction.get("comment").equals("На чорну картку")) {
-            if (amount.compareTo(BigDecimal.valueOf(10.0)) < 0) {
-                // todo send message to chat user in telegram about error (MIN_AMOUNT)
-                throw new WalletAmountNotValidException(MIN_AMOUNT);
-            } else {
-                User targetUser = userService.findByTelegramId(transaction.get("comment"));
-                walletService.depositAmountToWalletByUserId(targetUser.getId(), amount);
+        User targetUser = userService.findByTelegramId(transaction.get("comment"));
 
-                TransactionCreateDto dto = new TransactionCreateDto(
-                        transaction.get("id"),
-                        transaction.get("description").replace("Від: ", ""),
-                        amount,
-                        TransactionType.DEPOSIT,
-                        TransactionStatus.COMPLETED,
-                        transaction.get("comment")
-                );
-
-                Transaction processedTransaction = transactionCreateUseCase.createDepositTransaction(targetUser.getTelegramId(), dto);
-
-                // todo add send message about deposit to chat user in telegram
-
-                telegramBotService.depositAdminMessage(processedTransaction);
-            }
+        if (amount.compareTo(BigDecimal.valueOf(10.0)) < 0) {
+            handleFailedTransaction(targetUser, transaction, amount);
+        } else {
+            handleSuccessfulTransaction(targetUser, transaction, amount);
         }
+    }
+
+    private void handleFailedTransaction(User user, Map<String, String> transaction, BigDecimal amount) {
+        TransactionCreateDto dto = createDto(transaction, TransactionStatus.FAILED, amount);
+        Transaction processedTransaction = transactionCreateUseCase.createDepositTransaction(user.getTelegramId(), dto);
+
+        telegramBotService.failedDepositTransaction(processedTransaction, MIN_AMOUNT);
+        throw new WalletAmountNotValidException(MIN_AMOUNT);
+    }
+
+    private void handleSuccessfulTransaction(User user, Map<String, String> transaction, BigDecimal amount) {
+        walletService.depositAmountToWalletByUserId(user.getId(), amount);
+
+        TransactionCreateDto dto = createDto(transaction, TransactionStatus.COMPLETED, amount);
+        Transaction processedTransaction = transactionCreateUseCase.createDepositTransaction(user.getTelegramId(), dto);
+
+        telegramBotService.depositUserMessage(processedTransaction);
+        telegramBotService.depositAdminMessage(processedTransaction);
+    }
+
+    private TransactionCreateDto createDto(Map<String, String> transaction, TransactionStatus status, BigDecimal amount) {
+        return new TransactionCreateDto(
+                transaction.get("id"),
+                transaction.get("description").replace("Від: ", ""),
+                amount,
+                TransactionType.DEPOSIT,
+                status,
+                transaction.get("comment")
+        );
     }
 }
