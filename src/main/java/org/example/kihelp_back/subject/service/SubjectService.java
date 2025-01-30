@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.example.kihelp_back.subject.util.ErrorMessages.SUBJECT_EXIST;
-import static org.example.kihelp_back.subject.util.ErrorMessages.SUBJECT_NOT_FOUND;
+import static org.example.kihelp_back.subject.util.SubjectErrorMessages.SUBJECT_EXIST;
+import static org.example.kihelp_back.subject.util.SubjectErrorMessages.SUBJECT_NOT_FOUND;
 
 @Service
 public class SubjectService{

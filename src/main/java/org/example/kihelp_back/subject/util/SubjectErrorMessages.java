@@ -1,7 +1,7 @@
 package org.example.kihelp_back.subject.util;
 
-public class ErrorMessages {
-    private ErrorMessages() {}
+public class SubjectErrorMessages {
+    private SubjectErrorMessages() {}
 
     public static final String SUBJECT_EXIST = "Предмет з назвою %s для курсу %s вже існує!";
     public static final String COURSE_VALUE = "Обраний курс має бути в діапазоні від 1 до 4.";
