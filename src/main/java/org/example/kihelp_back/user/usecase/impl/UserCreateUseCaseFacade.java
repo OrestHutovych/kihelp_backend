@@ -64,7 +64,7 @@ public class UserCreateUseCaseFacade implements UserCreateUseCase {
 
             return new JwtDto(jwtToken);
         } catch (AuthenticationException e) {
-            throw new UserUnauthorizedException(String.format(USER_AUTHENTICATION_FAILED, e.getMessage()));
+            throw new UserUnauthorizedException(USER_AUTHENTICATION_FAILED);
         }
     }
 

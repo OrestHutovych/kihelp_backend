@@ -1,7 +1,5 @@
 package org.example.kihelp_back.user.usecase.impl;
 
-import org.example.kihelp_back.user.dto.UserToggleBanDto;
-import org.example.kihelp_back.user.dto.UserToggleRoleDto;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.stereotype.Component;
@@ -15,12 +13,12 @@ public class UserUpdateUseCaseFacade implements UserUpdateUseCase {
     }
 
     @Override
-    public void changeBanValueByUser(String telegramId, UserToggleBanDto request) {
-        userService.changeBan(telegramId, request.value());
+    public void changeBanValueByUser(String telegramId, boolean value) {
+        userService.changeBan(telegramId, value);
     }
 
     @Override
-    public void toggleRole(String telegramId, UserToggleRoleDto request) {
-        userService.changeRole(telegramId, request.roleName());
+    public void toggleRole(String telegramId, String roleName) {
+        userService.changeRole(telegramId, roleName);
     }
 }

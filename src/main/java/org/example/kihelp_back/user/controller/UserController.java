@@ -23,14 +23,15 @@ public class UserController {
         this.userUpdateUseCase = userUpdateUseCase;
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/user/auth")
     public JwtDto authUser(@RequestBody String initData) {
        return userCreateUseCase.authUser(initData);
     }
 
-    @PutMapping("/{telegram_id}/toggle_role")
-    public void toggleRole(@PathVariable("telegram_id") String telegramId, @RequestBody UserToggleRoleDto request) {
-        userUpdateUseCase.toggleRole(telegramId, request);
+    @PutMapping("/user/{telegram_id}/toggle_role")
+    public void toggleRole(@PathVariable("telegram_id") String telegramId,
+                           @RequestParam(name = "role") String roleName) {
+        userUpdateUseCase.toggleRole(telegramId, roleName);
     }
 
     @GetMapping("/role/{role_name}")
@@ -38,8 +39,9 @@ public class UserController {
         return userGetUseCase.getUserByRole(roleName);
     }
 
-    @PutMapping("/{telegram_id}/ban")
-    public void banUser(@PathVariable("telegram_id") String telegramId, @RequestBody UserToggleBanDto request) {
-        userUpdateUseCase.changeBanValueByUser(telegramId, request);
+    @PutMapping("/user/{telegram_id}/ban")
+    public void banUser(@PathVariable("telegram_id") String telegramId,
+                        @RequestParam(name = "value") boolean value) {
+        userUpdateUseCase.changeBanValueByUser(telegramId, value);
     }
 }
