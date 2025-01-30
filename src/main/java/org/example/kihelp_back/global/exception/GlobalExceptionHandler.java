@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(SubjectNotFoundException.class)
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(TeacherNotFoundException.class)
@@ -89,7 +89,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(TypeNotValidException.class)
@@ -107,7 +107,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ArgumentNotFoundException.class)
@@ -179,7 +179,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(WalletExistException.class)
@@ -188,7 +188,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(WalletIsNotDefaultException.class)
@@ -278,7 +278,7 @@ public class GlobalExceptionHandler {
         error.put(MESSAGE_FIELD, ex.getMessage());
 
         log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserRoleNotValidException.class)
