@@ -55,6 +55,8 @@ monobank:
     - jar: 3MTzYwD5u1mcEAz2p_Q9BrrT_mXMSNo
       X_Token: u8or15FnXMzXDdpp5Py-RATldC9KJy7MLEfrPsA7T4qM
   interval: 60000
+  personal_info: https://api.monobank.ua/personal/client-info
+  jar_info: https://api.monobank.ua/personal/statement/{jarId}/{timeFrom}
 
 #logging:
 #  level:

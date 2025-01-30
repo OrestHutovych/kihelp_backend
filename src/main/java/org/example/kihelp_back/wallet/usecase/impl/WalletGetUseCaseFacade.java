@@ -1,6 +1,5 @@
 package org.example.kihelp_back.wallet.usecase.impl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.wallet.config.MonobankConfig;
@@ -13,6 +12,7 @@ import org.example.kihelp_back.wallet.mapper.WalletMapper;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.service.WalletService;
 import org.example.kihelp_back.wallet.usecase.WalletGetUseCase;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -24,13 +24,15 @@ import java.util.*;
 import static org.example.kihelp_back.wallet.util.WalletErrorMessage.WALLET_JAR_INFO;
 
 @Component
-@Slf4j
 public class WalletGetUseCaseFacade implements WalletGetUseCase {
     private final WalletService walletService;
     private final WalletMapper walletMapper;
     private final UserService userService;
     private final MonobankConfig monobankConfig;
     private final RestTemplate restTemplate;
+
+    @Value("${monobank.personal_info}")
+    private String personalInfoUrl;
 
     public WalletGetUseCaseFacade(WalletService walletService,
                                   WalletMapper walletMapper,
@@ -75,7 +77,7 @@ public class WalletGetUseCaseFacade implements WalletGetUseCase {
             headers.set("X-Token", jarConfig.X_Token());
 
             ResponseEntity<MonobankJarInfoDto> response = restTemplate.exchange(
-                    "https://api.monobank.ua/personal/client-info",
+                    personalInfoUrl,
                     HttpMethod.GET,
                     new HttpEntity<>(headers),
                     new ParameterizedTypeReference<>() {}
@@ -90,9 +92,7 @@ public class WalletGetUseCaseFacade implements WalletGetUseCase {
     }
 
     private String createJarLink(String jarSendId, String userTelegramId){
-        return String.format(
-          "https://send.monobank.ua/%s?t=%s", jarSendId, userTelegramId
-        );
+        return String.format("https://send.monobank.ua/%s?t=%s", jarSendId, userTelegramId);
     }
 
     private BigDecimal parseBalance(String balance) {

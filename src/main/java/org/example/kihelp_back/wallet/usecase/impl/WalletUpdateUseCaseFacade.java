@@ -18,6 +18,7 @@ import org.example.kihelp_back.wallet.exception.MonobankApiException;
 import org.example.kihelp_back.wallet.exception.WalletAmountNotValidException;
 import org.example.kihelp_back.wallet.service.WalletService;
 import org.example.kihelp_back.wallet.usecase.WalletUpdateUseCase;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -43,6 +44,9 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
     private final RestTemplate restTemplate;
     private final MonobankConfig monobankConfig;
 
+    @Value("${monobank.jar_info}")
+    private String jarInfo;
+
     public WalletUpdateUseCaseFacade(WalletService walletService,
                                      MonobankConfig monobankConfig,
                                      UserService userService,
@@ -61,7 +65,7 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
     public void deposit(WalletDepositDto request) {
         User targetUser = userService.findByTelegramId(request.userTelegramId());
 
-        walletService.depositAmountToWalletByUserId(targetUser.getId(), request.amount());
+        walletService.depositAmountToWalletByUserId(targetUser.getId(), request.amount(), true);
     }
 
     @Override
@@ -73,7 +77,7 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
             throw new IllegalArgumentException(WALLET_WITHDRAW_AMOUNT_NOT_VALID);
         }
 
-        walletService.withdrawAmountFromDevWalletByUserId(targetUser.getId(), request.amount());
+        walletService.withdrawAmountFromWalletByUserId(targetUser.getId(), request.amount(), false);
 
         TransactionWithdrawDto withdrawDto = new TransactionWithdrawDto(
                 request.amount(),
@@ -108,7 +112,7 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
 
         try {
             response = restTemplate.exchange(
-                    "https://api.monobank.ua/personal/statement/{jarId}/{timeFrom}",
+                    jarInfo,
                     HttpMethod.GET,
                     new HttpEntity<>(headers),
                     new ParameterizedTypeReference<>() {},
@@ -161,7 +165,7 @@ public class WalletUpdateUseCaseFacade implements WalletUpdateUseCase {
     }
 
     private void handleSuccessfulTransaction(User user, Map<String, String> transaction, BigDecimal amount) {
-        walletService.depositAmountToWalletByUserId(user.getId(), amount);
+        walletService.depositAmountToWalletByUserId(user.getId(), amount, true);
 
         TransactionCreateDto dto = createDto(transaction, TransactionStatus.COMPLETED, amount);
         Transaction processedTransaction = transactionCreateUseCase.createDepositTransaction(user.getTelegramId(), dto);

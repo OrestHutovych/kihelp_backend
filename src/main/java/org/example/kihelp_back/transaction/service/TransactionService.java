@@ -1,6 +1,5 @@
 package org.example.kihelp_back.transaction.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.global.service.TelegramBotService;
 import org.example.kihelp_back.transaction.exception.TransactionExistException;
 import org.example.kihelp_back.transaction.exception.TransactionNotFoundException;
@@ -22,7 +21,6 @@ import java.util.List;
 
 import static org.example.kihelp_back.transaction.util.TransactionErrorMessage.*;
 
-@Slf4j
 @Service
 public class TransactionService {
     private final TransactionHistoryRepository transactionRepository;
@@ -116,7 +114,7 @@ public class TransactionService {
                 t.setStatus(TransactionStatus.FAILED);
 
                 Transaction failedTransaction = transactionRepository.save(t);
-                walletService.depositAmountToDevWalletByUserId(t.getUser().getId(), t.getAmount());
+                walletService.depositAmountToWalletByUserId(t.getUser().getId(), t.getAmount(), false);
 
                 telegramBotService.failedWithdrawTransaction(failedTransaction);
             }
