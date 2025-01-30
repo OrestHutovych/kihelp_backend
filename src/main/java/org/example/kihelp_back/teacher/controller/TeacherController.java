@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/teacher")
+@RequestMapping("/api/v1/teachers")
 public class TeacherController {
     private final TeacherCreateUseCase teacherCreateUseCase;
     private final TeacherGetUseCase teacherGetUseCase;
@@ -30,22 +30,22 @@ public class TeacherController {
         this.teacherUpdateUseCase = teacherUpdateUseCase;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/teacher")
     public void createTeacher(@Valid @RequestBody TeacherCreateDto request){
         teacherCreateUseCase.createTeacher(request);
     }
 
-    @GetMapping("/getBySubject/{subject_id}")
+    @GetMapping("/subject/{subject_id}")
     public List<TeacherDto> getTeachersBySubject(@PathVariable("subject_id") Long subjectId){
         return teacherGetUseCase.getTeachersBySubject(subjectId);
     }
 
-    @DeleteMapping("/delete/{teacher_id}")
+    @DeleteMapping("/teacher/{teacher_id}")
     public void deleteTeacher(@PathVariable("teacher_id") Long teacherId){
         teacherDeleteUseCase.deleteTeacher(teacherId);
     }
 
-    @PutMapping("/changeAnInitials/{teacher_id}")
+    @PutMapping("/teacher/{teacher_id}")
     public void updateTeacher(@PathVariable("teacher_id") Long teacherId,
                               @Valid @RequestBody TeacherUpdateRequest request){
         teacherUpdateUseCase.updateTeacher(teacherId, request);
