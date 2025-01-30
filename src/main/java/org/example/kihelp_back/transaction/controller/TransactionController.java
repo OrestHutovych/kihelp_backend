@@ -21,7 +21,7 @@ public class TransactionController {
         this.transactionUpdateUseCase = transactionUpdateUseCase;
     }
 
-    @GetMapping("/history/{telegram_id}")
+    @GetMapping("/history/user/{telegram_id}")
     public Collection<TransactionDto> getTransactions(@PathVariable("telegram_id") String telegramId,
                                                       @RequestParam(name = "page") int page,
                                                       @RequestParam(name = "limit") int limit) {
