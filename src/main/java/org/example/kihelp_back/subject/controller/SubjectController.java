@@ -30,12 +30,12 @@ public class SubjectController {
         this.subjectUpdateUseCase = subjectUpdateUseCase;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/subject")
     public void createSubject(@Valid @RequestBody SubjectCreateDto request) {
         subjectCreateUseCase.create(request);
     }
 
-    @GetMapping("/course_number/{number}")
+    @GetMapping("/course-number/{number}")
     public List<SubjectDto> getSubjectByCourseNumber(@PathVariable("number") Integer number) {
         return subjectGetUseCase.getSubjectsByCourseNumber(number);
     }
