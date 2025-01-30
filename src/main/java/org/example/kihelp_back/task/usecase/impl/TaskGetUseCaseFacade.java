@@ -1,7 +1,7 @@
 package org.example.kihelp_back.task.usecase.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.task.mapper.TaskToTaskDtoMapper;
+import org.example.kihelp_back.task.mapper.TaskMapper;
 import org.example.kihelp_back.task.dto.TaskDto;
 import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.task.service.TaskService;
@@ -14,21 +14,20 @@ import java.util.List;
 @Slf4j
 public class TaskGetUseCaseFacade implements TaskGetUseCase {
     private final TaskService taskService;
-    private final TaskToTaskDtoMapper taskToTaskDtoMapper;
+    private final TaskMapper taskMapper;
 
     public TaskGetUseCaseFacade(TaskService taskService,
-                                TaskToTaskDtoMapper taskToTaskDtoMapper) {
+                                TaskMapper taskMapper) {
         this.taskService = taskService;
-        this.taskToTaskDtoMapper = taskToTaskDtoMapper;
+        this.taskMapper = taskMapper;
     }
 
     @Override
     public List<TaskDto> getTasksByTeacher(Long teacherId) {
         List<Task> tasks = taskService.getByTeacher(teacherId);
 
-        log.info("Attempting to map Task(s) {} to TaskDto and return it.", tasks.size());
         return tasks.stream()
-                .map(taskToTaskDtoMapper::map)
+                .map(taskMapper::toTaskDto)
                 .toList();
     }
 }

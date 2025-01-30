@@ -1,6 +1,6 @@
 package org.example.kihelp_back.user.mapper.impl;
 
-import org.example.kihelp_back.user.dto.UserResponseDto;
+import org.example.kihelp_back.user.dto.UserDto;
 import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.model.User;
@@ -39,12 +39,12 @@ public class UserMapperImpl implements UserMapper {
     }
 
     @Override
-    public UserResponseDto toResponseDto(User user) {
+    public UserDto toUserDto(User user) {
         if(user == null) {
             return null;
         }
 
-        return new UserResponseDto(
+        return new UserDto(
                 user.getTelegramId(),
                 user.getUsername(),
                 user.getCreatedAt().toString()

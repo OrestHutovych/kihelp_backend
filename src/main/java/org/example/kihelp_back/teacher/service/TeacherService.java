@@ -37,7 +37,7 @@ public class TeacherService{
         return teacherRepository.findTeacherBySubjectId(subjectId);
     }
 
-    public Teacher getTeacherById(Long id) {
+    public Teacher findTeacherById(Long id) {
         return teacherRepository.findById(id)
                 .orElseThrow(() -> new TeacherNotFoundException(String.format(TEACHER_NOT_FOUND, id)));
     }
@@ -53,7 +53,7 @@ public class TeacherService{
     }
 
     public void update(Long id, String name) {
-        Teacher teacher = getTeacherById(id);
+        Teacher teacher = findTeacherById(id);
 
         teacher.setName(name);
 

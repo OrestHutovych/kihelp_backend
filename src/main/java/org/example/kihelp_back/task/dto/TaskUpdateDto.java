@@ -11,6 +11,6 @@ public record TaskUpdateDto(
         boolean visible,
         String type,
         boolean autoGenerate,
-        Long developerId
+        String developerTelegramId
 ) {
 }

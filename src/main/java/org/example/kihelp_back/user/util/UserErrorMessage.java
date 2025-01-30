@@ -5,6 +5,7 @@ public class UserErrorMessage {
 
     public static final String USER_IS_BANNED = "Користувач із Telegram ID %s заблокований за порушення правил";
     public static final String USER_NOT_FOUND = "Користувача із Telegram ID %s не знайдено";
+    public static final String USER_NOT_VALID_ROLE = "Користувач із Telegram ID %s не має відповідної ролі";
     public static final String ROLE_NOT_FOUND = "Роль із іменем %s не знайдено";
     public static final String USER_BAD_CREDENTIALS = "Bad credentials";
     public static final String JWT_TOKEN_EXPIRED = "JWT Expired";

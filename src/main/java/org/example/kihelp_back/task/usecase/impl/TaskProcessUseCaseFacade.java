@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.example.kihelp_back.task.util.ErrorMessage.USER_BANNED_BY_RESELLER_ACTIVITY;
+import static org.example.kihelp_back.task.util.TaskErrorMessage.USER_BANNED_BY_RESELLER_ACTIVITY;
 import static org.example.kihelp_back.user.util.UserErrorMessage.USER_IS_BANNED;
 
 @Component
@@ -43,9 +43,9 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
 
     @Override
     @Transactional
-    public Map<String, String> processTask(Long taskId, TaskProcessCreateDto request) {
+    public Map<String, String> processTask(TaskProcessCreateDto request) {
         User targetUser = userService.findByJwt();
-        Task task = taskService.getTaskById(taskId);
+        Task task = taskService.getTaskById(request.taskId());
         BigDecimal price = task.getPrice();
         Map<String, String> processResponse = new HashMap<>();
 
@@ -53,7 +53,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
             throw new UserIsBannedException(String.format(USER_IS_BANNED, targetUser.getTelegramId()));
         }
 
-        boolean isDetected = historyService.detectResellerActivity(targetUser.getTelegramId(), taskId);
+        boolean isDetected = historyService.detectResellerActivity(targetUser.getTelegramId(), request.taskId());
 
         if(isDetected) {
             userService.changeBan(targetUser.getTelegramId(), true);
@@ -71,6 +71,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
                 }
 
                 walletService.withdrawAmountFromWalletByUserId(targetUser.getId(), price, true);
+                walletService.depositAmountToWalletByUserId(task.getDeveloper().getId(), price, false);
             }
         }
 

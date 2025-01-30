@@ -164,15 +164,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(TaskDeveloperNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleTaskDeveloperNotValidException(TaskDeveloperNotValidException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put(MESSAGE_FIELD, ex.getMessage());
-
-        log.error(ex.getMessage(), ex);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(WalletDefaultExistException.class)
     public ResponseEntity<Map<String, String>> handleWalletDefaultExistException(WalletDefaultExistException ex) {
         Map<String, String> error = new HashMap<>();

@@ -35,8 +35,8 @@ public class UserController {
     }
 
     @GetMapping("/role/{role_name}")
-    public List<UserResponseDto> getUsersByRole(@PathVariable("role_name") String roleName) {
-        return userGetUseCase.getUserByRole(roleName);
+    public List<UserDto> getUsersByRole(@PathVariable("role_name") String roleName) {
+        return userGetUseCase.findByUserRole(roleName);
     }
 
     @PutMapping("/user/{telegram_id}/ban")

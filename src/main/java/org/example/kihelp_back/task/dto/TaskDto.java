@@ -1,6 +1,6 @@
 package org.example.kihelp_back.task.dto;
 
-import org.example.kihelp_back.argument.model.Argument;
+import org.example.kihelp_back.argument.dto.ArgumentDto;
 import org.example.kihelp_back.teacher.dto.TeacherDto;
 import org.example.kihelp_back.user.dto.UserDto;
 
@@ -19,7 +19,7 @@ public record TaskDto(
         UserDto developer,
         boolean autoGenerate,
         String createdAt,
-        List<Argument> arguments,
-        TeacherDto teacherId
+        List<ArgumentDto> arguments,
+        TeacherDto teacher
 ) {
 }

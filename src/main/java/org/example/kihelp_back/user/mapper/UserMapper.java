@@ -1,11 +1,11 @@
 package org.example.kihelp_back.user.mapper;
 
-import org.example.kihelp_back.user.dto.UserResponseDto;
+import org.example.kihelp_back.user.dto.UserDto;
 import org.example.kihelp_back.user.model.User;
 
 import java.util.Map;
 
 public interface UserMapper {
     User toEntity(Map<String, String> userDto);
-    UserResponseDto toResponseDto(User user);
+    UserDto toUserDto(User user);
 }

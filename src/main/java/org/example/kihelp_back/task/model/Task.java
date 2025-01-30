@@ -32,16 +32,16 @@ public class Task extends BaseEntity {
     @Column(name = "price")
     private BigDecimal price;
     @Column(name = "discount")
-    private BigDecimal discount;
+    private BigDecimal discount = BigDecimal.ZERO;
     @Column(name = "visible")
-    private boolean visible;
+    private boolean visible = false;
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
     private TaskType type;
     @Column(name = "auto_generate", nullable = false)
     private boolean autoGenerate;
     @Column(name = "created_at")
-    private Instant createdAt;
+    private Instant createdAt = Instant.now();
 
     @ManyToMany
     @JoinTable(

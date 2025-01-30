@@ -21,6 +21,13 @@ public class TeacherGetUseCaseFacade implements TeacherGetUseCase {
     }
 
     @Override
+    public TeacherDto findTeacherById(Long id) {
+        Teacher teacher = teacherService.findTeacherById(id);
+
+        return teacherMapper.toTeacherDto(teacher);
+    }
+
+    @Override
     public List<TeacherDto> getTeachersBySubject(Long subjectId) {
         List<Teacher> teachers = teacherService.getTeachersBySubject(subjectId);
 

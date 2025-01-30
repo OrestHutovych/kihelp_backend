@@ -1,9 +1,6 @@
 package org.example.kihelp_back.user.service;
 
-import org.example.kihelp_back.user.exception.IllegalRoleChangeException;
-import org.example.kihelp_back.user.exception.RoleNotFoundException;
-import org.example.kihelp_back.user.exception.UserIsBannedException;
-import org.example.kihelp_back.user.exception.UserNotFoundException;
+import org.example.kihelp_back.user.exception.*;
 import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
@@ -135,6 +132,22 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException(
                         String.format(USER_NOT_FOUND, telegramId))
                 );
+    }
+
+    public User hasDeveloperOrAdminRole(String telegramId) {
+        User targetUser = findByTelegramId(telegramId);
+
+        boolean hasRequiredRole = targetUser.getRoles()
+                .stream()
+                .anyMatch(r -> r.getName().equals("ROLE_ADMIN") || r.getName().equals("ROLE_DEVELOPER"));
+
+        if (!hasRequiredRole) {
+            throw new UserRoleNotValidException(
+                    String.format(USER_NOT_VALID_ROLE, targetUser.getTelegramId())
+            );
+        }
+
+        return targetUser;
     }
 
     public User findById(Long id) {
