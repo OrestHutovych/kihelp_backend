@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public record TaskDto(
-        Long id,
+        String id,
         String title,
         String description,
         String identifier,

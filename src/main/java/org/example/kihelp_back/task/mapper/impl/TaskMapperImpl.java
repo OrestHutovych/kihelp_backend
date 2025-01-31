@@ -4,6 +4,7 @@ import org.example.kihelp_back.argument.dto.ArgumentDto;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.example.kihelp_back.argument.usecase.ArgumentGetUseCase;
+import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
 import org.example.kihelp_back.task.dto.TaskCreateDto;
 import org.example.kihelp_back.task.dto.TaskDto;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
@@ -33,19 +34,22 @@ public class TaskMapperImpl implements TaskMapper {
     private final TeacherMapper teacherMapper;
     private final ArgumentService argumentService;
     private final ArgumentGetUseCase argumentGetUseCase;
+    private final IdEncoderApiRepository idEncoderApiRepository;
 
     public TaskMapperImpl(UserService userService,
                           UserMapper userMapper,
                           TeacherService teacherService,
                           TeacherMapper teacherMapper,
                           ArgumentService argumentService,
-                          ArgumentGetUseCase argumentGetUseCase) {
+                          ArgumentGetUseCase argumentGetUseCase,
+                          IdEncoderApiRepository idEncoderApiRepository) {
         this.userService = userService;
         this.userMapper = userMapper;
         this.teacherService = teacherService;
         this.teacherMapper = teacherMapper;
         this.argumentService = argumentService;
         this.argumentGetUseCase = argumentGetUseCase;
+        this.idEncoderApiRepository = idEncoderApiRepository;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class TaskMapperImpl implements TaskMapper {
         }
 
         User developer = userService.hasDeveloperOrAdminRole(taskCreateDto.developerTelegramId());
-        Teacher teacher = teacherService.findTeacherById(taskCreateDto.teacherId());
+        Teacher teacher = teacherService.findTeacherById(decodeTeacherId(taskCreateDto.teacherId()));
         List<Argument> arguments = taskCreateDto.args()
                 .stream()
                 .map(argumentService::getById)
@@ -91,7 +95,7 @@ public class TaskMapperImpl implements TaskMapper {
         List<ArgumentDto> arguments = argumentGetUseCase.findArgumentsByTaskId(task.getId());
 
         return new TaskDto(
-                task.getId(),
+                encodeTaskId(task.getId()),
                 task.getTitle(),
                 task.getDescription(),
                 task.getIdentifier(),
@@ -113,5 +117,13 @@ public class TaskMapperImpl implements TaskMapper {
         } catch (IllegalArgumentException e) {
             throw new TypeNotValidException(String.format(TYPE_NOT_VALID, type));
         }
+    }
+
+    public Long decodeTeacherId(String teacherId) {
+        return idEncoderApiRepository.findEncoderByName("teacher").decode(teacherId).get(0);
+    }
+
+    public String encodeTaskId(Long taskId) {
+        return idEncoderApiRepository.findEncoderByName("task").encode(List.of(taskId));
     }
 }

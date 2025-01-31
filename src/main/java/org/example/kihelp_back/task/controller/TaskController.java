@@ -40,18 +40,18 @@ public class TaskController {
     }
 
     @GetMapping("/task/teacher/{teacher_id}")
-    public List<TaskDto> getTasksByTeacher(@PathVariable("teacher_id") Long teacherId) {
+    public List<TaskDto> getTasksByTeacher(@PathVariable("teacher_id") String teacherId) {
         return taskGetUseCase.getTasksByTeacher(teacherId);
     }
 
     @PatchMapping("/task/{task_id}")
-    public void updateTask(@PathVariable("task_id") Long taskId,
+    public void updateTask(@PathVariable("task_id") String taskId,
                            @RequestBody TaskUpdateDto request){
         taskUpdateUseCase.updateTask(taskId, request);
     }
 
     @DeleteMapping("/task/{task_id}")
-    public void deleteTask(@PathVariable("task_id") Long taskId) {
+    public void deleteTask(@PathVariable("task_id") String taskId) {
         taskDeleteUseCase.deleteTask(taskId);
     }
 }

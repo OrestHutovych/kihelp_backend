@@ -1,5 +1,6 @@
 package org.example.kihelp_back.task.usecase.impl;
 
+import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.model.HistoryStatus;
 import org.example.kihelp_back.history.service.HistoryService;
@@ -30,22 +31,25 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
     private final HistoryService historyService;
     private final UserService userService;
     private final WalletService walletService;
+    private final IdEncoderApiRepository idEncoderApiRepository;
 
     public TaskProcessUseCaseFacade(TaskService taskService,
                                     HistoryService historyService,
                                     UserService userService,
-                                    WalletService walletService) {
+                                    WalletService walletService, IdEncoderApiRepository idEncoderApiRepository) {
         this.taskService = taskService;
         this.historyService = historyService;
         this.userService = userService;
         this.walletService = walletService;
+        this.idEncoderApiRepository = idEncoderApiRepository;
     }
 
     @Override
     @Transactional
     public Map<String, String> processTask(TaskProcessCreateDto request) {
         User targetUser = userService.findByJwt();
-        Task task = taskService.getTaskById(request.taskId());
+        Long decodeTaskId = idEncoderApiRepository.findEncoderByName("task").decode(request.taskId()).get(0);
+        Task task = taskService.getTaskById(decodeTaskId);
         BigDecimal price = task.getPrice();
         Map<String, String> processResponse = new HashMap<>();
 
@@ -53,7 +57,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
             throw new UserIsBannedException(String.format(USER_IS_BANNED, targetUser.getTelegramId()));
         }
 
-        boolean isDetected = historyService.detectResellerActivity(targetUser.getTelegramId(), request.taskId());
+        boolean isDetected = historyService.detectResellerActivity(targetUser.getTelegramId(), decodeTaskId);
 
         if(isDetected) {
             userService.changeBan(targetUser.getTelegramId(), true);
