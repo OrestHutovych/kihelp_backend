@@ -36,17 +36,17 @@ public class TeacherController {
     }
 
     @GetMapping("/subject/{subject_id}")
-    public List<TeacherDto> getTeachersBySubject(@PathVariable("subject_id") Long subjectId){
+    public List<TeacherDto> getTeachersBySubject(@PathVariable("subject_id") String subjectId){
         return teacherGetUseCase.getTeachersBySubject(subjectId);
     }
 
     @DeleteMapping("/teacher/{teacher_id}")
-    public void deleteTeacher(@PathVariable("teacher_id") Long teacherId){
+    public void deleteTeacher(@PathVariable("teacher_id") String teacherId){
         teacherDeleteUseCase.deleteTeacher(teacherId);
     }
 
     @PutMapping("/teacher/{teacher_id}")
-    public void updateTeacher(@PathVariable("teacher_id") Long teacherId,
+    public void updateTeacher(@PathVariable("teacher_id") String teacherId,
                               @Valid @RequestBody TeacherUpdateRequest request){
         teacherUpdateUseCase.updateTeacher(teacherId, request);
     }

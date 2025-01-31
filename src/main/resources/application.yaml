@@ -62,3 +62,14 @@ monobank:
 #  level:
 #    org.example.kihelp_back: DEBUG
 #
+
+kihelp:
+  api:
+    id:
+      encoder:
+        subject:
+          alphabet: "jP0FfstKVS4cbUdEAkzDuiLRT6Qgm9JvrGqWe1aXZolINn3C8Hp25Mh7yYwOBx"
+          min-length: 10
+        teacher:
+          alphabet: "KuWng7QUw5lDvO3roah1H4iPINVZTRk8MmJe6Ad2GypYjtEqx0fsXCzBLb9FSc"
+          min-length: 10

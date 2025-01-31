@@ -11,13 +11,13 @@ import org.example.kihelp_back.task.mapper.TaskMapper;
 import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.task.model.TaskType;
 import org.example.kihelp_back.teacher.dto.TeacherDto;
+import org.example.kihelp_back.teacher.mapper.TeacherMapper;
 import org.example.kihelp_back.teacher.model.Teacher;
 import org.example.kihelp_back.teacher.service.TeacherService;
-import org.example.kihelp_back.teacher.usecase.TeacherGetUseCase;
 import org.example.kihelp_back.user.dto.UserDto;
+import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
-import org.example.kihelp_back.user.usecase.UserGetUseCase;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,22 +28,22 @@ import static org.example.kihelp_back.task.util.TaskErrorMessage.TYPE_NOT_VALID;
 @Component
 public class TaskMapperImpl implements TaskMapper {
     private final UserService userService;
-    private final UserGetUseCase userGetUseCase;
+    private final UserMapper userMapper;
     private final TeacherService teacherService;
-    private final TeacherGetUseCase teacherGetUseCase;
+    private final TeacherMapper teacherMapper;
     private final ArgumentService argumentService;
     private final ArgumentGetUseCase argumentGetUseCase;
 
     public TaskMapperImpl(UserService userService,
-                          UserGetUseCase userGetUseCase,
+                          UserMapper userMapper,
                           TeacherService teacherService,
-                          TeacherGetUseCase teacherGetUseCase,
+                          TeacherMapper teacherMapper,
                           ArgumentService argumentService,
                           ArgumentGetUseCase argumentGetUseCase) {
         this.userService = userService;
-        this.userGetUseCase = userGetUseCase;
+        this.userMapper = userMapper;
         this.teacherService = teacherService;
-        this.teacherGetUseCase = teacherGetUseCase;
+        this.teacherMapper = teacherMapper;
         this.argumentService = argumentService;
         this.argumentGetUseCase = argumentGetUseCase;
     }
@@ -86,8 +86,8 @@ public class TaskMapperImpl implements TaskMapper {
             return null;
         }
 
-        UserDto developer = userGetUseCase.findByUserTelegramId(task.getDeveloper().getTelegramId());
-        TeacherDto teacher = teacherGetUseCase.findTeacherById(task.getTeacher().getId());
+        UserDto developer = userMapper.toUserDto(task.getDeveloper());
+        TeacherDto teacher = teacherMapper.toTeacherDto(task.getTeacher());
         List<ArgumentDto> arguments = argumentGetUseCase.findArgumentsByTaskId(task.getId());
 
         return new TaskDto(

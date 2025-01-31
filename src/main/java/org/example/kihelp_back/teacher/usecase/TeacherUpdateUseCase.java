@@ -6,5 +6,5 @@ import org.springframework.validation.annotation.Validated;
 
 @Validated
 public interface TeacherUpdateUseCase {
-    void updateTeacher(Long teacherId, @Valid TeacherUpdateRequest request);
+    void updateTeacher(String teacherId, @Valid TeacherUpdateRequest request);
 }

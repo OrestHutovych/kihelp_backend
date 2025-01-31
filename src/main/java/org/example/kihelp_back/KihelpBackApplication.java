@@ -1,5 +1,6 @@
 package org.example.kihelp_back;
 
+import org.example.kihelp_back.global.api.idencoder.IdEncoderConfigurationProperties;
 import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.wallet.config.MonobankConfig;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableConfigurationProperties(MonobankConfig.class)
+@EnableConfigurationProperties({MonobankConfig.class, IdEncoderConfigurationProperties.class})
 public class KihelpBackApplication {
 
     public static void main(String[] args) {

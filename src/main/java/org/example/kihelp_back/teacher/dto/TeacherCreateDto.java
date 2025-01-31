@@ -7,6 +7,6 @@ import static org.example.kihelp_back.teacher.util.ErrorMessage.TEACHER_NAME_NOT
 public record TeacherCreateDto(
         @NotBlank(message = TEACHER_NAME_NOT_BLANK)
         String name,
-        Long subjectId
+        String subjectId
 ) {
 }

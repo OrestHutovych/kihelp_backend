@@ -1,5 +1,5 @@
 package org.example.kihelp_back.subject.usecase;
 
 public interface SubjectDeleteUseCase {
-    void deleteSubject(Long id);
+    void deleteSubject(String id);
 }
