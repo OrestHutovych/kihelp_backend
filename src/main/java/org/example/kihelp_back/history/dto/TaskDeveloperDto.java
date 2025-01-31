@@ -1,15 +1,14 @@
 package org.example.kihelp_back.history.dto;
 
-import java.time.Instant;
+import org.example.kihelp_back.user.dto.UserDto;
 
 public record TaskDeveloperDto(
         Long historyId,
-        String username,
-        String telegramId,
+        UserDto user,
         String subjectName,
         String teacherName,
         String taskTitle,
         String arguments,
-        Instant createdAt
+        String createdAt
 ) {
 }

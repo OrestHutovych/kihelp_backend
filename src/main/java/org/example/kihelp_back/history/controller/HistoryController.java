@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/history")
+@RequestMapping("/api/v1/histories")
 public class HistoryController {
     private final HistoryGetUseCase historyGetUseCase;
 
@@ -19,18 +19,19 @@ public class HistoryController {
         this.historyGetUseCase = historyGetUseCase;
     }
 
-    @GetMapping("/getHistoriesByTelegramId/{telegram_id}")
-    public List<HistoryDto> getHistoriesByTelegramId(@PathVariable("telegram_id") String telegramId){
+    @GetMapping("/user/{telegram_id}")
+    public List<HistoryDto> getHistoriesByUserTelegramId(@PathVariable("telegram_id") String telegramId){
         return historyGetUseCase.getHistoriesByUserTelegramId(telegramId);
     }
 
-    @GetMapping("/getTaskInProgresByDeveloper")
+    @GetMapping("/user/in-progress")
     public List<TaskDeveloperDto> getTaskInProgresByDeveloper(){
-        return historyGetUseCase.getTaskInProgressByDeveloperId();
+        return historyGetUseCase.getTaskInProgressByDeveloper();
     }
 
-    @GetMapping("/reseller-check/{telegram_id}/{task_id}")
-    public boolean resellerCheck(@PathVariable("telegram_id") String telegramId, @PathVariable("task_id") Long taskId){
+    @GetMapping("/task/{task_id}/user/{telegram_id}/reseller-check")
+    public boolean resellerCheck(@PathVariable("telegram_id") String telegramId,
+                                 @PathVariable("task_id") Long taskId){
         return historyGetUseCase.detectResellerActivity(telegramId, taskId);
     }
 }
