@@ -8,5 +8,5 @@ import java.util.List;
 public interface HistoryGetUseCase {
     List<HistoryDto> getHistoriesByUserTelegramId(String telegramId);
     List<TaskDeveloperDto> getTaskInProgressByDeveloper();
-    boolean detectResellerActivity(String telegramId, Long taskId);
+    boolean detectResellerActivity(String telegramId, String taskId);
 }

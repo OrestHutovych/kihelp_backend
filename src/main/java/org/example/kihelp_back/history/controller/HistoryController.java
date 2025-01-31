@@ -31,7 +31,7 @@ public class HistoryController {
 
     @GetMapping("/task/{task_id}/user/{telegram_id}/reseller-check")
     public boolean resellerCheck(@PathVariable("telegram_id") String telegramId,
-                                 @PathVariable("task_id") Long taskId){
+                                 @PathVariable("task_id") String taskId){
         return historyGetUseCase.detectResellerActivity(telegramId, taskId);
     }
 }

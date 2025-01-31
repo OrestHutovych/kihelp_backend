@@ -92,7 +92,7 @@ public class TaskMapperImpl implements TaskMapper {
 
         UserDto developer = userMapper.toUserDto(task.getDeveloper());
         TeacherDto teacher = teacherMapper.toTeacherDto(task.getTeacher());
-        List<ArgumentDto> arguments = argumentGetUseCase.findArgumentsByTaskId(task.getId());
+        List<ArgumentDto> arguments = argumentGetUseCase.findArgumentsByTaskId(encodeTaskId(task.getId()));
 
         return new TaskDto(
                 encodeTaskId(task.getId()),

@@ -1,5 +1,6 @@
 package org.example.kihelp_back.history.usecase.impl;
 
+import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
 import org.example.kihelp_back.history.dto.HistoryDto;
 import org.example.kihelp_back.history.dto.TaskDeveloperDto;
 import org.example.kihelp_back.history.mapper.HistoryMapper;
@@ -20,13 +21,15 @@ public class HistoryGetUseCaseFacade implements HistoryGetUseCase {
     private final HistoryService historyService;
     private final HistoryMapper historyMapper;
     private final UserService userService;
+    private final IdEncoderApiRepository idEncoderApiRepository;
 
     public HistoryGetUseCaseFacade(HistoryService historyService,
                                    HistoryMapper historyMapper,
-                                   UserService userService) {
+                                   UserService userService, IdEncoderApiRepository idEncoderApiRepository) {
         this.historyService = historyService;
         this.historyMapper = historyMapper;
         this.userService = userService;
+        this.idEncoderApiRepository = idEncoderApiRepository;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class HistoryGetUseCaseFacade implements HistoryGetUseCase {
     public List<TaskDeveloperDto> getTaskInProgressByDeveloper() {
         User developer = userService.findByJwt();
 
-        if(developer.getRoles().stream().anyMatch(role -> "ROLE_DEVELOPER".equals(role.getName()))) {
+        if(developer.getRoles().stream().anyMatch(role -> ("ROLE_DEVELOPER".equals(role.getName())) || ("ROLE_ADMIN".equals(role.getName())))) {
             List<History> historiesForDeveloper = historyService.getHistoryInProgresByDeveloper(developer.getTelegramId());
 
             return historiesForDeveloper.stream()
@@ -57,7 +60,8 @@ public class HistoryGetUseCaseFacade implements HistoryGetUseCase {
     }
 
     @Override
-    public boolean detectResellerActivity(String telegramId, Long taskId) {
-        return historyService.detectResellerActivity(telegramId, taskId);
+    public boolean detectResellerActivity(String telegramId, String taskId) {
+        Long decodedTaskId = idEncoderApiRepository.findEncoderByName("task").decode(taskId).get(0);
+        return historyService.detectResellerActivity(telegramId, decodedTaskId);
     }
 }

@@ -41,12 +41,12 @@ public class ArgumentController {
     }
 
     @DeleteMapping("/argument/{id}")
-    public void deleteArgument(@PathVariable("id") Long argumentId) {
+    public void deleteArgument(@PathVariable("id") String argumentId) {
         argumentDeleteUseCase.deleteArgument(argumentId);
     }
 
     @PatchMapping("/argument/{id}")
-    public void updateArgument(@PathVariable("id") Long argumentId,
+    public void updateArgument(@PathVariable("id") String argumentId,
                                @RequestBody ArgumentUpdateDto request) {
         argumentUpdateUseCase.updateArgument(argumentId, request);
     }

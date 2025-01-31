@@ -4,10 +4,19 @@ import org.example.kihelp_back.argument.dto.ArgumentCreateDto;
 import org.example.kihelp_back.argument.dto.ArgumentDto;
 import org.example.kihelp_back.argument.mapper.ArgumentMapper;
 import org.example.kihelp_back.argument.model.Argument;
+import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ArgumentMapperImpl implements ArgumentMapper {
+
+    private final IdEncoderApiRepository idEncoderApiRepository;
+
+    public ArgumentMapperImpl(IdEncoderApiRepository idEncoderApiRepository) {
+        this.idEncoderApiRepository = idEncoderApiRepository;
+    }
 
     @Override
     public Argument toEntity(ArgumentCreateDto argumentCreateDto) {
@@ -29,6 +38,14 @@ public class ArgumentMapperImpl implements ArgumentMapper {
             return null;
         }
 
-        return new ArgumentDto(argument.getId(), argument.getName(), argument.getDescription());
+        return new ArgumentDto(
+                encodeArgumentID(argument.getId()),
+                argument.getName(),
+                argument.getDescription()
+        );
+    }
+
+    public String encodeArgumentID(Long argumentId) {
+        return idEncoderApiRepository.findEncoderByName("argument").encode(List.of(argumentId));
     }
 }

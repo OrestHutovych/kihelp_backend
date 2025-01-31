@@ -37,13 +37,12 @@ public class HistoryMapperImpl implements HistoryMapper {
         );
 
         return new TaskDeveloperDto(
-                history.getId(),
-                userDto,
                 history.getTask().getTeacher().getSubject().getName(),
                 history.getTask().getTeacher().getName(),
                 history.getTask().getTitle(),
                 history.getArguments(),
-                history.getCreatedAt().toString()
+                history.getCreatedAt().toString(),
+                userDto
         );
     }
 }
