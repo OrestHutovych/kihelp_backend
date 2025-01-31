@@ -8,12 +8,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ArgumentRepository extends JpaRepository<Argument, Long> {
     boolean existsByName(String name);
     @Modifying
-    @Transactional
+    @Transactional(readOnly = true)
     @Query(value = "DELETE FROM tasks_arguments WHERE argument_id = :argumentId", nativeQuery = true)
     void deleteTaskArgumentsByArgumentId(Long argumentId);
+
+    @Transactional(readOnly = true)
+    @Query("""
+        SELECT t.arguments FROM Task t WHERE t.id = :taskId
+    """)
+    List<Argument> getArgumentsByTaskId(@Param("taskId") Long taskId);
 }

@@ -1,6 +1,5 @@
 package org.example.kihelp_back.argument.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
 import org.example.kihelp_back.argument.model.Argument;
@@ -11,11 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.example.kihelp_back.argument.util.MessageError.ARGUMENT_EXIST;
-import static org.example.kihelp_back.argument.util.MessageError.ARGUMENT_NOT_FOUND;
+import static org.example.kihelp_back.argument.util.ArgumentMessageError.ARGUMENT_EXIST;
+import static org.example.kihelp_back.argument.util.ArgumentMessageError.ARGUMENT_NOT_FOUND;
 
 @Service
-@Slf4j
 public class ArgumentService {
     private final ArgumentRepository argumentRepository;
 
@@ -25,47 +23,40 @@ public class ArgumentService {
 
     @Transactional
     public void create(Argument argument) {
-        log.info("Start creating argument '{}'", argument.getName());
         boolean existsExpect = argumentRepository.existsByName(argument.getName());
 
         if (existsExpect) {
             throw new ArgumentExistException(String.format(ARGUMENT_EXIST, argument.getName()));
         }
 
-        Argument argumentResponse = argumentRepository.save(argument);
-        log.info("Successfully created argument '{}' with ID: {}", argumentResponse.getName(), argumentResponse.getId());
+        argumentRepository.save(argument);
     }
 
     public Argument getById(Long id) {
-        log.info("Attempting to fetch argument with ID '{}'", id);
         return argumentRepository.findById(id)
                 .orElseThrow(() -> new ArgumentNotFoundException(
                         String.format(ARGUMENT_NOT_FOUND, id)
                 ));
     }
 
+    public List<Argument> getArgumentsByTaskId(Long taskId) {
+        return argumentRepository.getArgumentsByTaskId(taskId);
+    }
+
     public List<Argument> getAll() {
-        log.info("Attempting to fetch all arguments");
         return argumentRepository.findAll();
     }
 
     @Transactional
     public void delete(Long id) {
-        log.info("Start to delete argument with ID '{}'", id);
-        boolean existsExpect = argumentRepository.existsById(id);
-
-        if(!existsExpect) {
-            throw new ArgumentNotFoundException(String.format(ARGUMENT_NOT_FOUND, id));
-        }
+        Argument argument = getById(id);
 
         argumentRepository.deleteTaskArgumentsByArgumentId(id);
-        argumentRepository.deleteById(id);
-        log.info("Successfully deleted argument with ID '{}'", id);
+        argumentRepository.delete(argument);
     }
 
     @Transactional
     public void update(Long id, ArgumentUpdateDto request) {
-        log.info("Start to update argument with ID '{}'", id);
         Argument argument = getById(id);
 
         if(request.name() != null && !request.name().isEmpty()) {
@@ -77,6 +68,5 @@ public class ArgumentService {
         }
 
         argumentRepository.save(argument);
-        log.info("Successfully updated argument with ID '{}'", id);
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/argument")
+@RequestMapping("/api/v1/arguments")
 public class ArgumentController {
     private final ArgumentCreateUseCase argumentCreateUseCase;
     private final ArgumentGetUseCase argumentGetUseCase;
@@ -30,24 +30,24 @@ public class ArgumentController {
         this.argumentUpdateUseCase = argumentUpdateUseCase;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/argument")
     public void create(@Valid @RequestBody ArgumentCreateDto request) {
         argumentCreateUseCase.createArgument(request);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<ArgumentDto> getArguments() {
-        return argumentGetUseCase.getArguments();
+        return argumentGetUseCase.findAllArguments();
     }
 
-    @DeleteMapping("/delete/{argument_id}")
-    public void deleteArgument(@PathVariable("argument_id") Long argumentId) {
+    @DeleteMapping("/argument/{id}")
+    public void deleteArgument(@PathVariable("id") Long argumentId) {
         argumentDeleteUseCase.deleteArgument(argumentId);
     }
 
-    @PatchMapping("/update/{argument_id}")
-    public void updateArgument(@PathVariable("argument_id") Long argumentId,
-                               @Valid @RequestBody ArgumentUpdateDto request) {
+    @PatchMapping("/argument/{id}")
+    public void updateArgument(@PathVariable("id") Long argumentId,
+                               @RequestBody ArgumentUpdateDto request) {
         argumentUpdateUseCase.updateArgument(argumentId, request);
     }
 }

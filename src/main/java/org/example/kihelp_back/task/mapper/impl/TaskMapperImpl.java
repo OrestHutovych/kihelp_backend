@@ -1,7 +1,6 @@
 package org.example.kihelp_back.task.mapper.impl;
 
 import org.example.kihelp_back.argument.dto.ArgumentDto;
-import org.example.kihelp_back.argument.mapper.ArgumentMapper;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.example.kihelp_back.argument.usecase.ArgumentGetUseCase;
@@ -33,20 +32,20 @@ public class TaskMapperImpl implements TaskMapper {
     private final TeacherService teacherService;
     private final TeacherGetUseCase teacherGetUseCase;
     private final ArgumentService argumentService;
-    private final ArgumentMapper argumentMapper;
+    private final ArgumentGetUseCase argumentGetUseCase;
 
     public TaskMapperImpl(UserService userService,
                           UserGetUseCase userGetUseCase,
                           TeacherService teacherService,
                           TeacherGetUseCase teacherGetUseCase,
                           ArgumentService argumentService,
-                          ArgumentMapper argumentMapper) {
+                          ArgumentGetUseCase argumentGetUseCase) {
         this.userService = userService;
         this.userGetUseCase = userGetUseCase;
         this.teacherService = teacherService;
         this.teacherGetUseCase = teacherGetUseCase;
         this.argumentService = argumentService;
-        this.argumentMapper = argumentMapper;
+        this.argumentGetUseCase = argumentGetUseCase;
     }
 
     @Override
@@ -89,9 +88,7 @@ public class TaskMapperImpl implements TaskMapper {
 
         UserDto developer = userGetUseCase.findByUserTelegramId(task.getDeveloper().getTelegramId());
         TeacherDto teacher = teacherGetUseCase.findTeacherById(task.getTeacher().getId());
-        List<ArgumentDto> arguments = task.getArguments()
-                .stream().map(argumentMapper::toDto)
-                .toList();
+        List<ArgumentDto> arguments = argumentGetUseCase.findArgumentsByTaskId(task.getId());
 
         return new TaskDto(
                 task.getId(),

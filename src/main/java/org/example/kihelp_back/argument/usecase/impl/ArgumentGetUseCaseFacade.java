@@ -1,7 +1,6 @@
 package org.example.kihelp_back.argument.usecase.impl;
 
-import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.argument.mapper.ArgumentToArgumentDtoMapper;
+import org.example.kihelp_back.argument.mapper.ArgumentMapper;
 import org.example.kihelp_back.argument.dto.ArgumentDto;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.argument.service.ArgumentService;
@@ -11,24 +10,31 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@Slf4j
 public class ArgumentGetUseCaseFacade implements ArgumentGetUseCase {
     private final ArgumentService argumentService;
-    private final ArgumentToArgumentDtoMapper argumentToArgumentDtoMapper;
+    private final ArgumentMapper argumentMapper;
 
     public ArgumentGetUseCaseFacade(ArgumentService argumentService,
-                                    ArgumentToArgumentDtoMapper argumentToArgumentDtoMapper) {
+                                    ArgumentMapper argumentMapper) {
         this.argumentService = argumentService;
-        this.argumentToArgumentDtoMapper = argumentToArgumentDtoMapper;
+        this.argumentMapper = argumentMapper;
     }
 
     @Override
-    public List<ArgumentDto> getArguments() {
+    public List<ArgumentDto> findArgumentsByTaskId(Long taskId) {
+        List<Argument> arguments = argumentService.getArgumentsByTaskId(taskId);
+
+        return arguments.stream()
+                .map(argumentMapper::toArgumentDto)
+                .toList();
+    }
+
+    @Override
+    public List<ArgumentDto> findAllArguments() {
         List<Argument> arguments = argumentService.getAll();
 
-        log.info("Attempting to map Argument(s) {} to ArgumentDto and return it.", arguments.size());
         return arguments.stream()
-                .map(argumentToArgumentDtoMapper::map)
+                .map(argumentMapper::toArgumentDto)
                 .toList();
     }
 }

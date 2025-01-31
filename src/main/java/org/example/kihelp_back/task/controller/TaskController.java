@@ -44,13 +44,13 @@ public class TaskController {
         return taskGetUseCase.getTasksByTeacher(teacherId);
     }
 
-    @PatchMapping("/task/update/{task_id}")
+    @PatchMapping("/task/{task_id}")
     public void updateTask(@PathVariable("task_id") Long taskId,
                            @RequestBody TaskUpdateDto request){
         taskUpdateUseCase.updateTask(taskId, request);
     }
 
-    @DeleteMapping("/task/delete/{task_id}")
+    @DeleteMapping("/task/{task_id}")
     public void deleteTask(@PathVariable("task_id") Long taskId) {
         taskDeleteUseCase.deleteTask(taskId);
     }
