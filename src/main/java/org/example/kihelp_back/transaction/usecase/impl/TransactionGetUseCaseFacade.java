@@ -47,7 +47,7 @@ public class TransactionGetUseCaseFacade implements TransactionGetUseCase {
             Page<Transaction> transactions = transactionService.findCompletedTransactionsByUserId(targetUser.getId(), pageable);
 
             return transactions.stream()
-                    .map(transactionMapper::toDto)
+                    .map(transactionMapper::toTransactionDto)
                     .toList();
         } else{
             throw new TransactionNotFoundException(TRANSACTIONS_NOT_BY_USER);
