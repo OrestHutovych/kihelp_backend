@@ -81,11 +81,4 @@ public class UserCreateUseCaseFacade implements UserCreateUseCase {
             throw new IllegalArgumentException(String.format(INVALID_USER_DATA, e.getMessage()));
         }
     }
-
-    @Override
-    public User save(Map<String, String> query) {
-        User targetUser = userMapper.toEntity(query);
-
-        return userService.save(targetUser);
-    }
 }

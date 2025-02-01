@@ -17,16 +17,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "invites")
 public class Invite extends BaseEntity {
-    private BigDecimal inviteeAmountSpend;
-    private Instant createdTimeStamp;
+    private BigDecimal inviteeAmountSpend = BigDecimal.ZERO;
+    private Instant createdTimeStamp = Instant.now();
     private Boolean rewardGranted = false;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inviter_user_id", referencedColumnName = "id")
     @ToString.Exclude
     private User inviterUser;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invitee_user_id", referencedColumnName = "id")
     @ToString.Exclude
     private User inviteeUser;

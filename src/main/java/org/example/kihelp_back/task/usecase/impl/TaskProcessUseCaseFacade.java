@@ -4,6 +4,7 @@ import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.model.HistoryStatus;
 import org.example.kihelp_back.history.service.HistoryService;
+import org.example.kihelp_back.invite.service.InviteService;
 import org.example.kihelp_back.task.dto.TaskGenerateDto;
 import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
 import org.example.kihelp_back.task.model.Task;
@@ -31,16 +32,20 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
     private final HistoryService historyService;
     private final UserService userService;
     private final WalletService walletService;
+    private final InviteService inviteService;
     private final IdEncoderApiRepository idEncoderApiRepository;
 
     public TaskProcessUseCaseFacade(TaskService taskService,
                                     HistoryService historyService,
                                     UserService userService,
-                                    WalletService walletService, IdEncoderApiRepository idEncoderApiRepository) {
+                                    WalletService walletService,
+                                    InviteService inviteService,
+                                    IdEncoderApiRepository idEncoderApiRepository) {
         this.taskService = taskService;
         this.historyService = historyService;
         this.userService = userService;
         this.walletService = walletService;
+        this.inviteService = inviteService;
         this.idEncoderApiRepository = idEncoderApiRepository;
     }
 
@@ -57,6 +62,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
             BigDecimal price = calculateDiscountPrice(task.getPrice(), task.getDiscount());
             walletService.withdrawAmountFromWalletByUserId(targetUser.getId(), price, true);
             walletService.depositAmountToWalletByUserId(task.getDeveloper().getId(), price, false);
+            inviteService.depositToInviteeSpendBalance(targetUser.getId(), price);
         }
 
         Map<String, String> processResponse = new HashMap<>();
