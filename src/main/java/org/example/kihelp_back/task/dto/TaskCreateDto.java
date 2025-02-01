@@ -19,6 +19,6 @@ public record TaskCreateDto(
         String developerTelegramId,
         boolean autoGenerate,
         String teacherId,
-        List<Long> args
+        List<String> args
 ) {
 }

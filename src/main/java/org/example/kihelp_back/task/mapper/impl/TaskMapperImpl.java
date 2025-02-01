@@ -62,7 +62,7 @@ public class TaskMapperImpl implements TaskMapper {
         Teacher teacher = teacherService.findTeacherById(decodeTeacherId(taskCreateDto.teacherId()));
         List<Argument> arguments = taskCreateDto.args()
                 .stream()
-                .map(argumentService::getById)
+                .map(a -> argumentService.getById(decodeArgumentId(a)))
                 .toList();
 
         if(arguments.isEmpty()) {
@@ -117,6 +117,10 @@ public class TaskMapperImpl implements TaskMapper {
         } catch (IllegalArgumentException e) {
             throw new TypeNotValidException(String.format(TYPE_NOT_VALID, type));
         }
+    }
+
+    public Long decodeArgumentId(String argumentId) {
+        return idEncoderApiRepository.findEncoderByName("argument").decode(argumentId).get(0);
     }
 
     public Long decodeTeacherId(String teacherId) {

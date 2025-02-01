@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.example.kihelp_back.task.util.TaskErrorMessage.*;
 
@@ -22,6 +23,8 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserService userService;
     private final RestTemplate restTemplate;
+
+    private static final String TASK_GENERATE_URL = "http://127.0.0.1:8083/tasks/generate";
 
     public TaskService(TaskRepository taskRepository,
                        UserService userService,
@@ -45,7 +48,7 @@ public class TaskService {
     }
 
     public TaskGenerateDto process(User user, Task task, TaskProcessCreateDto request) {
-        TaskGenerateCreateDto taskGenerateDto = new TaskGenerateCreateDto(
+        final TaskGenerateCreateDto taskGenerateDto = new TaskGenerateCreateDto(
                 user.getTelegramId(),
                 task.getTitle(),
                 task.getTeacher().getName(),
@@ -54,16 +57,16 @@ public class TaskService {
                 request.arguments()
         );
 
-        TaskGenerateDto processResponse;
-
         try {
-            //todo change to docker network
-            processResponse = restTemplate.postForObject("http://127.0.0.1:8083/tasks/generate", taskGenerateDto, TaskGenerateDto.class);
+            final TaskGenerateDto response = restTemplate.postForObject(
+                    TASK_GENERATE_URL, taskGenerateDto, TaskGenerateDto.class);
+            if (response == null) {
+                throw new TaskProcessException(TASK_GENERATE_RESPONSE_NULL);
+            }
+            return response;
         } catch (HttpServerErrorException e) {
             throw new TaskProcessException(e.getMessage());
         }
-
-        return processResponse;
     }
 
     public List<Task> getByTeacher(Long teacherId) {
@@ -94,39 +97,34 @@ public class TaskService {
     public void update(Long id, TaskUpdateDto request) {
         Task task = getTaskById(id);
 
-        if (request.title() != null && !request.title().isEmpty()) {
-            task.setTitle(request.title());
+        updateIfNotBlank(request.title(), task::setTitle);
+        updateIfNotBlank(request.description(), task::setDescription);
+        updateIfNotBlank(request.identifier(), task::setIdentifier);
+
+       if(request.price() != null) {
+           task.setPrice(request.price());
+       }
+
+       if(request.discount() != null) {
+           task.setDiscount(request.discount());
+       }
+
+       updateIfNotBlank(request.type(), value -> task.setType(resolveType(value)));
+       updateIfNotBlank(request.developerTelegramId(), developerTelegramId -> {
+           User developer = userService.hasDeveloperOrAdminRole(developerTelegramId);
+           task.setDeveloper(developer);
+       });
+
+       task.setVisible(request.visible());
+       task.setAutoGenerate(request.autoGenerate());
+
+       taskRepository.save(task);
+    }
+
+    private void updateIfNotBlank(String value, Consumer<String> setter) {
+        if (value != null && !value.trim().isEmpty()) {
+            setter.accept(value);
         }
-
-        if (request.description() != null && !request.description().isEmpty()) {
-            task.setDescription(request.description());
-        }
-
-        if (request.identifier() != null && !request.identifier().isEmpty()) {
-            task.setIdentifier(request.identifier());
-        }
-
-        if (request.price() != null) {
-            task.setPrice(request.price());
-        }
-
-        if (request.discount() != null) {
-            task.setDiscount(request.discount());
-        }
-
-        if (request.type() != null && !request.type().isEmpty()) {
-            task.setType(resolveType(request.type()));
-        }
-
-        if (request.developerTelegramId() != null && !request.developerTelegramId().isEmpty()) {
-            User developer = userService.hasDeveloperOrAdminRole(request.developerTelegramId());
-            task.setDeveloper(developer);
-        }
-
-        task.setVisible(request.visible());
-        task.setAutoGenerate(request.autoGenerate());
-
-        taskRepository.save(task);
     }
 
     private TaskType resolveType(String type) {

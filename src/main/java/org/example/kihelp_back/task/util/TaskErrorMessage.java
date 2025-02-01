@@ -11,4 +11,5 @@ public class TaskErrorMessage {
     public static final String PRICE_MIN_NOT_VALID = "Ціна повинна бути більшою за 1 UAH.";
     public static final String USER_BANNED_BY_RESELLER_ACTIVITY = "Користувача із Telegram ID %s було забанено за підозрілу активність. Bиявлено повторні спроби масового придбання завдань.";
     public static final String ARGS_NOT_NULL = "Завдання не може мати null аргументів";
+    public static final String TASK_GENERATE_RESPONSE_NULL = "Отримано null-відповідь від сервісу генерації завдань";
 }
