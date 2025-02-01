@@ -9,6 +9,7 @@ import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -33,5 +34,13 @@ public class InviteGetUseCaseFacade implements InviteGetUseCase {
         return invitesByUser.stream()
                 .map(inviteMapper::toInviteDto)
                 .toList();
+    }
+
+    @Override
+    public BigDecimal getInvitesPrice() {
+        User targetUser = userService.findByJwt();
+        List<Invite> invitesByUser = inviteService.getInvitesByInviterUserId(targetUser.getTelegramId());
+
+        return invitesByUser.stream().map(Invite::getInviteeAmountSpend).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

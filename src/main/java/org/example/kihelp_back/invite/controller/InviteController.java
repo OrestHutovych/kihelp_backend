@@ -6,6 +6,7 @@ import org.example.kihelp_back.invite.usecase.InviteCreateUseCase;
 import org.example.kihelp_back.invite.usecase.InviteGetUseCase;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -28,5 +29,10 @@ public class InviteController {
     @GetMapping("/")
     public List<InviteDto> getInvitesByInviter() {
         return inviteGetUseCase.getInvitesByInviter();
+    }
+
+    @GetMapping("/invitee_amount")
+    public BigDecimal getInvitePrice() {
+        return inviteGetUseCase.getInvitesPrice();
     }
 }
