@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.example.kihelp_back.invite.util.ErrorMessage.USER_ALREADY_REGISTERED;
+import static org.example.kihelp_back.invite.util.InviteErrorMessage.USER_ALREADY_REGISTERED;
 
 @Component
 public class InviteMapperImpl implements InviteMapper {

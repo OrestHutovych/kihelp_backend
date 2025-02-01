@@ -4,6 +4,7 @@ import org.example.kihelp_back.invite.dto.InviteCreateDto;
 import org.example.kihelp_back.invite.dto.InviteDto;
 import org.example.kihelp_back.invite.usecase.InviteCreateUseCase;
 import org.example.kihelp_back.invite.usecase.InviteGetUseCase;
+import org.example.kihelp_back.invite.usecase.InviteUpdateUseCase;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -14,11 +15,14 @@ import java.util.List;
 public class InviteController {
     private final InviteCreateUseCase inviteCreateUseCase;
     private final InviteGetUseCase inviteGetUseCase;
+    private final InviteUpdateUseCase inviteUpdateUseCase;
 
     public InviteController(InviteCreateUseCase inviteCreateUseCase,
-                            InviteGetUseCase inviteGetUseCase) {
+                            InviteGetUseCase inviteGetUseCase,
+                            InviteUpdateUseCase inviteUpdateUseCase) {
         this.inviteCreateUseCase = inviteCreateUseCase;
         this.inviteGetUseCase = inviteGetUseCase;
+        this.inviteUpdateUseCase = inviteUpdateUseCase;
     }
 
     @PostMapping("/invite")
@@ -31,8 +35,13 @@ public class InviteController {
         return inviteGetUseCase.getInvitesByInviter();
     }
 
-    @GetMapping("/invitee_amount")
+    @GetMapping("/invitee-amount")
     public BigDecimal getInvitePrice() {
         return inviteGetUseCase.getInvitesPrice();
+    }
+
+    @PutMapping("/deposit-amount")
+    public void depositInviteeAmount(){
+        inviteUpdateUseCase.depositInviteAmount();
     }
 }

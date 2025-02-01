@@ -35,6 +35,30 @@ public class InviteService {
         }
     }
 
+    @Transactional
+    public boolean depositToWallet(String telegramId){
+        List<Invite> invites = getInvitesByInviterUserId(telegramId);
+
+        List<Invite> validInvites = invites.stream()
+                .filter(i -> i.getInviteeAmountSpend() != null &&
+                        i.getInviteeAmountSpend().compareTo(BigDecimal.valueOf(100.0)) >= 0)
+                .toList();
+
+        if (validInvites.size() >= 3) {
+            boolean rewardedAlreadyGranted = validInvites.stream()
+                    .anyMatch(Invite::getRewardGranted);
+
+            if(!rewardedAlreadyGranted) {
+                validInvites.forEach(i -> i.setRewardGranted(true));
+                inviteRepository.saveAll(validInvites);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public List<Invite> getInvitesByInviterUserId(String telegramId) {
         return inviteRepository.findAllByInviterUserTelegramId(telegramId);
     }

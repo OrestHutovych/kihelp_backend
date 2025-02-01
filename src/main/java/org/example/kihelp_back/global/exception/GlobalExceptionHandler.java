@@ -3,6 +3,7 @@ package org.example.kihelp_back.global.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
+import org.example.kihelp_back.invite.exception.InviteDepositException;
 import org.example.kihelp_back.subject.exception.SubjectExistException;
 import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
 import org.example.kihelp_back.support.exception.SupportFileLimitException;
@@ -288,5 +289,14 @@ public class GlobalExceptionHandler {
 
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InviteDepositException.class)
+    public ResponseEntity<Map<String, String>> handleInviteDepositException(InviteDepositException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 }
