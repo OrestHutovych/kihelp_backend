@@ -1,5 +1,6 @@
 package org.example.kihelp_back.task.usecase.impl;
 
+import org.example.kihelp_back.discount.service.DiscountService;
 import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.model.HistoryStatus;
@@ -33,6 +34,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
     private final UserService userService;
     private final WalletService walletService;
     private final InviteService inviteService;
+    private final DiscountService discountService;
     private final IdEncoderApiRepository idEncoderApiRepository;
 
     public TaskProcessUseCaseFacade(TaskService taskService,
@@ -40,12 +42,14 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
                                     UserService userService,
                                     WalletService walletService,
                                     InviteService inviteService,
+                                    DiscountService discountService,
                                     IdEncoderApiRepository idEncoderApiRepository) {
         this.taskService = taskService;
         this.historyService = historyService;
         this.userService = userService;
         this.walletService = walletService;
         this.inviteService = inviteService;
+        this.discountService = discountService;
         this.idEncoderApiRepository = idEncoderApiRepository;
     }
 
@@ -59,7 +63,8 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
         validateUserStatus(targetUser, decodeTaskId);
 
         if (!hasRole(targetUser, "ROLE_ADMIN") && !isTaskDeveloper(targetUser, task)) {
-            BigDecimal price = calculateDiscountPrice(task.getPrice(), task.getDiscount());
+            BigDecimal discount = discountService.updateDiscount(task.getId(), targetUser.getId());
+            BigDecimal price = calculateDiscountPrice(task.getPrice(), discount);
             walletService.withdrawAmountFromWalletByUserId(targetUser.getId(), price, true);
             walletService.depositAmountToWalletByUserId(task.getDeveloper().getId(), price, false);
             inviteService.depositToInviteeSpendBalance(targetUser.getId(), price);

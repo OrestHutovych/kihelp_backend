@@ -7,7 +7,6 @@ public record TaskUpdateDto(
         String description,
         String identifier,
         BigDecimal price,
-        BigDecimal discount,
         boolean visible,
         String type,
         boolean autoGenerate,

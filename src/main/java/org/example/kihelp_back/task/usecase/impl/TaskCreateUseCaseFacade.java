@@ -29,8 +29,8 @@ public class TaskCreateUseCaseFacade implements TaskCreateUseCase {
             if (identifier == null || identifier.isBlank()) {
                 throw new IllegalArgumentException(IDENTIFIER_BLANK_NOT_VALID);
             }
-            if (!(identifier.equals("task") || identifier.equals("main"))) {
-                throw new IllegalArgumentException(String.format(IDENTIFIER_NOT_VALID, "task або main"));
+            if (!identifier.contains("task") || !identifier.contains("main")) {
+                throw new IllegalArgumentException(String.format(IDENTIFIER_NOT_VALID, "task і main"));
             }
         } else {
             if (!"google_drive".equals(identifier)) {

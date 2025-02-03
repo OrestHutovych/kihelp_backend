@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import org.example.kihelp_back.discount.model.Discount;
 import org.example.kihelp_back.global.model.BaseEntity;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.task.model.Task;
@@ -53,6 +55,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "developer")
     private List<Task> tasks;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Discount> discounts;
 
     @PostPersist
     private void createDefaultWallet() {

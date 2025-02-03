@@ -4,6 +4,8 @@ import org.example.kihelp_back.argument.dto.ArgumentDto;
 import org.example.kihelp_back.argument.model.Argument;
 import org.example.kihelp_back.argument.service.ArgumentService;
 import org.example.kihelp_back.argument.usecase.ArgumentGetUseCase;
+import org.example.kihelp_back.discount.model.Discount;
+import org.example.kihelp_back.discount.service.DiscountService;
 import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
 import org.example.kihelp_back.task.dto.TaskCreateDto;
 import org.example.kihelp_back.task.dto.TaskDto;
@@ -21,6 +23,7 @@ import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.example.kihelp_back.task.util.TaskErrorMessage.ARGS_NOT_NULL;
@@ -34,6 +37,7 @@ public class TaskMapperImpl implements TaskMapper {
     private final TeacherMapper teacherMapper;
     private final ArgumentService argumentService;
     private final ArgumentGetUseCase argumentGetUseCase;
+    private final DiscountService discountService;
     private final IdEncoderApiRepository idEncoderApiRepository;
 
     public TaskMapperImpl(UserService userService,
@@ -41,7 +45,7 @@ public class TaskMapperImpl implements TaskMapper {
                           TeacherService teacherService,
                           TeacherMapper teacherMapper,
                           ArgumentService argumentService,
-                          ArgumentGetUseCase argumentGetUseCase,
+                          ArgumentGetUseCase argumentGetUseCase, DiscountService discountService,
                           IdEncoderApiRepository idEncoderApiRepository) {
         this.userService = userService;
         this.userMapper = userMapper;
@@ -49,6 +53,7 @@ public class TaskMapperImpl implements TaskMapper {
         this.teacherMapper = teacherMapper;
         this.argumentService = argumentService;
         this.argumentGetUseCase = argumentGetUseCase;
+        this.discountService = discountService;
         this.idEncoderApiRepository = idEncoderApiRepository;
     }
 
@@ -90,9 +95,11 @@ public class TaskMapperImpl implements TaskMapper {
             return null;
         }
 
+        User targetUser = userService.findByJwt();
         UserDto developer = userMapper.toUserDto(task.getDeveloper());
         TeacherDto teacher = teacherMapper.toTeacherDto(task.getTeacher());
         List<ArgumentDto> arguments = argumentGetUseCase.findArgumentsByTaskId(encodeTaskId(task.getId()));
+        Discount discount = discountService.getDiscountByUserAndTask(targetUser.getId(), task.getId());
 
         return new TaskDto(
                 encodeTaskId(task.getId()),
@@ -100,7 +107,7 @@ public class TaskMapperImpl implements TaskMapper {
                 task.getDescription(),
                 task.getIdentifier(),
                 task.getPrice(),
-                task.getDiscount(),
+                discount != null ? discount.getDiscountValue() : BigDecimal.ZERO,
                 task.isVisible(),
                 task.getType().name(),
                 developer,

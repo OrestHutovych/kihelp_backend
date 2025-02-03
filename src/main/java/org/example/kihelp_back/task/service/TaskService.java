@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -103,10 +102,6 @@ public class TaskService {
 
        if(request.price() != null) {
            task.setPrice(request.price());
-       }
-
-       if(request.discount() != null) {
-           task.setDiscount(request.discount());
        }
 
        updateIfNotBlank(request.type(), value -> task.setType(resolveType(value)));

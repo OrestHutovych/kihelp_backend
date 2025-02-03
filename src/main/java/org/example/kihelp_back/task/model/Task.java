@@ -3,6 +3,7 @@ package org.example.kihelp_back.task.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.kihelp_back.argument.model.Argument;
+import org.example.kihelp_back.discount.model.Discount;
 import org.example.kihelp_back.global.model.BaseEntity;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.teacher.model.Teacher;
@@ -31,8 +32,6 @@ public class Task extends BaseEntity {
     private String identifier;
     @Column(name = "price")
     private BigDecimal price;
-    @Column(name = "discount")
-    private BigDecimal discount = BigDecimal.ZERO;
     @Column(name = "visible")
     private boolean visible = false;
     @Enumerated(EnumType.STRING)
@@ -66,6 +65,10 @@ public class Task extends BaseEntity {
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<History> histories;
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Discount> discounts;
 
     @Override
     public final boolean equals(Object o) {
