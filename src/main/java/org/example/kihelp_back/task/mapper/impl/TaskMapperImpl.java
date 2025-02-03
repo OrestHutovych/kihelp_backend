@@ -22,6 +22,7 @@ import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
 import org.springframework.stereotype.Component;
+import org.sqids.Sqids;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,6 +41,10 @@ public class TaskMapperImpl implements TaskMapper {
     private final DiscountService discountService;
     private final IdEncoderApiRepository idEncoderApiRepository;
 
+    private final Sqids encoderArgument;
+    private final Sqids encoderTeacher;
+    private final Sqids encoderTask;
+
     public TaskMapperImpl(UserService userService,
                           UserMapper userMapper,
                           TeacherService teacherService,
@@ -55,6 +60,10 @@ public class TaskMapperImpl implements TaskMapper {
         this.argumentGetUseCase = argumentGetUseCase;
         this.discountService = discountService;
         this.idEncoderApiRepository = idEncoderApiRepository;
+
+        this.encoderArgument = idEncoderApiRepository.findEncoderByName("argument");
+        this.encoderTeacher = idEncoderApiRepository.findEncoderByName("teacher");
+        this.encoderTask = idEncoderApiRepository.findEncoderByName("task");
     }
 
     @Override
@@ -63,19 +72,18 @@ public class TaskMapperImpl implements TaskMapper {
             return null;
         }
 
-        User developer = userService.hasDeveloperOrAdminRole(taskCreateDto.developerTelegramId());
-        Teacher teacher = teacherService.findTeacherById(decodeTeacherId(taskCreateDto.teacherId()));
-        List<Argument> arguments = taskCreateDto.args()
-                .stream()
-                .map(a -> argumentService.getById(decodeArgumentId(a)))
-                .toList();
-
-        if(arguments.isEmpty()) {
+        if (taskCreateDto.args() == null || taskCreateDto.args().isEmpty()) {
             throw new IllegalArgumentException(ARGS_NOT_NULL);
         }
 
-        Task task = new Task();
+        User developer = userService.hasDeveloperOrAdminRole(taskCreateDto.developerTelegramId());
+        Teacher teacher = teacherService.findTeacherById(decodeTeacherId(taskCreateDto.teacherId()));
 
+        List<Argument> arguments = taskCreateDto.args().stream()
+                .map(this::decodeAndFetchArgument)
+                .toList();
+
+        Task task = new Task();
         task.setTitle(taskCreateDto.title());
         task.setDescription(taskCreateDto.description());
         task.setIdentifier(taskCreateDto.identifier());
@@ -95,11 +103,14 @@ public class TaskMapperImpl implements TaskMapper {
             return null;
         }
 
-        User targetUser = userService.findByJwt();
-        UserDto developer = userMapper.toUserDto(task.getDeveloper());
-        TeacherDto teacher = teacherMapper.toTeacherDto(task.getTeacher());
-        List<ArgumentDto> arguments = argumentGetUseCase.findArgumentsByTaskId(encodeTaskId(task.getId()));
-        Discount discount = discountService.getDiscountByUserAndTask(targetUser.getId(), task.getId());
+        User currentUser = userService.findByJwt();
+        UserDto developerDto = userMapper.toUserDto(task.getDeveloper());
+        TeacherDto teacherDto = teacherMapper.toTeacherDto(task.getTeacher());
+        List<ArgumentDto> argumentDtos = argumentGetUseCase.findArgumentsByTaskId(encodeTaskId(task.getId()));
+        Discount discount = discountService.getDiscountByUserAndTask(currentUser.getId(), task.getId());
+        BigDecimal discountValue = discount != null ? discount.getDiscountValue() : BigDecimal.ZERO;
+
+        String createdAt = task.getCreatedAt().toString();
 
         return new TaskDto(
                 encodeTaskId(task.getId()),
@@ -107,15 +118,20 @@ public class TaskMapperImpl implements TaskMapper {
                 task.getDescription(),
                 task.getIdentifier(),
                 task.getPrice(),
-                discount != null ? discount.getDiscountValue() : BigDecimal.ZERO,
+                discountValue,
                 task.isVisible(),
                 task.getType().name(),
-                developer,
+                developerDto,
                 task.isAutoGenerate(),
-                task.getCreatedAt().toString(),
-                arguments,
-                teacher
+                createdAt,
+                argumentDtos,
+                teacherDto
         );
+    }
+
+    private Argument decodeAndFetchArgument(String encodedArgumentId) {
+        Long argumentId = decodeArgumentId(encodedArgumentId);
+        return argumentService.getById(argumentId);
     }
 
     private TaskType resolveType(String type) {
@@ -126,15 +142,23 @@ public class TaskMapperImpl implements TaskMapper {
         }
     }
 
-    public Long decodeArgumentId(String argumentId) {
-        return idEncoderApiRepository.findEncoderByName("argument").decode(argumentId).get(0);
+    private Long decodeArgumentId(String argumentId) {
+        List<Long> decoded = encoderArgument.decode(argumentId);
+        if (decoded.isEmpty()) {
+            throw new IllegalArgumentException("Invalid argument id: " + argumentId);
+        }
+        return decoded.get(0);
     }
 
-    public Long decodeTeacherId(String teacherId) {
-        return idEncoderApiRepository.findEncoderByName("teacher").decode(teacherId).get(0);
+    private Long decodeTeacherId(String teacherId) {
+        List<Long> decoded = encoderTeacher.decode(teacherId);
+        if (decoded.isEmpty()) {
+            throw new IllegalArgumentException("Invalid teacher id: " + teacherId);
+        }
+        return decoded.get(0);
     }
 
-    public String encodeTaskId(Long taskId) {
-        return idEncoderApiRepository.findEncoderByName("task").encode(List.of(taskId));
+    private String encodeTaskId(Long taskId) {
+        return encoderTask.encode(List.of(taskId));
     }
 }

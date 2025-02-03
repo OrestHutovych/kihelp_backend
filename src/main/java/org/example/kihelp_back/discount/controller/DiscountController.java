@@ -18,7 +18,6 @@ public class DiscountController {
 
     @PostMapping("/discount")
     public void createDiscount(@RequestBody DiscountCreateDto discountCreateDto) {
-        System.out.println(discountCreateDto);
         discountCreateUseCase.create(discountCreateDto);
     }
 }

@@ -5,9 +5,7 @@ import org.example.kihelp_back.discount.mapper.DiscountMapper;
 import org.example.kihelp_back.discount.model.Discount;
 import org.example.kihelp_back.discount.model.DiscountType;
 import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
-import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.task.model.Task;
-import org.example.kihelp_back.task.model.TaskType;
 import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
@@ -35,7 +33,6 @@ public class DiscountMapperImpl implements DiscountMapper {
         }
 
         Discount discount = new Discount();
-        System.out.println(createDto);
 
         discount.setDiscountValue(createDto.discountValue());
         discount.setType(resolveType(createDto.type()));

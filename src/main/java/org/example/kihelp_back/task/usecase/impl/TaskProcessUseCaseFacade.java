@@ -65,6 +65,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
         if (!hasRole(targetUser, "ROLE_ADMIN") && !isTaskDeveloper(targetUser, task)) {
             BigDecimal discount = discountService.updateDiscount(task.getId(), targetUser.getId());
             BigDecimal price = calculateDiscountPrice(task.getPrice(), discount);
+
             walletService.withdrawAmountFromWalletByUserId(targetUser.getId(), price, true);
             walletService.depositAmountToWalletByUserId(task.getDeveloper().getId(), price, false);
             inviteService.depositToInviteeSpendBalance(targetUser.getId(), price);
