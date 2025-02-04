@@ -1,6 +1,7 @@
 package org.example.kihelp_back.global.service;
 
 import org.example.kihelp_back.global.exception.TelegramException;
+import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.support.dto.SupportDto;
 import org.example.kihelp_back.transaction.model.Transaction;
 import org.example.kihelp_back.user.model.User;
@@ -140,7 +141,6 @@ public class TelegramBotService extends TelegramLongPollingBot {
     }
 
     public void supportMessageSentToAdmin(User user, SupportDto supportDto) {
-        String chatId = "1176171881";
         String message = String.format(
                 """
                 🚀 *Нове повідомлення від користувача:*
@@ -282,6 +282,73 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 """,
                 transaction.getAmount(),
                 transaction.getTransactionId()
+        );
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
+        }
+    }
+
+    public void sendMessageToUserChatAboutCompletedTask(History history) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(history.getUser().getTelegramId());
+
+        String message = String.format("""
+                🟩 *Завдання виконане успішно!*
+        
+                🔗 *Детальна інформація:*
+                • *Предмет:* `%s`
+                • *Викладач:* `%s`
+                • *Назва завдання:* `%s`
+        
+                Перегляньте деталі в розділі «Налаштування» -> «Історія завдань».
+        
+                #task
+                """,
+                history.getTask().getTeacher().getSubject().getName(),
+                history.getTask().getTeacher().getName(),
+                history.getTask().getTitle()
+        );
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
+        }
+    }
+
+    public void sendToDeveloperChatAboutNewInPendingTask(History history) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(history.getTask().getDeveloper().getTelegramId());
+
+        String message = String.format("""
+                📣 *Користувач купив завдання.*
+                • *Username:* `@%s`
+                • *Telegram ID:* `%s`
+                
+                Перегляньте деталі завдання в «Налаштування» -> «Dev панель» та звяжіться з користувачем протягом 1 години.
+        
+                #task
+                """,
+                history.getTask().getTeacher().getSubject().getName(),
+                history.getTask().getTeacher().getName(),
+                history.getTask().getTitle()
         );
 
         sendMessage.setText(message);

@@ -3,9 +3,12 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost:5432}/${POSTGRES_DB_NAME:postgres}
-    username: ${POSTGRES_USERNAME:postgres}
-    password: ${POSTGRES_PASSWORD:password}
+#    url: jdbc:postgresql://${POSTGRES_HOST:localhost:5432}/${POSTGRES_DB_NAME:postgres}
+#    username: ${POSTGRES_USERNAME:postgres}
+#    password: ${POSTGRES_PASSWORD:password}
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: Lapka228
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -75,4 +78,7 @@ kihelp:
           min-length: 10
         argument:
           alphabet: "vTojwJhyZmNK9Afna4385PsVEIdbpLtlRQcGz7CMXkeiBH1O0UrWq26FgxSDuY"
+          min-length: 10
+        history:
+          alphabet: "X0xODIkCeHvN9bcarPW1YLQARFqy8357uSjtwdMm6inlGZpzBKsgf2hoUVE4JT"
           min-length: 10

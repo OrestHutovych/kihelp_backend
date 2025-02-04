@@ -3,6 +3,8 @@ package org.example.kihelp_back.global.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.example.kihelp_back.argument.exception.ArgumentExistException;
 import org.example.kihelp_back.argument.exception.ArgumentNotFoundException;
+import org.example.kihelp_back.history.exception.HistoryNotFoundException;
+import org.example.kihelp_back.history.exception.TaskConvertException;
 import org.example.kihelp_back.invite.exception.InviteDepositException;
 import org.example.kihelp_back.subject.exception.SubjectExistException;
 import org.example.kihelp_back.subject.exception.SubjectNotFoundException;
@@ -293,6 +295,33 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InviteDepositException.class)
     public ResponseEntity<Map<String, String>> handleInviteDepositException(InviteDepositException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(HistoryNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleHistoryNotFoundException(HistoryNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TaskConvertException.class)
+    public ResponseEntity<Map<String, String>> handleTaskConvertException(TaskConvertException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put(MESSAGE_FIELD, ex.getMessage());
+
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TaskAreNotAvailableException.class)
+    public ResponseEntity<Map<String, String>> handleTaskAreNotAvailableException(TaskAreNotAvailableException ex) {
         Map<String, String> error = new HashMap<>();
         error.put(MESSAGE_FIELD, ex.getMessage());
 

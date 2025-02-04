@@ -3,6 +3,7 @@ package org.example.kihelp_back.history.dto;
 import org.example.kihelp_back.user.dto.UserDto;
 
 public record TaskDeveloperDto(
+        String id,
         String taskTitle,
         String teacherName,
         String subjectName,

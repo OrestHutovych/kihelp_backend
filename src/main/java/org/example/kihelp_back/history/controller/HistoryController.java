@@ -1,12 +1,12 @@
 package org.example.kihelp_back.history.controller;
 
 import org.example.kihelp_back.history.dto.HistoryDto;
+import org.example.kihelp_back.history.dto.HistorySaveFileDto;
 import org.example.kihelp_back.history.dto.TaskDeveloperDto;
 import org.example.kihelp_back.history.usecase.HistoryGetUseCase;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.kihelp_back.history.usecase.HistoryUpdateUseCase;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,9 +14,12 @@ import java.util.List;
 @RequestMapping("/api/v1/histories")
 public class HistoryController {
     private final HistoryGetUseCase historyGetUseCase;
+    private final HistoryUpdateUseCase historyUpdateUseCase;
 
-    public HistoryController(HistoryGetUseCase historyGetUseCase) {
+    public HistoryController(HistoryGetUseCase historyGetUseCase,
+                             HistoryUpdateUseCase historyUpdateUseCase) {
         this.historyGetUseCase = historyGetUseCase;
+        this.historyUpdateUseCase = historyUpdateUseCase;
     }
 
     @GetMapping("/user/{telegram_id}")
@@ -24,9 +27,14 @@ public class HistoryController {
         return historyGetUseCase.getHistoriesByUserTelegramId(telegramId);
     }
 
-    @GetMapping("/user/in-progress")
+    @GetMapping("/developer/in-progress")
     public List<TaskDeveloperDto> getTaskInProgresByDeveloper(){
         return historyGetUseCase.getTaskInProgressByDeveloper();
+    }
+
+    @PatchMapping("/history/{history_id}/developer/save-file")
+    public void saveFileInHistory(@PathVariable("history_id") String id, @ModelAttribute HistorySaveFileDto file){
+        historyUpdateUseCase.saveFileInHistory(id, file);
     }
 
     @GetMapping("/task/{task_id}/user/{telegram_id}/reseller-check")

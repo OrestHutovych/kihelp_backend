@@ -2,12 +2,14 @@ package org.example.kihelp_back.task.usecase.impl;
 
 import org.example.kihelp_back.discount.service.DiscountService;
 import org.example.kihelp_back.global.api.idencoder.IdEncoderApiRepository;
+import org.example.kihelp_back.global.service.TelegramBotService;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.model.HistoryStatus;
 import org.example.kihelp_back.history.service.HistoryService;
 import org.example.kihelp_back.invite.service.InviteService;
 import org.example.kihelp_back.task.dto.TaskGenerateDto;
 import org.example.kihelp_back.task.dto.TaskProcessCreateDto;
+import org.example.kihelp_back.task.exception.TaskAreNotAvailableException;
 import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.task.service.TaskService;
 import org.example.kihelp_back.task.usecase.TaskProcessUseCase;
@@ -24,6 +26,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.example.kihelp_back.task.util.TaskErrorMessage.TASK_NOT_AVAILABLE;
 import static org.example.kihelp_back.task.util.TaskErrorMessage.USER_BANNED_BY_RESELLER_ACTIVITY;
 import static org.example.kihelp_back.user.util.UserErrorMessage.USER_IS_BANNED;
 
@@ -36,6 +39,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
     private final InviteService inviteService;
     private final DiscountService discountService;
     private final IdEncoderApiRepository idEncoderApiRepository;
+    private final TelegramBotService telegramBotService;
 
     public TaskProcessUseCaseFacade(TaskService taskService,
                                     HistoryService historyService,
@@ -43,7 +47,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
                                     WalletService walletService,
                                     InviteService inviteService,
                                     DiscountService discountService,
-                                    IdEncoderApiRepository idEncoderApiRepository) {
+                                    IdEncoderApiRepository idEncoderApiRepository, TelegramBotService telegramBotService) {
         this.taskService = taskService;
         this.historyService = historyService;
         this.userService = userService;
@@ -51,6 +55,7 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
         this.inviteService = inviteService;
         this.discountService = discountService;
         this.idEncoderApiRepository = idEncoderApiRepository;
+        this.telegramBotService = telegramBotService;
     }
 
     @Override
@@ -63,6 +68,10 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
         validateUserStatus(targetUser, decodeTaskId);
 
         if (!hasRole(targetUser, "ROLE_ADMIN") && !isTaskDeveloper(targetUser, task)) {
+            if (!task.isVisible()){
+                throw new TaskAreNotAvailableException(TASK_NOT_AVAILABLE);
+            }
+
             BigDecimal discount = discountService.updateDiscount(task.getId(), targetUser.getId());
             BigDecimal price = calculateDiscountPrice(task.getPrice(), discount);
 
@@ -150,5 +159,6 @@ public class TaskProcessUseCaseFacade implements TaskProcessUseCase {
                 "щоб уточнити деталі для подальшої розробки" +
                 "завдання відносно вашого запиту.");
         processResponse.put("createdAt", now.toString());
+        telegramBotService.sendToDeveloperChatAboutNewInPendingTask(historyToSave);
     }
 }
