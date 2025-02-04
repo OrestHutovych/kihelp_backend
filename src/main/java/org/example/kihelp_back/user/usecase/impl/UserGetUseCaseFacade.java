@@ -21,10 +21,9 @@ public class UserGetUseCaseFacade implements UserGetUseCase {
     }
 
     @Override
-    public UserDto findByUserTelegramId(String telegramId) {
-        User targetUser = userService.findByTelegramId(telegramId);
-
-        return userMapper.toUserDto(targetUser);
+    public Integer getCourseNumberByUser() {
+       User targetUser = userService.findByJwt();
+       return targetUser.getCourseNumber() != null ? targetUser.getCourseNumber() : 0;
     }
 
     @Override

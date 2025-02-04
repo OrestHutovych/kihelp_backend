@@ -5,6 +5,6 @@ import org.example.kihelp_back.user.dto.UserDto;
 import java.util.List;
 
 public interface UserGetUseCase {
-    UserDto findByUserTelegramId(String telegramId);
+    Integer getCourseNumberByUser();
     List<UserDto> findByUserRole(String roleName);
 }

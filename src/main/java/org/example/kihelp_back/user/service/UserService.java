@@ -7,6 +7,7 @@ import org.example.kihelp_back.user.repository.UserRepository;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -16,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -82,6 +82,17 @@ public class UserService implements UserDetailsService {
         targetUser.setUsername(user.getUsername());
 
         return userRepository.save(targetUser);
+    }
+
+    @Transactional
+    public void updateCourseNumber(Integer courseNumber) {
+        User user = findByJwt();
+
+        if(courseNumber != null){
+            user.setCourseNumber(courseNumber);
+        }
+
+        userRepository.save(user);
     }
 
     public boolean validateUser(String initData){
@@ -253,6 +264,20 @@ public class UserService implements UserDetailsService {
     private void validateRoleUserChange(Role role) {
         if ("ROLE_USER".equals(role.getName())) {
             throw new IllegalRoleChangeException(USER_ROLE_CHANGE_NOT_ALLOWED);
+        }
+    }
+
+    @Scheduled(cron = "0 0 0 1 9 ?")
+    public void incrementCourseNumbers(){
+        List<User> users = userRepository.findAll();
+
+        for(User user : users){
+            Integer courseNumber = user.getCourseNumber();
+
+            if(courseNumber < 4) {
+                user.setCourseNumber(courseNumber + 1);
+                userRepository.save(user);
+            }
         }
     }
 }

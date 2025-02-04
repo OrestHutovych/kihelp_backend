@@ -1,5 +1,6 @@
 package org.example.kihelp_back.user.controller;
 
+import jakarta.validation.Valid;
 import org.example.kihelp_back.user.dto.*;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;
 import org.example.kihelp_back.user.usecase.UserGetUseCase;
@@ -37,6 +38,16 @@ public class UserController {
     @GetMapping("/role/{role_name}")
     public List<UserDto> getUsersByRole(@PathVariable("role_name") String roleName) {
         return userGetUseCase.findByUserRole(roleName);
+    }
+
+    @GetMapping("/user/course")
+    public Integer getCourseNumber() {
+        return userGetUseCase.getCourseNumberByUser();
+    }
+
+    @PatchMapping("/user/enter-course")
+    public void enterCourseNumber(@RequestBody @Valid UserCourseDto userCourseDto) {
+        userUpdateUseCase.enterCourseNumber(userCourseDto);
     }
 
     @PutMapping("/user/{telegram_id}/ban")

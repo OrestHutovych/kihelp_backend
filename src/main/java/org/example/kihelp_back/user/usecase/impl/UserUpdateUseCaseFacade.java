@@ -1,5 +1,7 @@
 package org.example.kihelp_back.user.usecase.impl;
 
+import org.example.kihelp_back.user.dto.UserCourseDto;
+import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
 import org.springframework.stereotype.Component;
@@ -20,5 +22,10 @@ public class UserUpdateUseCaseFacade implements UserUpdateUseCase {
     @Override
     public void toggleRole(String telegramId, String roleName) {
         userService.changeRole(telegramId, roleName);
+    }
+
+    @Override
+    public void enterCourseNumber(UserCourseDto userCourseDto) {
+        userService.updateCourseNumber(userCourseDto.courseNumber());
     }
 }

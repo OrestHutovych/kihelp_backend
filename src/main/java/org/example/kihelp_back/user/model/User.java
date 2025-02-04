@@ -35,6 +35,8 @@ public class User extends BaseEntity {
     private Instant createdAt = Instant.now();
     @Column(name = "is_banned")
     private boolean isBanned = false;
+    @Column(name = "course_number")
+    private Integer courseNumber;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
