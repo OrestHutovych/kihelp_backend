@@ -346,9 +346,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
         
                 #task
                 """,
-                history.getTask().getTeacher().getSubject().getName(),
-                history.getTask().getTeacher().getName(),
-                history.getTask().getTitle()
+                history.getUser().getUsername(),
+                history.getUser().getTelegramId()
         );
 
         sendMessage.setText(message);
