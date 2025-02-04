@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.example.kihelp_back.wallet.util.WalletErrorMessage.WALLET_JAR_INFO;
+import static org.example.kihelp_back.wallet.util.WalletErrorMessage.WALLET_USER_ERR;
 
 @Component
 public class WalletGetUseCaseFacade implements WalletGetUseCase {
@@ -47,8 +48,14 @@ public class WalletGetUseCaseFacade implements WalletGetUseCase {
     }
 
     @Override
-    public List<WalletDto> getWalletsByUser() {
-        User targetUser = userService.findByJwt();
+    public List<WalletDto> getWalletsByUser(String telegramId) {
+        User sender = userService.findByJwt();
+        User targetUser = userService.findByTelegramId(telegramId);
+
+        if(!hasRole(sender, "ROLE_ADMIN") || !sender.equals(targetUser)) {
+            throw new IllegalArgumentException(WALLET_USER_ERR);
+        }
+
         List<Wallet> wallets = walletService.findByUserId(targetUser.getId());
 
         return wallets.stream()
@@ -97,6 +104,10 @@ public class WalletGetUseCaseFacade implements WalletGetUseCase {
 
     private BigDecimal parseBalance(String balance) {
         return BigDecimal.valueOf(Double.parseDouble(balance));
+    }
+
+    private boolean hasRole(User user, String roleName) {
+        return user.getRoles().stream().anyMatch(role -> roleName.equals(role.getName()));
     }
 
     private Optional<Map<String, String>> findJarWithName(MonobankJarInfoDto jarInfo, JarConfig jarConfig) {

@@ -38,10 +38,7 @@ public class TransactionGetUseCaseFacade implements TransactionGetUseCase {
         User targetUser = userService.findByTelegramId(telegramId);
         User sender = userService.findByJwt();
 
-        boolean senderIsAdmin = sender.getRoles().stream()
-                .anyMatch(r -> r.getName().equals("ROLE_ADMIN"));
-
-        if (sender.equals(targetUser) || senderIsAdmin) {
+        if(!hasRole(sender, "ROLE_ADMIN") || !sender.equals(targetUser)) {
             Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
             Pageable pageable = PageRequest.of(pageDto.page(), pageDto.limit(), sort);
             Page<Transaction> transactions = transactionService.findCompletedTransactionsByUserId(targetUser.getId(), pageable);
@@ -52,5 +49,9 @@ public class TransactionGetUseCaseFacade implements TransactionGetUseCase {
         } else{
             throw new TransactionNotFoundException(TRANSACTIONS_NOT_BY_USER);
         }
+    }
+
+    private boolean hasRole(User user, String roleName) {
+        return user.getRoles().stream().anyMatch(role -> roleName.equals(role.getName()));
     }
 }

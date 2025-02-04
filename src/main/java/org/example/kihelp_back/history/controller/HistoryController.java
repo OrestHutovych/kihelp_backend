@@ -6,7 +6,6 @@ import org.example.kihelp_back.history.dto.TaskDeveloperDto;
 import org.example.kihelp_back.history.usecase.HistoryGetUseCase;
 import org.example.kihelp_back.history.usecase.HistoryUpdateUseCase;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

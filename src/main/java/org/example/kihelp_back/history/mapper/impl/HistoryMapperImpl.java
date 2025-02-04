@@ -41,6 +41,7 @@ public class HistoryMapperImpl implements HistoryMapper {
         UserDto userDto = new UserDto(
           history.getUser().getUsername(),
           history.getUser().getTelegramId(),
+          history.getUser().getCourseNumber(),
           history.getUser().getCreatedAt().toString()
         );
 

@@ -47,6 +47,7 @@ public class UserMapperImpl implements UserMapper {
         return new UserDto(
                 user.getTelegramId(),
                 user.getUsername(),
+                user.getCourseNumber(),
                 user.getCreatedAt().toString()
         );
     }

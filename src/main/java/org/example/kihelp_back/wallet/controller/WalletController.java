@@ -23,9 +23,9 @@ public class WalletController {
         this.walletUpdateUseCase = walletUpdateUseCase;
     }
 
-    @GetMapping("/")
-    public List<WalletDto> getWalletsByUser() {
-        return walletGetUseCase.getWalletsByUser();
+    @GetMapping("/user/{telegram_id}")
+    public List<WalletDto> getWalletsByUser(@PathVariable("telegram_id") String telegramId) {
+        return walletGetUseCase.getWalletsByUser(telegramId);
     }
 
     @GetMapping("/jar")

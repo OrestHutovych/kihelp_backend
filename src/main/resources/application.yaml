@@ -3,12 +3,9 @@ server:
 
 spring:
   datasource:
-#    url: jdbc:postgresql://${POSTGRES_HOST:localhost:5432}/${POSTGRES_DB_NAME:postgres}
-#    username: ${POSTGRES_USERNAME:postgres}
-#    password: ${POSTGRES_PASSWORD:password}
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: Lapka228
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost:5432}/${POSTGRES_DB_NAME:postgres}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:password}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

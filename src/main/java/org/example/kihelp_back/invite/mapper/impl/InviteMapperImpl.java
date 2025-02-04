@@ -50,6 +50,7 @@ public class InviteMapperImpl implements InviteMapper {
         UserDto user = new UserDto(
           invite.getInviteeUser().getUsername(),
           invite.getInviteeUser().getTelegramId(),
+          invite.getInviteeUser().getCourseNumber(),
           invite.getInviteeUser().getCreatedAt().toString()
         );
 

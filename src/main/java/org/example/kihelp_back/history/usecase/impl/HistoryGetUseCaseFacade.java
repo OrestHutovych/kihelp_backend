@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.example.kihelp_back.history.util.HistoryErrorMessage.HISTORY_NOT_USER;
 import static org.example.kihelp_back.history.util.HistoryErrorMessage.USER_ROLE_INVALID;
 
 @Component
@@ -34,6 +35,13 @@ public class HistoryGetUseCaseFacade implements HistoryGetUseCase {
 
     @Override
     public List<HistoryDto> getHistoriesByUserTelegramId(String telegramId) {
+        User sender = userService.findByJwt();
+        User targetUser = userService.findByTelegramId(telegramId);
+
+        if(!hasRole(sender, "ROLE_ADMIN") || !sender.equals(targetUser)) {
+            throw new IllegalArgumentException(HISTORY_NOT_USER);
+        }
+
         List<History> histories = historyService.getHistoryByUser(telegramId);
 
         return histories.stream()
@@ -63,5 +71,9 @@ public class HistoryGetUseCaseFacade implements HistoryGetUseCase {
     public boolean detectResellerActivity(String telegramId, String taskId) {
         Long decodedTaskId = idEncoderApiRepository.findEncoderByName("task").decode(taskId).get(0);
         return historyService.detectResellerActivity(telegramId, decodedTaskId);
+    }
+
+    private boolean hasRole(User user, String roleName) {
+        return user.getRoles().stream().anyMatch(role -> roleName.equals(role.getName()));
     }
 }
