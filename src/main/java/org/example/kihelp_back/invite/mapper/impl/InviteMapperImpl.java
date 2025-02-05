@@ -4,7 +4,7 @@ import org.example.kihelp_back.invite.dto.InviteCreateDto;
 import org.example.kihelp_back.invite.dto.InviteDto;
 import org.example.kihelp_back.invite.mapper.InviteMapper;
 import org.example.kihelp_back.invite.model.Invite;
-import org.example.kihelp_back.user.adapters.dto.UserDto;
+import org.example.kihelp_back.user.dto.UserDto;
 import org.example.kihelp_back.user.exception.UserExistException;
 import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.User;
@@ -47,15 +47,10 @@ public class InviteMapperImpl implements InviteMapper {
             return null;
         }
 
-        UserDto user = new UserDto(
-          invite.getInviteeUser().getUsername(),
-          invite.getInviteeUser().getTelegramId(),
-          invite.getInviteeUser().getCourseNumber(),
-          invite.getInviteeUser().getCreatedAt().toString()
-        );
+        UserDto userDto = userMapper.toUserDto(invite.getInviteeUser());
 
         return new InviteDto(
-                user,
+                userDto,
                 invite.getInviteeAmountSpend()
         );
     }

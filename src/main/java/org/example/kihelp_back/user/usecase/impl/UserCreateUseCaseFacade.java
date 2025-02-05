@@ -2,7 +2,7 @@ package org.example.kihelp_back.user.usecase.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.kihelp_back.user.adapters.dto.JwtDto;
+import org.example.kihelp_back.user.dto.JwtDto;
 import org.example.kihelp_back.user.exception.UserUnauthorizedException;
 import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.User;

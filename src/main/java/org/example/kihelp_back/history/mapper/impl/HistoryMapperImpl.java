@@ -5,16 +5,20 @@ import org.example.kihelp_back.history.dto.HistoryDto;
 import org.example.kihelp_back.history.dto.TaskDeveloperDto;
 import org.example.kihelp_back.history.mapper.HistoryMapper;
 import org.example.kihelp_back.history.model.History;
-import org.example.kihelp_back.user.adapters.dto.UserDto;
+import org.example.kihelp_back.user.dto.UserDto;
+import org.example.kihelp_back.user.mapper.UserMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class HistoryMapperImpl implements HistoryMapper {
+    private final UserMapper userMapper;
     private final IdEncoderApiRepository idEncoderApiRepository;
 
-    public HistoryMapperImpl(IdEncoderApiRepository idEncoderApiRepository) {
+    public HistoryMapperImpl(UserMapper userMapper,
+                             IdEncoderApiRepository idEncoderApiRepository) {
+        this.userMapper = userMapper;
         this.idEncoderApiRepository = idEncoderApiRepository;
     }
 
@@ -38,12 +42,7 @@ public class HistoryMapperImpl implements HistoryMapper {
             return null;
         }
 
-        UserDto userDto = new UserDto(
-          history.getUser().getUsername(),
-          history.getUser().getTelegramId(),
-          history.getUser().getCourseNumber(),
-          history.getUser().getCreatedAt().toString()
-        );
+        UserDto userDto = userMapper.toUserDto(history.getUser());
 
         return new TaskDeveloperDto(
                 encodeHistoryId(history.getId()),

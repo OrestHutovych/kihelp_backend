@@ -23,8 +23,8 @@ public class WalletController {
         this.walletUpdateUseCase = walletUpdateUseCase;
     }
 
-    @GetMapping("/user/{telegram_id}")
-    public List<WalletDto> getWalletsByUser(@PathVariable("telegram_id") String telegramId) {
+    @GetMapping("/user/{telegramId}")
+    public List<WalletDto> getWalletsByUser(@PathVariable("telegramId") String telegramId){
         return walletGetUseCase.getWalletsByUser(telegramId);
     }
 

@@ -46,7 +46,7 @@ public class SecurityConfig {
                                         "/webjars/**",
                                         "/swagger-ui.html"
                                 ).permitAll()
-                                .requestMatchers(HttpMethod.POST,"/api/v1/users/user/auth").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/v1/users/auth").permitAll()
                                 .requestMatchers(HttpMethod.GET,"/actuator/prometheus").permitAll()
                                 .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()

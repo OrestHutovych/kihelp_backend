@@ -1,4 +1,4 @@
-package org.example.kihelp_back.user.adapters.dto;
+package org.example.kihelp_back.user.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

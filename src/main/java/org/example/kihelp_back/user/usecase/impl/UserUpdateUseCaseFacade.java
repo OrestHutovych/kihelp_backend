@@ -1,7 +1,7 @@
 package org.example.kihelp_back.user.usecase.impl;
 
-import org.example.kihelp_back.user.adapters.dto.RoleUpdateDto;
-import org.example.kihelp_back.user.adapters.dto.UserCourseDto;
+import org.example.kihelp_back.user.dto.RoleUpdateDto;
+import org.example.kihelp_back.user.dto.UserCourseDto;
 import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.service.RoleService;
 import org.example.kihelp_back.user.service.UserService;

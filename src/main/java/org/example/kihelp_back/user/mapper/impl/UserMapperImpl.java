@@ -1,6 +1,6 @@
 package org.example.kihelp_back.user.mapper.impl;
 
-import org.example.kihelp_back.user.adapters.dto.UserDto;
+import org.example.kihelp_back.user.dto.UserDto;
 import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.model.User;
@@ -30,9 +30,10 @@ public class UserMapperImpl implements UserMapper {
 
         User user = new User();
 
-        user.setTelegramId(userDto.get("id"));
+        user.setTelegramId(String.valueOf(userDto.get("id")));
         user.setUsername(userDto.get("username"));
-        user.setPassword(encodePassword(userDto.get("id")));
+        user.setPhoto(userDto.get("photo_url"));
+        user.setPassword(encodePassword(String.valueOf(userDto.get("id"))));
         user.setRoles(List.of(findRole()));
 
         return user;
@@ -47,6 +48,7 @@ public class UserMapperImpl implements UserMapper {
         return new UserDto(
                 user.getTelegramId(),
                 user.getUsername(),
+                user.getPhoto(),
                 user.getCourseNumber(),
                 user.getCreatedAt().toString()
         );

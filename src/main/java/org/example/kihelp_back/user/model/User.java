@@ -28,6 +28,8 @@ public class User extends BaseEntity {
     private String telegramId;
     @Column(name = "username", nullable = false)
     private String username;
+    @Column(name = "photo", nullable = false)
+    private String photo;
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "created_at")

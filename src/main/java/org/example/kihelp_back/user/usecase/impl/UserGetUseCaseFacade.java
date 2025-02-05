@@ -1,6 +1,6 @@
 package org.example.kihelp_back.user.usecase.impl;
 
-import org.example.kihelp_back.user.adapters.dto.UserDto;
+import org.example.kihelp_back.user.dto.UserDto;
 import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.service.UserService;

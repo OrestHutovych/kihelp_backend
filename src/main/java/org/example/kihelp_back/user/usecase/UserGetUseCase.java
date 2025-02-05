@@ -1,6 +1,6 @@
 package org.example.kihelp_back.user.usecase;
 
-import org.example.kihelp_back.user.adapters.dto.UserDto;
+import org.example.kihelp_back.user.dto.UserDto;
 
 import java.util.List;
 

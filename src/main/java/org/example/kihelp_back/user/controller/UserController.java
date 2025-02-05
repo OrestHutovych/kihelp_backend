@@ -1,10 +1,10 @@
 package org.example.kihelp_back.user.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.user.adapters.dto.JwtDto;
-import org.example.kihelp_back.user.adapters.dto.RoleUpdateDto;
-import org.example.kihelp_back.user.adapters.dto.UserCourseDto;
-import org.example.kihelp_back.user.adapters.dto.UserDto;
+import org.example.kihelp_back.user.dto.JwtDto;
+import org.example.kihelp_back.user.dto.RoleUpdateDto;
+import org.example.kihelp_back.user.dto.UserCourseDto;
+import org.example.kihelp_back.user.dto.UserDto;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;
 import org.example.kihelp_back.user.usecase.UserGetUseCase;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;

@@ -55,11 +55,6 @@ monobank:
   personal_info: https://api.monobank.ua/personal/client-info
   jar_info: https://api.monobank.ua/personal/statement/{jarId}/{timeFrom}
 
-#logging:
-#  level:
-#    org.example.kihelp_back: DEBUG
-#
-
 kihelp:
   api:
     id:
