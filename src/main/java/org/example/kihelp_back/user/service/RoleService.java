@@ -2,6 +2,7 @@ package org.example.kihelp_back.user.service;
 
 import org.example.kihelp_back.user.exception.RoleNotFoundException;
 import org.example.kihelp_back.user.model.Role;
+import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.RoleRepository;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,10 @@ public class RoleService {
 
     public boolean existsByName(String name) {
         return roleRepository.existsByName(name);
+    }
+
+    public boolean hasRole(String roleName, User user) {
+        return user.getRoles().stream().anyMatch(r -> roleName.equals(r.getName()));
     }
 
     public void createRolesIfNotExists(List<String> roleNames) {

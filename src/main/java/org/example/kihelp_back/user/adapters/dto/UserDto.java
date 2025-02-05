@@ -1,4 +1,4 @@
-package org.example.kihelp_back.user.dto;
+package org.example.kihelp_back.user.adapters.dto;
 
 public record UserDto(
         String username,

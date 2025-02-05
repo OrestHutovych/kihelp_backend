@@ -4,7 +4,7 @@ import org.example.kihelp_back.invite.dto.InviteCreateDto;
 import org.example.kihelp_back.invite.dto.InviteDto;
 import org.example.kihelp_back.invite.mapper.InviteMapper;
 import org.example.kihelp_back.invite.model.Invite;
-import org.example.kihelp_back.user.dto.UserDto;
+import org.example.kihelp_back.user.adapters.dto.UserDto;
 import org.example.kihelp_back.user.exception.UserExistException;
 import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.User;

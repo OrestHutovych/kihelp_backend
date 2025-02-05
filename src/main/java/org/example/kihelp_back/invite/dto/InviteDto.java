@@ -1,6 +1,6 @@
 package org.example.kihelp_back.invite.dto;
 
-import org.example.kihelp_back.user.dto.UserDto;
+import org.example.kihelp_back.user.adapters.dto.UserDto;
 
 import java.math.BigDecimal;
 

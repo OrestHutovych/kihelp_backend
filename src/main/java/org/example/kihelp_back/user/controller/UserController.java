@@ -1,7 +1,10 @@
 package org.example.kihelp_back.user.controller;
 
 import jakarta.validation.Valid;
-import org.example.kihelp_back.user.dto.*;
+import org.example.kihelp_back.user.adapters.dto.JwtDto;
+import org.example.kihelp_back.user.adapters.dto.RoleUpdateDto;
+import org.example.kihelp_back.user.adapters.dto.UserCourseDto;
+import org.example.kihelp_back.user.adapters.dto.UserDto;
 import org.example.kihelp_back.user.usecase.UserCreateUseCase;
 import org.example.kihelp_back.user.usecase.UserGetUseCase;
 import org.example.kihelp_back.user.usecase.UserUpdateUseCase;
@@ -24,15 +27,16 @@ public class UserController {
         this.userUpdateUseCase = userUpdateUseCase;
     }
 
-    @PostMapping("/user/auth")
+    @PostMapping("/auth")
     public JwtDto authUser(@RequestBody String initData) {
        return userCreateUseCase.authUser(initData);
     }
 
-    @PutMapping("/user/{telegram_id}/toggle_role")
-    public void toggleRole(@PathVariable("telegram_id") String telegramId,
-                           @RequestParam(name = "role") String roleName) {
-        userUpdateUseCase.toggleRole(telegramId, roleName);
+    @PatchMapping("/{telegramId}/roles")
+    public void toggleRole(
+            @PathVariable("telegramId") String telegramId,
+            @RequestBody RoleUpdateDto roleUpdateDto) {
+        userUpdateUseCase.toggleRole(telegramId, roleUpdateDto);
     }
 
     @GetMapping("/")
@@ -40,23 +44,23 @@ public class UserController {
         return userGetUseCase.getUsers();
     }
 
-    @GetMapping("/role/{role_name}")
-    public List<UserDto> getUsersByRole(@PathVariable("role_name") String roleName) {
+    @GetMapping("/role/{roleName}")
+    public List<UserDto> getUsersByRole(@PathVariable("roleName") String roleName) {
         return userGetUseCase.findByUserRole(roleName);
     }
 
-    @GetMapping("/user/course")
+    @GetMapping("/me/course")
     public Integer getCourseNumber() {
         return userGetUseCase.getCourseNumberByUser();
     }
 
-    @PatchMapping("/user/enter-course")
+    @PatchMapping("/me/course")
     public void enterCourseNumber(@RequestBody @Valid UserCourseDto userCourseDto) {
         userUpdateUseCase.enterCourseNumber(userCourseDto);
     }
 
-    @PutMapping("/user/{telegram_id}/ban")
-    public void banUser(@PathVariable("telegram_id") String telegramId,
+    @PutMapping("/{telegramId}/ban")
+    public void banUser(@PathVariable("telegramId") String telegramId,
                         @RequestParam(name = "value") boolean value) {
         userUpdateUseCase.changeBanValueByUser(telegramId, value);
     }

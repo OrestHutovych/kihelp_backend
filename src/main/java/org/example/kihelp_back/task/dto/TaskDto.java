@@ -2,7 +2,7 @@ package org.example.kihelp_back.task.dto;
 
 import org.example.kihelp_back.argument.dto.ArgumentDto;
 import org.example.kihelp_back.teacher.dto.TeacherDto;
-import org.example.kihelp_back.user.dto.UserDto;
+import org.example.kihelp_back.user.adapters.dto.UserDto;
 
 import java.math.BigDecimal;
 import java.util.List;

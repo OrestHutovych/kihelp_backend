@@ -5,7 +5,7 @@ import org.example.kihelp_back.history.dto.HistoryDto;
 import org.example.kihelp_back.history.dto.TaskDeveloperDto;
 import org.example.kihelp_back.history.mapper.HistoryMapper;
 import org.example.kihelp_back.history.model.History;
-import org.example.kihelp_back.user.dto.UserDto;
+import org.example.kihelp_back.user.adapters.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

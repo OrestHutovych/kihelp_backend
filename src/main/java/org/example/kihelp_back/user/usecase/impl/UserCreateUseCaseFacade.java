@@ -2,8 +2,7 @@ package org.example.kihelp_back.user.usecase.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.example.kihelp_back.user.dto.JwtDto;
+import org.example.kihelp_back.user.adapters.dto.JwtDto;
 import org.example.kihelp_back.user.exception.UserUnauthorizedException;
 import org.example.kihelp_back.user.mapper.UserMapper;
 import org.example.kihelp_back.user.model.User;
@@ -21,7 +20,6 @@ import java.util.Map;
 import static org.example.kihelp_back.user.util.UserErrorMessage.*;
 
 @Component
-@Slf4j
 public class UserCreateUseCaseFacade implements UserCreateUseCase {
     private final UserService userService;
     private final UserMapper userMapper;

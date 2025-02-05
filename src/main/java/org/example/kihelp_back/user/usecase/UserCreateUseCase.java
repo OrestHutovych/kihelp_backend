@@ -1,9 +1,7 @@
 package org.example.kihelp_back.user.usecase;
 
-import org.example.kihelp_back.user.dto.JwtDto;
-import org.springframework.validation.annotation.Validated;
+import org.example.kihelp_back.user.adapters.dto.JwtDto;
 
-@Validated
 public interface UserCreateUseCase {
     JwtDto authUser(String initData);
 }

@@ -1,5 +1,6 @@
 package org.example.kihelp_back.wallet.service;
 
+import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.wallet.exception.WalletDefaultExistException;
 import org.example.kihelp_back.wallet.exception.WalletExistException;
 import org.example.kihelp_back.wallet.exception.WalletNotFoundException;
@@ -78,12 +79,8 @@ public class WalletService {
     }
 
     @Transactional
-    public void deleteNotDefaultWalletsByUser(Long userId) {
-        List<Wallet> wallets = walletRepository.findByUserId(userId);
-
-        wallets.stream()
-                .filter(wallet -> !wallet.isDefaultWallet())
-                .forEach(walletRepository::delete);
+    public void deleteWallet(Wallet wallet) {
+        walletRepository.delete(wallet);
     }
 
     private void validateDefaultWallet(Wallet wallet) {

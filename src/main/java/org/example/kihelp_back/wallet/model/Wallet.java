@@ -20,7 +20,7 @@ import java.util.Objects;
 })
 public class Wallet extends BaseEntity {
     @Column(name = "balance", nullable = false)
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "default_wallet")

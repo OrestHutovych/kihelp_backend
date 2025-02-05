@@ -1,9 +1,13 @@
 package org.example.kihelp_back.user.service;
 
-import org.example.kihelp_back.user.exception.*;
+import org.example.kihelp_back.user.exception.RoleNotFoundException;
+import org.example.kihelp_back.user.exception.UserIsBannedException;
+import org.example.kihelp_back.user.exception.UserNotFoundException;
+import org.example.kihelp_back.user.exception.UserRoleNotValidException;
 import org.example.kihelp_back.user.model.Role;
 import org.example.kihelp_back.user.model.User;
 import org.example.kihelp_back.user.repository.UserRepository;
+import org.example.kihelp_back.wallet.exception.WalletNotFoundException;
 import org.example.kihelp_back.wallet.model.Wallet;
 import org.example.kihelp_back.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,13 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.example.kihelp_back.user.util.UserErrorMessage.*;
+import static org.example.kihelp_back.wallet.util.WalletErrorMessage.WALLET_NOT_FOUND;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -195,48 +199,61 @@ public class UserService implements UserDetailsService {
         return userRepository.findByRoleName(roleName);
     }
 
+    @Transactional
     public void changeBan(String telegramId, boolean value) {
         User user = findByTelegramId(telegramId);
 
-        if (user.isBanned() == value) {
-            return;
-        }
-
         user.setBanned(value);
 
-        if(user.getRoles().contains(ROLE_NAME)){
-            user.getRoles().remove(ROLE_NAME);
+        if(roleService.hasRole("ROLE_DEVELOPER", user) || roleService.hasRole("ROLE_ADMIN", user)){
+            List<Role> roles = user.getRoles()
+                    .stream()
+                    .filter(r -> r.getName().equals("ROLE_ADMIN") || r.getName().equals("ROLE_DEVELOPER"))
+                    .toList();
 
-            walletService.deleteNotDefaultWalletsByUser(user.getId());
+            user.getRoles().removeAll(roles);
+
+            Wallet walletForDelete = user.getWallets().stream()
+                    .filter(wallet -> !wallet.isDefaultWallet())
+                    .findFirst()
+                    .orElseThrow(() -> new WalletNotFoundException(WALLET_NOT_FOUND));
+
+            walletService.deleteWallet(walletForDelete);
         }
 
         userRepository.save(user);
     }
 
-    public void changeRole(String telegramId, String roleName) {
-        Role role = roleService.findByName(roleName);
-        User user = findByTelegramId(telegramId);
+    @Transactional
+    public void changeRole(String telegramId, Role role) {
+        User targetUser = findByTelegramId(telegramId);
 
-        validateRoleUserChange(role);
+        if(targetUser.getRoles().contains(role)){
+            targetUser.getRoles().remove(role);
 
-        if (user.getRoles().contains(role)) {
-            user.getRoles().remove(role);
+            if(role.getName().equals("ROLE_DEVELOPER") || role.getName().equals("ROLE_ADMIN")){
+                Wallet walletForDelete = targetUser.getWallets().stream()
+                                .filter(wallet -> !wallet.isDefaultWallet())
+                                .findFirst()
+                                .orElseThrow(() -> new WalletNotFoundException(WALLET_NOT_FOUND));
 
-            walletService.deleteNotDefaultWalletsByUser(user.getId());
-        } else {
-            user.getRoles().add(role);
+                walletService.deleteWallet(walletForDelete);
+            }
+        }else{
+            targetUser.getRoles().add(role);
 
-            var wallet = Wallet.builder()
-                    .balance(BigDecimal.ZERO)
-                    .name("Dev гаманець")
-                    .defaultWallet(false)
-                    .user(user)
-                    .build();
-
-            walletService.save(wallet);
+            if(role.getName().equals("ROLE_DEVELOPER") || role.getName().equals("ROLE_ADMIN")){
+                Wallet wallet = Wallet.builder()
+                        .name("Dev гаманець")
+                        .defaultWallet(false)
+                        .user(targetUser)
+                        .build();
+                
+                walletService.save(wallet);
+            }
         }
 
-        userRepository.save(user);
+        userRepository.save(targetUser);
     }
 
     public boolean existByTelegramId(String telegramId) {
@@ -258,12 +275,6 @@ public class UserService implements UserDetailsService {
             return URLDecoder.decode(value, StandardCharsets.UTF_8);
         } catch (Exception e) {
             return "";
-        }
-    }
-
-    private void validateRoleUserChange(Role role) {
-        if ("ROLE_USER".equals(role.getName())) {
-            throw new IllegalRoleChangeException(USER_ROLE_CHANGE_NOT_ALLOWED);
         }
     }
 
