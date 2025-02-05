@@ -21,6 +21,15 @@ public class UserGetUseCaseFacade implements UserGetUseCase {
     }
 
     @Override
+    public List<UserDto> getUsers() {
+        List<User> users = userService.getAll();
+
+        return users.stream()
+                .map(userMapper::toUserDto)
+                .toList();
+    }
+
+    @Override
     public Integer getCourseNumberByUser() {
        User targetUser = userService.findByJwt();
        return targetUser.getCourseNumber() != null ? targetUser.getCourseNumber() : 0;
