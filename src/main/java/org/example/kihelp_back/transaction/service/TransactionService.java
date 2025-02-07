@@ -61,7 +61,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public void toggleWithdrawStatus(String transactionId) {
+    public Transaction toggleWithdrawStatus(String transactionId, TransactionStatus status) {
         Transaction transaction = findTransactionByTransactionId(transactionId);
 
         if(!transaction.getType().equals(TransactionType.WITHDRAW)){
@@ -72,9 +72,9 @@ public class TransactionService {
             throw new IllegalArgumentException(TRANSACTION_STATUS_NOT_IN_PROGRESS);
         }
 
-        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setStatus(status);
 
-        transactionRepository.save(transaction);
+        return transactionRepository.save(transaction);
     }
 
     public Transaction findTransactionByTransactionId(String transactionId) {

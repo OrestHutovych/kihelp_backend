@@ -59,7 +59,7 @@ public class UserController {
         userUpdateUseCase.enterCourseNumber(userCourseDto);
     }
 
-    @PutMapping("/{telegramId}/ban")
+    @PatchMapping("/{telegramId}/ban")
     public void banUser(@PathVariable("telegramId") String telegramId,
                         @RequestParam(name = "value") boolean value) {
         userUpdateUseCase.changeBanValueByUser(telegramId, value);

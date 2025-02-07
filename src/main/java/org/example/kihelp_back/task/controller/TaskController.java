@@ -34,23 +34,23 @@ public class TaskController {
         taskCreateUseCase.createTask(taskRequest);
     }
 
-    @PostMapping("/task/process")
+    @PostMapping("/process")
     public Map<String, String> processTask(@RequestBody TaskProcessCreateDto request) {
         return taskProcessUseCase.processTask(request);
     }
 
-    @GetMapping("/task/teacher/{teacher_id}")
+    @GetMapping("/teacher/{teacher_id}")
     public List<TaskDto> getTasksByTeacher(@PathVariable("teacher_id") String teacherId) {
         return taskGetUseCase.getTasksByTeacher(teacherId);
     }
 
-    @PatchMapping("/task/{task_id}")
+    @PatchMapping("/{task_id}")
     public void updateTask(@PathVariable("task_id") String taskId,
                            @RequestBody TaskUpdateDto request){
         taskUpdateUseCase.updateTask(taskId, request);
     }
 
-    @DeleteMapping("/task/{task_id}")
+    @DeleteMapping("/{task_id}")
     public void deleteTask(@PathVariable("task_id") String taskId) {
         taskDeleteUseCase.deleteTask(taskId);
     }

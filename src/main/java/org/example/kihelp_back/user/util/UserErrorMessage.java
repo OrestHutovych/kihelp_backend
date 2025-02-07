@@ -13,4 +13,5 @@ public class UserErrorMessage {
     public static final String INVALID_USER_DATA = "Виникла помилка при обробці користувача: %s";
     public static final String MISSING_USER_DATA = "Init data не знайдено";
     public static final String USER_AUTHENTICATION_FAILED = "Помилка процесу автентифікації";
+    public static final String USER_ALREADY_HAVE_COURSE_NUMBER = "Користувач вже має вибраний курс";
 }

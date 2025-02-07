@@ -40,13 +40,13 @@ public class SubjectController {
         return subjectGetUseCase.getSubjectsByCourseNumber(number);
     }
 
-    @PutMapping("/subject/{subject_id}")
+    @PutMapping("/{subject_id}")
     public void updateSubject(@PathVariable("subject_id") String subjectId,
                               @Valid @RequestBody SubjectUpdateDto request) {
         subjectUpdateUseCase.updateSubject(subjectId, request);
     }
 
-    @DeleteMapping("/subject/{subject_id}")
+    @DeleteMapping("/{subject_id}")
     public void deleteSubject(@PathVariable("subject_id") String subjectId) {
         subjectDeleteUseCase.deleteSubject(subjectId);
     }

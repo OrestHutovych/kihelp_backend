@@ -29,7 +29,7 @@ public class TransactionController {
         return transactionGetUseCase.getAllTransactionsByUserTelegramId(telegramId, pageDto);
     }
 
-    @PutMapping("/toggle_withdraw_status")
+    @PatchMapping("/toggle_withdraw_status")
     public void toggleWithdrawStatus(@RequestBody TransactionWithdrawStatusDto request){
         transactionUpdateUseCase.toggleWithdrawStatus(request);
     }

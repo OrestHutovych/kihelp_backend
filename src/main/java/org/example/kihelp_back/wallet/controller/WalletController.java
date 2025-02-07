@@ -33,12 +33,12 @@ public class WalletController {
         return walletGetUseCase.getJarForDeposit();
     }
 
-    @PutMapping("/deposit")
+    @PatchMapping("/deposit")
     public void deposit(@Valid @RequestBody WalletDepositDto request){
         walletUpdateUseCase.deposit(request);
     }
 
-    @PutMapping("/withdraw")
+    @PatchMapping("/withdraw")
     public void withdraw(@Valid @RequestBody WalletWithdrawDto request){
         walletUpdateUseCase.withdraw(request);
     }

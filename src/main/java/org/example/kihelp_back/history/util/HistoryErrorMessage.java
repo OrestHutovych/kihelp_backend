@@ -7,4 +7,5 @@ public class HistoryErrorMessage {
     public static final String HISTORY_NOT_FOUND = "History з ID %s для розробника не знайдено.";
     public static final String HISTORY_NOT_USER = "Користувач не може переглянути чужу історію.";
     public static final String HISTORY_NOT_IN_PROGRESS = "Завдання не знайдено з статусом IN_PROGRESS.";
+    public static final String HISTORY_DEV_ERR = "Користувач не має ролі DEVELOPER";
 }

@@ -52,7 +52,7 @@ public class WalletGetUseCaseFacade implements WalletGetUseCase {
         User sender = userService.findByJwt();
         User targetUser = userService.findByTelegramId(telegramId);
 
-        if(!hasRole(sender, "ROLE_ADMIN") || !sender.equals(targetUser)) {
+        if(!sender.getTelegramId().equals(targetUser.getTelegramId()) && !hasRole(sender, "ROLE_ADMIN")) {
             throw new IllegalArgumentException(WALLET_USER_ERR);
         }
 

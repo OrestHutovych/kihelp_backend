@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -90,6 +91,10 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void updateCourseNumber(Integer courseNumber) {
         User user = findByJwt();
+
+        if(user.getCourseNumber() != null){
+            throw new IllegalArgumentException(USER_ALREADY_HAVE_COURSE_NUMBER);
+        }
 
         if(courseNumber != null){
             user.setCourseNumber(courseNumber);
@@ -243,6 +248,7 @@ public class UserService implements UserDetailsService {
 
             if(role.getName().equals("ROLE_DEVELOPER") || role.getName().equals("ROLE_ADMIN")){
                 Wallet wallet = Wallet.builder()
+                        .balance(BigDecimal.ZERO)
                         .name("Dev гаманець")
                         .defaultWallet(false)
                         .user(targetUser)

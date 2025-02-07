@@ -40,12 +40,12 @@ public class TeacherController {
         return teacherGetUseCase.getTeachersBySubject(subjectId);
     }
 
-    @DeleteMapping("/teacher/{teacher_id}")
+    @DeleteMapping("/{teacher_id}")
     public void deleteTeacher(@PathVariable("teacher_id") String teacherId){
         teacherDeleteUseCase.deleteTeacher(teacherId);
     }
 
-    @PutMapping("/teacher/{teacher_id}")
+    @PutMapping("/{teacher_id}")
     public void updateTeacher(@PathVariable("teacher_id") String teacherId,
                               @Valid @RequestBody TeacherUpdateRequest request){
         teacherUpdateUseCase.updateTeacher(teacherId, request);
