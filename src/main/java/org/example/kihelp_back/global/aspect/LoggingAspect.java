@@ -24,7 +24,9 @@ public class LoggingAspect {
             "execution(public * org.example.kihelp_back.wallet.controller.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.transaction.controller.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.history.controller.*.*(..)) ||" +
-            "execution(public * org.example.kihelp_back.support.controller.*.*(..))")
+            "execution(public * org.example.kihelp_back.support.controller.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.discount.controller.*.*(..)) || " +
+            "execution(public * org.example.kihelp_back.invite.controller.*.*(..))")
     public void controllerLog(){}
 
     @Pointcut("execution(public * org.example.kihelp_back.teacher.service.*.*(..)) ||" +
@@ -34,7 +36,9 @@ public class LoggingAspect {
             "execution(public * org.example.kihelp_back.user.service.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.wallet.service.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.transaction.service.*.*(..)) || " +
-            "execution(public * org.example.kihelp_back.history.service.*.*(..))")
+            "execution(public * org.example.kihelp_back.history.service.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.discount.service.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.invite.service.*.*(..))")
     public void serviceLog(){}
 
     @Pointcut("execution(public * org.example.kihelp_back.teacher.usecase.impl.*.*(..)) ||" +
@@ -45,7 +49,9 @@ public class LoggingAspect {
             "execution(public * org.example.kihelp_back.wallet.usecase.impl.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.transaction.usecase.impl.*.*(..)) ||" +
             "execution(public * org.example.kihelp_back.history.usecase.impl.*.*(..)) || " +
-            "execution(public * org.example.kihelp_back.support.usecase.impl.*.*(..))")
+            "execution(public * org.example.kihelp_back.support.usecase.impl.*.*(..)) ||" +
+            "execution(public * org.example.kihelp_back.discount.usecase.impl.*.*(..)) || " +
+            "execution(public * org.example.kihelp_back.invite.usecase.impl.*.*(..))")
     public void useCaseLog(){}
 
     @Before("controllerLog()")

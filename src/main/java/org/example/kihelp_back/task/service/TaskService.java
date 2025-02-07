@@ -19,11 +19,11 @@ import static org.example.kihelp_back.task.util.TaskErrorMessage.*;
 
 @Service
 public class TaskService {
+    private static final String TASK_GENERATE_URL = "http://localhost:8083/tasks/generate";
+
     private final TaskRepository taskRepository;
     private final UserService userService;
     private final RestTemplate restTemplate;
-
-    private static final String TASK_GENERATE_URL = "http://127.0.0.1:8083/tasks/generate";
 
     public TaskService(TaskRepository taskRepository,
                        UserService userService,

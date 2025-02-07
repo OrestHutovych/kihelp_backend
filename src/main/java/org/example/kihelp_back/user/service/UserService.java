@@ -39,7 +39,6 @@ public class UserService implements UserDetailsService {
     private final WalletService walletService;
 
     private static final byte[] WEB_APP_DATA_BYTES = "WebAppData".getBytes(StandardCharsets.UTF_8);
-    private static final String ROLE_NAME = "ROLE_DEVELOPER";
 
     @Value("${telegram.token}")
     private String botToken;

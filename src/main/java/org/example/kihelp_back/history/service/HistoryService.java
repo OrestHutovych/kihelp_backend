@@ -4,6 +4,7 @@ import org.example.kihelp_back.history.exception.HistoryNotFoundException;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.model.HistoryStatus;
 import org.example.kihelp_back.history.repository.HistoryRepository;
+import org.example.kihelp_back.task.dto.TaskGenerateDto;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,16 +29,18 @@ public class HistoryService {
     }
 
     @Transactional
-    public History saveFileInDeveloperInProgresTask(Long historyId, String link) {
-        History historyToUpdate = getHistoryById(historyId);
-
-        if(link != null && !link.isEmpty()) {
-            historyToUpdate.setLink(link);
+    public History saveFileInDeveloperInProgresTask(History history, TaskGenerateDto taskGenerateDto) {
+        if(taskGenerateDto.link() != null && !taskGenerateDto.link().isEmpty()) {
+            history.setLink(taskGenerateDto.link());
         }
 
-        historyToUpdate.setStatus(HistoryStatus.COMPLETED);
+        if(taskGenerateDto.fileName() != null && !taskGenerateDto.fileName().isEmpty()) {
+            history.setName(taskGenerateDto.fileName());
+        }
 
-        return historyRepository.save(historyToUpdate);
+        history.setStatus(HistoryStatus.COMPLETED);
+
+        return historyRepository.save(history);
     }
 
     public History getHistoryById(Long historyId) {
