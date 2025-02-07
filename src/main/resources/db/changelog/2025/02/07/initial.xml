@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1738916218190-1" author="a1 (generated)">
+        <createTable tableName="discounts">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="discounts_pkey"/>
+            </column>
+            <column name="available_value" type="INTEGER"/>
+            <column name="discount_value" type="numeric(38, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-2" author="a1 (generated)">
+        <createTable tableName="histories">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="histories_pkey"/>
+            </column>
+            <column name="arguments" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="link" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-3" author="a1 (generated)">
+        <createTable tableName="tasks">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tasks_pkey"/>
+            </column>
+            <column name="auto_generate" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="identifier" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="numeric(38, 2)"/>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visible" type="BOOLEAN"/>
+            <column name="developer_id" type="BIGINT"/>
+            <column name="teacher_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-4" author="a1 (generated)">
+        <createTable tableName="transactions">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="transactions_pkey"/>
+            </column>
+            <column name="amount" type="numeric(19, 3)"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="initials" type="VARCHAR(255)"/>
+            <column name="transaction_status" type="VARCHAR(255)"/>
+            <column name="transaction_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_type" type="VARCHAR(255)"/>
+            <column name="warning_sent" type="BOOLEAN"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-5" author="a1 (generated)">
+        <createTable tableName="wallets">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="wallets_pkey"/>
+            </column>
+            <column name="balance" type="numeric(38, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="default_wallet" type="BOOLEAN"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-6" author="a1 (generated)">
+        <createTable tableName="subjects">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="subjects_pkey"/>
+            </column>
+            <column name="course_number" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-7" author="a1 (generated)">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="course_number" type="INTEGER"/>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="is_banned" type="BOOLEAN"/>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telegram_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-8" author="a1 (generated)">
+        <createTable tableName="teachers">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="teachers_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-9" author="a1 (generated)">
+        <createTable tableName="arguments">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="arguments_pkey"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-10" author="a1 (generated)">
+        <createTable tableName="roles">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="roles_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-11" author="a1 (generated)">
+        <addUniqueConstraint columnNames="title, teacher_id" constraintName="uk8bf2uhsqrcvrbbbaue8wumyw4"
+                             tableName="tasks"/>
+    </changeSet>
+    <changeSet id="1738916218190-12" author="a1 (generated)">
+        <addUniqueConstraint columnNames="transaction_id" constraintName="uk6plyfbm3wy6ds7hongoml5xbk"
+                             tableName="transactions"/>
+    </changeSet>
+    <changeSet id="1738916218190-13" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name, user_id" constraintName="uka5646ek9l5o3x7s8lj123s5l9"
+                             tableName="wallets"/>
+    </changeSet>
+    <changeSet id="1738916218190-14" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="ukaodt3utnw0lsov4k9ta88dbpr" tableName="subjects"/>
+    </changeSet>
+    <changeSet id="1738916218190-15" author="a1 (generated)">
+        <addUniqueConstraint columnNames="telegram_id" constraintName="ukdus03vmwyluiy7k2p2gcrqbms" tableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-16" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name, subject_id" constraintName="ukhryo5bwpn9m8hdphmj82co0lq"
+                             tableName="teachers"/>
+    </changeSet>
+    <changeSet id="1738916218190-17" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="ukihcof0d00ad9oc5u48psq3pmn" tableName="arguments"/>
+    </changeSet>
+    <changeSet id="1738916218190-18" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="ukofx66keruapi6vyqpv6f2or37" tableName="roles"/>
+    </changeSet>
+    <changeSet id="1738916218190-19" author="a1 (generated)">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="roles_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1738916218190-20" author="a1 (generated)">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="transactions_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1738916218190-21" author="a1 (generated)">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="users_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1738916218190-22" author="a1 (generated)">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="50" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="wallets_seq" startValue="1"/>
+    </changeSet>
+    <changeSet id="1738916218190-23" author="a1 (generated)">
+        <createTable tableName="invites">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="invites_pkey"/>
+            </column>
+            <column name="created_time_stamp" type="TIMESTAMP WITH TIME ZONE"/>
+            <column name="invitee_amount_spend" type="numeric(38, 2)"/>
+            <column name="reward_granted" type="BOOLEAN"/>
+            <column name="invitee_user_id" type="BIGINT"/>
+            <column name="inviter_user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-24" author="a1 (generated)">
+        <createTable tableName="tasks_arguments">
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tasks_arguments_pkey"/>
+            </column>
+            <column name="argument_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="argument_order" type="INTEGER">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tasks_arguments_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-25" author="a1 (generated)">
+        <createTable tableName="users_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1738916218190-26" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="invitee_user_id" baseTableName="invites"
+                                 constraintName="fk1857ggd5o3xfhoa00qu5v1wkm" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-27" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="tasks_arguments"
+                                 constraintName="fk1abuf95dro5tonoburjf62jjx" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="tasks"/>
+    </changeSet>
+    <changeSet id="1738916218190-28" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="argument_id" baseTableName="tasks_arguments"
+                                 constraintName="fk1m36fjwlr9i790m1om0mq0nwa" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="arguments"/>
+    </changeSet>
+    <changeSet id="1738916218190-29" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="inviter_user_id" baseTableName="invites"
+                                 constraintName="fk2frv8k4ofg7wql5y5dyecd1jl" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-30" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="users_roles"
+                                 constraintName="fk2o0jvgh89lemvvo17cbqvdxaa" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-31" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="histories"
+                                 constraintName="fk4pxwh0g4kyfnmuka0v4nwnasf" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="tasks"/>
+    </changeSet>
+    <changeSet id="1738916218190-32" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="developer_id" baseTableName="tasks"
+                                 constraintName="fk79r3ikp3utt1gvnk7j2s3asvs" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-33" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="histories"
+                                 constraintName="fk8w9eva74w7t7xtf2opb33f8bq" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-34" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="wallets"
+                                 constraintName="fkc1foyisidw7wqqrkamafuwn4e" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-35" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="teacher_id" baseTableName="tasks"
+                                 constraintName="fkedr91s1ueomtf3d9vhxsxo6a1" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="teachers"/>
+    </changeSet>
+    <changeSet id="1738916218190-36" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="discounts"
+                                 constraintName="fkef49ab0kman90km5tdvj1lrxc" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="tasks"/>
+    </changeSet>
+    <changeSet id="1738916218190-37" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users_roles"
+                                 constraintName="fkj6m8fwv7oqv74fcehir1a9ffy" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="roles"/>
+    </changeSet>
+    <changeSet id="1738916218190-38" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="transactions"
+                                 constraintName="fkqwv7rmvc8va8rep7piikrojds" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1738916218190-39" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="teachers"
+                                 constraintName="fksahkj7ew9hfs6byrpl75br5lx" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="subjects"/>
+    </changeSet>
+    <changeSet id="1738916218190-40" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="discounts"
+                                 constraintName="fkvh30r0xjn6nilxg3ht6dkoaq" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+
+</databaseChangeLog>

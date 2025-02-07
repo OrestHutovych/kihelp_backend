@@ -9,11 +9,13 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update #Поставити validate
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         default_batch_fetch_size: 100
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
 #  servlet:
 #    multipart:
 #      enabled: true
