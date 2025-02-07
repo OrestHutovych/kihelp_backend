@@ -239,6 +239,37 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
+    public void successWithdrawTransaction(Transaction transaction) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(transaction.getUser().getTelegramId());
+
+        String message = String.format("""
+                💳 *Ваш запит на зняття грошей успішно оброблений.*
+               
+                🔗 *Деталі транзакції:*
+                • *Transaction ID:* `%s`
+                • *Сума:* `%s`
+            
+                #withdraw
+                """,
+                transaction.getTransactionId(),
+                transaction.getAmount()
+        );
+
+        sendMessage.setText(message);
+        sendMessage.setParseMode("Markdown");
+
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new TelegramException(
+                    String.format(
+                            TELEGRAM_ERROR, e.getMessage()
+                    )
+            );
+        }
+    }
+
     public void failedDepositTransaction(Transaction transaction, String errorMessage) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(transaction.getUser().getTelegramId());

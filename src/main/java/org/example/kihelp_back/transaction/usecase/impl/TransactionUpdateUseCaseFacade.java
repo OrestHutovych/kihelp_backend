@@ -1,5 +1,6 @@
 package org.example.kihelp_back.transaction.usecase.impl;
 
+import org.example.kihelp_back.global.service.TelegramBotService;
 import org.example.kihelp_back.task.exception.TypeNotValidException;
 import org.example.kihelp_back.task.model.TaskType;
 import org.example.kihelp_back.transaction.dto.TransactionWithdrawStatusDto;
@@ -16,11 +17,13 @@ import static org.example.kihelp_back.task.util.TaskErrorMessage.TYPE_NOT_VALID;
 public class TransactionUpdateUseCaseFacade implements TransactionUpdateUseCase {
     private final TransactionService transactionService;
     private final WalletService walletService;
+    private final TelegramBotService telegramBotService;
 
     public TransactionUpdateUseCaseFacade(TransactionService transactionService,
-                                          WalletService walletService) {
+                                          WalletService walletService, TelegramBotService telegramBotService) {
         this.transactionService = transactionService;
         this.walletService = walletService;
+        this.telegramBotService = telegramBotService;
     }
 
     @Override
@@ -30,6 +33,9 @@ public class TransactionUpdateUseCaseFacade implements TransactionUpdateUseCase 
 
         if(transaction.getStatus().equals(TransactionStatus.CANCELLED)) {
             walletService.depositAmountToWalletByUserId(transaction.getUser().getId(), transaction.getAmount(), false);
+            telegramBotService.failedWithdrawTransaction(transaction);
+        }else{
+            telegramBotService.successWithdrawTransaction(transaction);
         }
     }
 
