@@ -16,7 +16,7 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "transactions")
+@Table(schema = "kihelp-new", name = "transactions")
 public class Transaction extends BaseEntity {
     @Column(name = "transaction_id", unique = true, nullable = false)
     private String transactionId;

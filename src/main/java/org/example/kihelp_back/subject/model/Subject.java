@@ -14,7 +14,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "subjects")
+@Table(schema = "kihelp-new", name = "subjects")
 public class Subject extends BaseEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;

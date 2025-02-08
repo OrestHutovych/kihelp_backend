@@ -22,7 +22,7 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(schema = "kihelp-new", name = "users")
 public class User extends BaseEntity {
     @Column(name = "telegram_id", unique = true, nullable = false)
     private String telegramId;
@@ -41,6 +41,7 @@ public class User extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
+            schema = "kihelp-new",
             name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}

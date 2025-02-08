@@ -15,7 +15,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "discounts")
+@Table(schema = "kihelp-new", name = "discounts")
 public class Discount extends BaseEntity {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)

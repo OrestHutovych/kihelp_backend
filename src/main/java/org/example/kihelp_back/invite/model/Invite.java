@@ -15,7 +15,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "invites")
+@Table(schema = "kihelp-new", name = "invites")
 public class Invite extends BaseEntity {
     private BigDecimal inviteeAmountSpend = BigDecimal.ZERO;
     private Instant createdTimeStamp = Instant.now();

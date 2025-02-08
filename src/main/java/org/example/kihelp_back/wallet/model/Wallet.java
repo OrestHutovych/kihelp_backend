@@ -15,7 +15,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "wallets", uniqueConstraints = {
+@Table(schema = "kihelp-new", name = "wallets", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name", "user_id"})
 })
 public class Wallet extends BaseEntity {

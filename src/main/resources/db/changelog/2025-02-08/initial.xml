@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create-schema-kihelp-new" author="a1 (generated)">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS "kihelp-new";
+        </sql>
+    </changeSet>
+    <changeSet id="1739003681142-1" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="arguments">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_arguments"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-2" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="discounts">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_discounts"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="discount_value" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="available_value" type="INT"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="task_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-3" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="histories">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_histories"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="link" type="VARCHAR(255)"/>
+            <column name="arguments" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="task_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-4" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="invites">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_invites"/>
+            </column>
+            <column name="invitee_amount_spend" type="DECIMAL"/>
+            <column name="created_time_stamp" type="DATETIME"/>
+            <column name="reward_granted" type="BOOLEAN"/>
+            <column name="inviter_user_id" type="BIGINT"/>
+            <column name="invitee_user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-5" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="roles">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_roles"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-6" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="subjects">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_subjects"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-7" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="tasks">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tasks"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="identifier" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL"/>
+            <column name="visible" type="BOOLEAN"/>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="auto_generate" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="developer_id" type="BIGINT"/>
+            <column name="teacher_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-8" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="tasks_arguments">
+            <column name="argument_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="argument_order" type="INT">
+                <constraints primaryKey="true" primaryKeyName="pk_tasks_arguments"/>
+            </column>
+            <column name="task_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tasks_arguments"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-9" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="teachers">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_teachers"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-10" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="transactions">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_transactions"/>
+            </column>
+            <column name="transaction_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initials" type="VARCHAR(255)"/>
+            <column name="amount" type="DECIMAL(19, 3)"/>
+            <column name="transaction_type" type="VARCHAR(255)"/>
+            <column name="transaction_status" type="VARCHAR(255)"/>
+            <column name="warning_sent" type="BOOLEAN"/>
+            <column name="created_at" type="DATETIME"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-11" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="telegram_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="DATETIME"/>
+            <column name="is_banned" type="BOOLEAN"/>
+            <column name="course_number" type="INT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-12" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="users_roles">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-13" author="a1 (generated)">
+        <createTable schemaName="kihelp-new" tableName="wallets">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_wallets"/>
+            </column>
+            <column name="balance" type="DECIMAL">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="default_wallet" type="BOOLEAN"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1739003681142-14" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_arguments_name" schemaName="kihelp-new"
+                             tableName="arguments"/>
+    </changeSet>
+    <changeSet id="1739003681142-15" author="a1 (generated)">
+        <addUniqueConstraint columnNames="title, teacher_id" constraintName="uc_b9270582b865507d191bbfbde"
+                             schemaName="kihelp-new" tableName="tasks"/>
+    </changeSet>
+    <changeSet id="1739003681142-16" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name, subject_id" constraintName="uc_c23d4ff3dc96ff9172c7aee3e"
+                             schemaName="kihelp-new" tableName="teachers"/>
+    </changeSet>
+    <changeSet id="1739003681142-17" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name, user_id" constraintName="uc_f32acc34c5a1132ab2e8d0d42"
+                             schemaName="kihelp-new" tableName="wallets"/>
+    </changeSet>
+    <changeSet id="1739003681142-18" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_roles_name" schemaName="kihelp-new"
+                             tableName="roles"/>
+    </changeSet>
+    <changeSet id="1739003681142-19" author="a1 (generated)">
+        <addUniqueConstraint columnNames="name" constraintName="uc_subjects_name" schemaName="kihelp-new"
+                             tableName="subjects"/>
+    </changeSet>
+    <changeSet id="1739003681142-20" author="a1 (generated)">
+        <addUniqueConstraint columnNames="transaction_id" constraintName="uc_transactions_transaction"
+                             schemaName="kihelp-new" tableName="transactions"/>
+    </changeSet>
+    <changeSet id="1739003681142-21" author="a1 (generated)">
+        <addUniqueConstraint columnNames="telegram_id" constraintName="uc_users_telegram" schemaName="kihelp-new"
+                             tableName="users"/>
+    </changeSet>
+    <changeSet id="1739003681142-22" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="discounts" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_DISCOUNTS_ON_TASK" referencedColumnNames="id"
+                                 referencedTableName="tasks" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-23" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="discounts" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_DISCOUNTS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-24" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="histories" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_HISTORIES_ON_TASK" referencedColumnNames="id"
+                                 referencedTableName="tasks" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-25" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="histories" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_HISTORIES_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-26" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="invitee_user_id" baseTableName="invites"
+                                 baseTableSchemaName="kihelp-new" constraintName="FK_INVITES_ON_INVITEE_USER"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-27" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="inviter_user_id" baseTableName="invites"
+                                 baseTableSchemaName="kihelp-new" constraintName="FK_INVITES_ON_INVITER_USER"
+                                 referencedColumnNames="id" referencedTableName="users"
+                                 referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-28" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="developer_id" baseTableName="tasks" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_TASKS_ON_DEVELOPER" referencedColumnNames="id"
+                                 referencedTableName="users" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-29" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="teacher_id" baseTableName="tasks" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_TASKS_ON_TEACHER" referencedColumnNames="id"
+                                 referencedTableName="teachers" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-30" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="teachers" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_TEACHERS_ON_SUBJECT" referencedColumnNames="id"
+                                 referencedTableName="subjects" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-31" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="transactions" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_TRANSACTIONS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-32" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="wallets" baseTableSchemaName="kihelp-new"
+                                 constraintName="FK_WALLETS_ON_USER" referencedColumnNames="id"
+                                 referencedTableName="users" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-33" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="argument_id" baseTableName="tasks_arguments"
+                                 baseTableSchemaName="kihelp-new" constraintName="fk_tasarg_on_argument"
+                                 referencedColumnNames="id" referencedTableName="arguments"
+                                 referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-34" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="task_id" baseTableName="tasks_arguments"
+                                 baseTableSchemaName="kihelp-new" constraintName="fk_tasarg_on_task"
+                                 referencedColumnNames="id" referencedTableName="tasks"
+                                 referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-35" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="users_roles" baseTableSchemaName="kihelp-new"
+                                 constraintName="fk_userol_on_role" referencedColumnNames="id"
+                                 referencedTableName="roles" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+    <changeSet id="1739003681142-36" author="a1 (generated)">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="users_roles" baseTableSchemaName="kihelp-new"
+                                 constraintName="fk_userol_on_user" referencedColumnNames="id"
+                                 referencedTableName="users" referencedTableSchemaName="kihelp-new"/>
+    </changeSet>
+</databaseChangeLog>

@@ -15,7 +15,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Table(name = "teachers", uniqueConstraints = {
+@Table(schema = "kihelp-new", name = "teachers", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name", "subject_id"})
 })
 public class Teacher extends BaseEntity {

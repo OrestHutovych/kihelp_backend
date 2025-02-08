@@ -20,7 +20,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Table(name = "tasks", uniqueConstraints = {
+@Table(schema = "kihelp-new", name = "tasks", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"title", "teacher_id"})
 })
 public class Task extends BaseEntity {
@@ -44,6 +44,7 @@ public class Task extends BaseEntity {
 
     @ManyToMany
     @JoinTable(
+            schema = "kihelp-new",
             name = "tasks_arguments",
             joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "argument_id", referencedColumnName = "id")}

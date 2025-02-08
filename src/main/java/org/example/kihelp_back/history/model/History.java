@@ -16,7 +16,7 @@ import java.util.Objects;
 @Builder
 @RequiredArgsConstructor
 @Entity
-@Table(name = "histories")
+@Table(schema = "kihelp-new", name = "histories")
 @AllArgsConstructor
 public class History extends BaseEntity {
     @Column(name = "name")

@@ -14,7 +14,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "roles")
+@Table(schema = "kihelp-new", name = "roles")
 public class Role extends BaseEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;

@@ -14,7 +14,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Table(name = "arguments")
+@Table(schema = "kihelp-new", name = "arguments")
 public class Argument extends BaseEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
