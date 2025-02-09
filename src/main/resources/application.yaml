@@ -1,11 +1,11 @@
-server:
-  port: 8082
-
 spring:
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost:5432}/${POSTGRES_DB_NAME:postgres}
     username: ${POSTGRES_USERNAME:postgres}
     password: ${POSTGRES_PASSWORD:password}
+#    url: jdbc:postgresql://localhost:5432/postgres
+#    username: postgres
+#    password: Lapka228
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -22,20 +22,19 @@ spring:
 #      max-file-size: 5MB
 #      max-request-size: 5MB
 
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: health, prometheus
-#  metrics:
-#    distribution:
-#      percentiles-histogram:
-#        "[http.server.requests]": true
-#  prometheus:
-#    metrics:
-#      export:
-#        enabled: true
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
 jwt:
   secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
   lifetime: 1d

@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   grafana:
     build: './config/grafana'
@@ -38,3 +36,4 @@ services:
           - loki
 networks:
   monitoring:
+    external: true
