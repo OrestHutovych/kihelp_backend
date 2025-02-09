@@ -9,7 +9,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
-      monitoring:
+      kihelp-network:
         aliases:
           - grafana
   prometheus:
@@ -22,7 +22,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
-      monitoring:
+      kihelp-network:
         aliases:
           - prometheus
   loki:
@@ -31,9 +31,9 @@ services:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
     networks:
-      monitoring:
+      kihelp-network:
         aliases:
           - loki
 networks:
-  monitoring:
+  kihelp-network:
     external: true

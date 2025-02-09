@@ -17,7 +17,7 @@ services:
       start_period: 10s
       retries: 5
     networks:
-      monitoring:
+      kihelp-network:
         aliases:
           - postgres
   kihelp:
@@ -40,12 +40,12 @@ services:
     depends_on:
       - postgres
     networks:
-      monitoring:
+      kihelp-network:
         aliases:
           - kihelp
 volumes:
   postgres_data:
 
 networks:
-  monitoring:
+  kihelp-network:
     external: true
