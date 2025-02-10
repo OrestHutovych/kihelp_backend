@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface HistoryRepository extends JpaRepository<History, Long> {
@@ -24,4 +25,12 @@ public interface HistoryRepository extends JpaRepository<History, Long> {
     """)
     List<History> findTaskInProgressByDeveloperTelegramId(@Param("developerTelegramId") String developerTelegramId,
                                                           @Param("status") HistoryStatus status);
+
+    @Transactional(readOnly = true)
+    @Query("""
+        SELECT coalesce(sum(h.price), 0)
+        FROM History h
+        WHERE h.status = 'COMPLETED'
+    """)
+    BigDecimal getTotalEarnedMoney();
 }

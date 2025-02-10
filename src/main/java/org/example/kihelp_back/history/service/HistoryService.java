@@ -1,26 +1,32 @@
 package org.example.kihelp_back.history.service;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.example.kihelp_back.history.exception.HistoryNotFoundException;
 import org.example.kihelp_back.history.model.History;
 import org.example.kihelp_back.history.model.HistoryStatus;
 import org.example.kihelp_back.history.repository.HistoryRepository;
 import org.example.kihelp_back.task.dto.TaskGenerateDto;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.example.kihelp_back.history.util.HistoryErrorMessage.HISTORY_NOT_FOUND;
 
 @Component
 public class HistoryService {
     private final HistoryRepository historyRepository;
+    private AtomicInteger money;
 
-    public HistoryService(HistoryRepository historyRepository) {
+    public HistoryService(HistoryRepository historyRepository, MeterRegistry meterRegistry) {
         this.historyRepository = historyRepository;
+        this.money = new AtomicInteger();
+        meterRegistry.gauge("totalEarnedMoney", money);
     }
 
     @Transactional
@@ -70,5 +76,16 @@ public class HistoryService {
         }
 
         return false;
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public BigDecimal getEarnedMoney() {
+        BigDecimal totalMoney = historyRepository.getTotalEarnedMoney();
+
+        if(totalMoney != null) {
+            money.set(totalMoney.intValue());
+        }
+
+        return totalMoney;
     }
 }

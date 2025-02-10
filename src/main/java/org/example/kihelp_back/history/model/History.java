@@ -7,6 +7,7 @@ import org.example.kihelp_back.task.model.Task;
 import org.example.kihelp_back.user.model.User;
 import org.hibernate.proxy.HibernateProxy;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -23,6 +24,8 @@ public class History extends BaseEntity {
     private String name;
     @Column(name = "link")
     private String link;
+    @Column(name = "price")
+    private BigDecimal price;
     @Column(name = "arguments")
     private String arguments;
     @Enumerated(EnumType.STRING)
